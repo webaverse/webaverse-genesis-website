@@ -1,0 +1,12 @@
+
+.DS_store
+
+node_modules
+
+*.txt
+
+.sass-cache
+
+.cache
+
+.vscode
