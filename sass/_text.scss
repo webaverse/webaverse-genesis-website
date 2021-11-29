@@ -1,0 +1,96 @@
+$header-family: 'Bowlby One SC', cursive;
+$body-family: 'Jost', sans-serif;
+
+// Globals
+.header-text {
+    color: white;
+    font-family: $header-family;
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+    margin: 0 auto;
+
+}
+
+.subheader-text {
+    color: white;
+    font-family: $header-family;
+    font-size: 1.5rem;
+    margin: 0 auto;
+    //line-height: 1.5rem;
+}
+
+.body-text {
+    color: white;
+    font-family: $body-family;
+    font-weight: 300;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+    margin: 0 auto;
+}
+
+// Locals
+
+.intro-sub-text {
+    margin-bottom: 0.7rem;
+    color: #7a1566;
+}
+
+.intro-header-text {
+    margin-bottom: 1rem;
+}
+
+
+@media only screen and (min-width: 600px) {
+    .header-text {
+        font-size: 3rem;
+        line-height: 3rem;
+
+    }
+    
+    .subheader-text {
+        font-family: $header-family;
+        font-size: 2rem;
+    }
+    
+    .body-text {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        max-width: 600px;
+    }
+
+    .intro-sub-text {
+        margin-bottom: 0.5rem;
+    }
+    
+    .intro-header-text {
+        margin-bottom: 1rem;
+    }
+
+}
+
+@media only screen and (min-width: 768px) {
+    
+    .header-text {
+        font-size: 4rem;
+        line-height: 4rem;
+    }
+    
+    .subheader-text {
+        font-family: $header-family;
+        font-size: 2rem;
+    }
+    
+    .body-text {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        max-width: 600px;
+    }
+
+     .intro-sub-text {
+        margin-bottom: 1rem;
+    }
+    
+    .intro-header-text {
+        margin-bottom: 1rem;
+    }
+}

@@ -1,0 +1,238 @@
+.foreground-div {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+
+.ui-cont {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index:101;
+    pointer-events: none;
+}
+
+.ui-logo {
+    position: absolute;
+    width: 210px;
+    height: 30px;
+}
+
+.ui-logo-m {
+    position: absolute;
+    width: 210px;
+    height: 30px;
+    margin: 0 auto;
+    right: 50%;
+}
+
+.ui-nav {
+
+    width: auto;
+    height: 40px;
+    position: absolute;
+    bottom: 0px;
+    text-align: center;
+    cursor: pointer;
+    pointer-events: none;
+    position: fixed;
+    left: calc( 50% - 159px );
+    margin: 0 auto;
+}
+
+.ui-nav-item {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    color: white;
+    display: inline-block;
+    margin-right: 30px;
+    font-size: 13px;
+    pointer-events: all;
+
+}
+
+.ui-nav-item-m {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    color: white;
+    display: inline-block;
+    margin-right: 30px;
+    font-size: 11px;
+    pointer-events: all;
+}
+
+.ui-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 0;
+
+    pointer-events: none;
+}   
+
+.ui-top-cont {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: none;
+    opacity: 0;
+    pointer-events: all;
+}
+
+.ui-cta-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.ui-cta-inner-container {
+    width: 300px;
+    height: auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    pointer-events: all;
+}
+
+.ui-cta-button {
+    width: 150px;
+    height: 50px;
+    background-color: black;
+    opacity: 0;
+    cursor: pointer;
+
+    pointer-events: all;
+}
+
+.ui-cta-message {
+    width: 300px;
+    height: auto;
+    color: white;
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 20px;
+    opacity: 0;
+}
+
+.ui-cta-lopading-message {
+    width: 300px;
+    height: auto;
+    color: white;
+    font-size: 18px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.ui-enter-button-text {
+    margin-top: 10px;
+    width: 150px;
+    height: 60px;
+    font-family: 'Jost', sans-serif;
+    text-align: center;
+    color: white;
+    font-size: 22px;
+    pointer-events: none;
+}
+
+.ui-logo-container {
+    position: relative;
+    padding-top: 15px;
+    padding-left: 15px;
+    width: 250px;
+    height: 80px;
+    pointer-events: none;
+    left: calc( 50% - 125px);
+}
+
+.ui-genesis-container {
+    width: 100px;
+    height: 30px;
+    right: 42px;
+    top: 45px;
+    position: absolute;
+}
+
+.ui-genesis-img {
+    width: 100px;
+    height: 30px;
+    position: absolute;
+}
+
+.ui-audio-toggle-container {
+    width: 19px;
+    height: 16px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.ui-audio-icon {
+    width: 19px;
+    height: 16px;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ui-alpha {
+    position: absolute;
+    top: 16px;
+    right: 288px;
+    padding-top: 2px;
+    width: 30px;
+    height: 10px;
+    background-color: rgba( 129, 27, 239, 0.4 );
+}
+
+.ui-alpha-m {
+    position: absolute;
+    top: 16px;
+    padding-top: 2px;
+    right: 262px;
+    width: 25px;
+    height: 10px;
+    background-color: rgba( 129, 27, 239, 0.4 );
+}
+
+.ui-alpha-text {
+    font-family: 'Jost', sans-serif;
+    text-align: center;
+    color: white;
+    font-size: 6px;
+}
+
+.ui-loadbar-cont {
+    width: 100px;
+    height: 1px;
+    background-color: rgba( 129, 27, 239, 0.4 );
+}
+
+.ui-load-bar {
+    width: 4px;
+    height: 1px;
+    background-color: white;
+}
+

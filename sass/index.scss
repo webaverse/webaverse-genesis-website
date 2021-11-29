@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: auto;
+    background-color: #0e161f;
+    
+}
+
+@import "app";
+@import "content";
+@import "scroll-component";
+@import "ui";
+@import "text";
