@@ -2,8 +2,40 @@
     margin-top: 50px;
     width: 100%;
     height: 500px;
-    background-color: rgba( 44, 61, 79, 0.5 );
+    //background-color: rgba( 44, 61, 79, 0.5 );
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    
 }
+
+.slide-scroll-items-container {
+    width: 100%;
+    height: 90%;
+    //background-color: #444444;
+    opacity: 1;
+    align-self: center;
+    left: 50%;
+}
+
+.slide-scroll-item {
+    max-width: 480px;
+    max-height: 360px;
+    border-radius: 5px;
+    position: relative;
+/*     -webkit-border-radius: 13%; 
+    -moz-border-radius: 13%; 
+    border-radius: 13%;  */
+
+}
+
+$img-rad: 3%;
+
+.slide-scroll-img {
+    position: absolute;
+    max-width: 480px;
+    max-height: 360px;
+    -webkit-border-radius: $img-rad; 
+    -moz-border-radius: $img-rad; 
+    border-radius: $img-rad; 
+}
+
