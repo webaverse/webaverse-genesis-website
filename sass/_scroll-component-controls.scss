@@ -13,18 +13,18 @@ $comp-color: #617b99;
 }
 
 .side-scroll-controls-bar {
-    width: 290px;
+    width: 275px;
     height: 1px;
     background-color: $comp-color;
     position: absolute;
-    top: 10px;
-    left: 5px;
+    top: 16px;
+    left: 10px;
     z-index: 0;
 }
 
 .slide-scroll-control-item {
-    width: 20px;
-    height: 20px;
+    width: 34px;
+    height: 34px;
     //background-color: chartreuse;
     
     display: flex;

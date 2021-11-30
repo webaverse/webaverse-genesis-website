@@ -60994,7 +60994,7 @@ var updateCameraPosition = function updateCameraPosition(val) {
   streetLight1.intensity = 1 - val * 0.5;
   streetLight2.intensity = 0.5 - val * 0.5;
 
-  if (val > 0.8) {
+  if (val > 0.75) {
     allowUpdate = false;
   } else {
     allowUpdate = true;
@@ -64096,6 +64096,43 @@ var pointerUp = function pointerUp(evt) {
  */
 
 
+var forceClick = function forceClick(index) {
+  var activeItem = controlItemsArray[index];
+  activeItem.isActive = false;
+
+  _gsap.TweenLite.to(activeItem.children[0], 0.3, {
+    width: outerItemSizes.focus,
+    height: outerItemSizes.focus,
+    ease: _gsap.Power3.easeOut
+  });
+
+  _gsap.TweenLite.to(activeItem.children[1], 0.3, {
+    width: innerItemSizes.focus,
+    height: innerItemSizes.focus,
+    ease: _gsap.Power3.easeOut
+  });
+
+  for (var i = 0; i < controlItemsArray.length; i++) {
+    var ci = controlItemsArray[i];
+
+    if (i != index && ci.isActive == false) {
+      ci.isActive = true;
+
+      _gsap.TweenLite.to(ci.children[0], 0.3, {
+        width: outerItemSizes.blur,
+        height: outerItemSizes.blur,
+        ease: _gsap.Power3.easeOut
+      });
+
+      _gsap.TweenLite.to(ci.children[1], 0.3, {
+        width: innerItemSizes.blur,
+        height: innerItemSizes.blur,
+        ease: _gsap.Power3.easeOut
+      });
+    }
+  }
+};
+
 var updateScroll = function updateScroll(val) {
   var amt = val > 1 ? 1 : val;
 };
@@ -64103,7 +64140,8 @@ var updateScroll = function updateScroll(val) {
 var SideScrollControls = {
   init: init,
   updateScroll: updateScroll,
-  dispatcher: dispatcher
+  dispatcher: dispatcher,
+  forceClick: forceClick
 };
 var _default = SideScrollControls;
 exports.default = _default;
@@ -64145,6 +64183,7 @@ var sectionImgs = [{
   focus: 'secret_sm.png',
   blur: 'secret_alt_sm.png'
 }];
+var zIndexCtr = 99;
 var contentLength = sectionImgs.length;
 
 var init = function init(params) {
@@ -64168,25 +64207,23 @@ var init = function init(params) {
     var slideItem = document.createElement('div');
     slideItem.className = 'slide-scroll-item';
     var blurImg = document.createElement('img');
-    blurImg.className = 'slide-scroll-img';
+    blurImg.className = 'slide-scroll-img slide-shadow';
     var focusImg = document.createElement('img');
     focusImg.className = 'slide-scroll-img';
+    var tintImg = document.createElement('img');
+    tintImg.className = 'slide-scroll-img';
     blurImg.src = imgPath + sectionImgs[i].blur;
     focusImg.src = imgPath + sectionImgs[i].focus;
+    tintImg.src = imgPath + 'tint-img.png';
+    slideItem.blurImg = blurImg;
+    slideItem.focusImg = focusImg;
+    slideItem.tintImg = tintImg;
     slideItem.appendChild(blurImg);
-    slideItem.appendChild(focusImg); //slideItem.style.zIndex = tempContentLen - i;
-
+    slideItem.appendChild(focusImg);
+    slideItem.appendChild(tintImg);
     slideItem.sineFract = i / contentLength;
     slideItem.originFract = i / contentLength;
     console.log('SineFract ' + slideItem.sineFract);
-    /* let rots = { x: 0 * i, y: 15 * i, z: 5 * i, pers: 800 * i };
-    let perspective = { pers: 800 * i };
-    let trans = { x: 480 * i };
-     slideItem.rots = rots;
-    slideItem.trans = trans;
-    slideItem.perspective = perspective;
-    */
-
     slideItem.transforms = {
       rotX: 0 * Math.sin(slideItem.sineFract),
       rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
@@ -64200,7 +64237,14 @@ var init = function init(params) {
       perspective: "".concat(slideItem.transforms.perspective, "px")
     });
 
-    if (i != 0) focusImg.style.opacity = 0;
+    if (i != 0) {
+      tintImg.style.opacity = 0;
+      focusImg.style.opacity = 0;
+    } else {}
+
+    slideItem.style.zIndex = zIndexCtr - i; // calc tint 
+
+    tintImg.style.opacity = i * 0.3;
     slideItemsContainer.appendChild(slideItem);
     slideItemsArray.push(slideItem);
   }
@@ -64211,47 +64255,69 @@ var init = function init(params) {
 };
 
 var controlItemClickedHandler = function controlItemClickedHandler(evt) {
-  //console.log( 'itemClicled in Manager ' + evt.id );
+  console.log('itemClicled in Manager ' + evt.id);
+  var newIndex = -(evt.id * 0.2);
+  console.log('new index ' + newIndex);
+
   for (var i = 0; i < slideItemsArray.length; i++) {
     var slideItem = slideItemsArray[i];
-    slideItem.rots.x = 0; // -= 0
+    slideItem.sineFract = slideItem.originFract + newIndex; //if( i == 4 ) console.log( 'sineFract ' + Math.abs( slideItem.sineFract ) )
 
-    slideItem.rots.y = 0; //-= 15;// * ( i + 1 );
+    slideItem.transforms = {
+      rotX: 0 * Math.sin(slideItem.sineFract),
+      rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
+      rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
+      trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+      perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
+    };
 
-    slideItem.rots.z = 0; //-= 5;
-
-    slideItem.trans.x = 0; //-= 480;
-
-    slideItem.perspective.pers = 0; //-= 800;
+    _gsap.gsap.to(slideItem, 0.6, {
+      transform: "rotateX(".concat(slideItem.transforms.rotX, "deg) rotateY(").concat(slideItem.transforms.rotY, "deg) rotateZ(").concat(slideItem.transforms.rotZ, "deg) translateX(").concat(slideItem.transforms.trans, "px)"),
+      perspective: "".concat(slideItem.transforms.perspective, "px"),
+      ease: _gsap.Power3.easeOut,
+      delay: i * 0.0
+    });
 
     if (i == evt.id) {
-      _gsap.gsap.to(slideItem.children[1], 0.6, {
-        opacity: 1,
-        ease: _gsap.Power3.easeInOut,
-        delay: i * 0.025
-      }); //gsap.to( slideItem.children[ 0 ], 0.6, { opacity: 1, ease: Power3.easeOut } );
+      zIndexCtr++;
+      slideItem.style.zIndex = zIndexCtr;
 
-    } else {
-      _gsap.gsap.to(slideItem.children[1], 0.6, {
+      _gsap.gsap.to(slideItem.focusImg, 0.6, {
+        opacity: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.025
+      });
+
+      _gsap.gsap.to(slideItem.tintImg, 0.6, {
         opacity: 0,
-        ease: _gsap.Power3.easeInOut,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.025
+      });
+    } else {
+      slideItem.style.zIndex = zIndexCtr - Math.ceil(Math.abs(slideItem.sineFract * 10));
+
+      _gsap.gsap.to(slideItem.focusImg, 0.6, {
+        opacity: 0,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.025
+      });
+
+      _gsap.gsap.to(slideItem.tintImg, 0.6, {
+        alpha: Math.abs(slideItem.sineFract) * 1.5,
+        ease: _gsap.Power3.easeOut,
         delay: i * 0.025
       });
     }
-
-    _gsap.gsap.to(slideItem, 0.6, {
-      transform: "rotateX(".concat(slideItem.rots.x, "deg) rotateY(").concat(slideItem.rots.y, "deg) rotateZ(").concat(slideItem.rots.z, "deg) translateX(").concat(slideItem.trans.x, "px)"),
-      perspective: "".concat(slideItem.perspective.pers, "px"),
-      ease: _gsap.Power3.easeInOut,
-      delay: i * 0.025
-    });
   }
 };
 
 var updateScrollVal = function updateScrollVal(val) {
-  console.log('updateScrollVal in SideScrollManager ' + val); //console.log( 'index is ' + )
-
   var newIndex = Math.floor(Math.abs(val * 10) * 0.5);
+
+  _SideScrollControls.default.forceClick(newIndex);
+
+  var activeIndex = Math.round(Math.abs(val * 5));
+  console.log('activeIndex ' + activeIndex);
 
   for (var i = 0; i < slideItemsArray.length; i++) {
     var slideItem = slideItemsArray[i];
@@ -64269,21 +64335,36 @@ var updateScrollVal = function updateScrollVal(val) {
       perspective: "".concat(slideItem.transforms.perspective, "px"),
       ease: _gsap.Power3.easeOut,
       delay: i * 0.0
-    }); //gsap.set( slideItem, { transform: `rotateX(${ slideItem.transforms.rotX }deg) rotateY(${ slideItem.transforms.rotY }deg) rotateZ(${ slideItem.transforms.rotZ }deg) translateX(${ slideItem.transforms.trans }px)`, perspective: `${ slideItem.transforms.perspective }px` });
+    });
 
+    if (i == activeIndex) {
+      zIndexCtr++;
+      slideItem.style.zIndex = zIndexCtr;
 
-    if (i == newIndex) {
-      _gsap.gsap.to(slideItem.children[1], 0.6, {
+      _gsap.gsap.to(slideItem.focusImg, 0.6, {
         opacity: 1,
         ease: _gsap.Power3.easeOut,
         delay: i * 0.0
-      }); //gsap.to( slideItem.children[ 0 ], 0.6, { opacity: 1, ease: Power3.easeOut } );
+      });
 
-    } else {
-      _gsap.gsap.to(slideItem.children[1], 0.6, {
+      _gsap.gsap.to(slideItem.tintImg, 0.6, {
         opacity: 0,
         ease: _gsap.Power3.easeOut,
-        delay: i * 0.00
+        delay: i * 0.0
+      });
+    } else {
+      slideItem.style.zIndex = zIndexCtr - Math.ceil(Math.abs(slideItem.sineFract * 10));
+
+      _gsap.gsap.to(slideItem.focusImg, 0.6, {
+        opacity: 0,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.0
+      });
+
+      _gsap.gsap.to(slideItem.tintImg, 0.6, {
+        alpha: Math.abs(slideItem.sineFract) * 1.5,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.0
       });
     }
   }
@@ -64413,20 +64494,16 @@ function init() {
   });
 
   _WebaWorld.default.dispatcher.addEventListener('audioInitMobile', _UI.default.forceComplete);
+  /* UI.dispatcher.addEventListener( 'toggleAudio', function( e ){
+      console.log( 'toggleAudio');
+      if( e.audioToggle ) {
+          WebaWorld.getAudioManager().playAll();
+       } else {
+          WebaWorld.getAudioManager().stopAll();
+      }
+   });
+    UI.init( { isMobile: isMobile } ); */
 
-  _UI.default.dispatcher.addEventListener('toggleAudio', function (e) {
-    console.log('toggleAudio');
-
-    if (e.audioToggle) {
-      _WebaWorld.default.getAudioManager().playAll();
-    } else {
-      _WebaWorld.default.getAudioManager().stopAll();
-    }
-  });
-
-  _UI.default.init({
-    isMobile: isMobile
-  });
 
   contentContainer = document.querySelector('.content-container');
 
@@ -64572,7 +64649,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53992" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49326" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

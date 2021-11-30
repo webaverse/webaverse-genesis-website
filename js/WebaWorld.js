@@ -778,7 +778,7 @@ const updateCameraPosition = ( val ) => {
     streetLight1.intensity = 1 - ( val * 0.5 );
     streetLight2.intensity = 0.5 - ( val * 0.5 );
 
-    if( val > 0.8 ) {
+    if( val > 0.75 ) {
         allowUpdate = false;
     } else {
         allowUpdate = true;

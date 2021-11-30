@@ -47,7 +47,7 @@ function init(){
     WebaWorld.dispatcher.addEventListener( 'audioInitMobile', UI.forceComplete );
 
        
-    UI.dispatcher.addEventListener( 'toggleAudio', function( e ){
+    /* UI.dispatcher.addEventListener( 'toggleAudio', function( e ){
         console.log( 'toggleAudio');
         if( e.audioToggle ) {
             WebaWorld.getAudioManager().playAll();
@@ -59,7 +59,7 @@ function init(){
     });
 
 
-    UI.init( { isMobile: isMobile } );
+    UI.init( { isMobile: isMobile } ); */
 
     contentContainer = document.querySelector( '.content-container' );
     ContentManager.init( { 

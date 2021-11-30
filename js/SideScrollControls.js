@@ -124,6 +124,24 @@ const pointerUp = ( evt ) => {
 }
  */
 
+const forceClick = ( index ) => {
+
+    let activeItem = controlItemsArray[ index ]; 
+    activeItem.isActive = false;
+    TweenLite.to( activeItem.children[ 0 ], 0.3, { width: outerItemSizes.focus, height: outerItemSizes.focus, ease: Power3.easeOut } );
+    TweenLite.to( activeItem.children[ 1 ], 0.3, { width: innerItemSizes.focus, height: innerItemSizes.focus, ease: Power3.easeOut } );
+
+    for( let i = 0; i < controlItemsArray.length; i++ ){
+        let ci = controlItemsArray[ i ];
+        if( i != index && ci.isActive == false ){
+            ci.isActive = true;
+            TweenLite.to( ci.children[ 0 ], 0.3, { width: outerItemSizes.blur, height: outerItemSizes.blur, ease: Power3.easeOut } );
+            TweenLite.to( ci.children[ 1 ], 0.3, { width: innerItemSizes.blur, height: innerItemSizes.blur, ease: Power3.easeOut } );
+        }
+    }
+
+}
+
 
 const updateScroll = ( val ) => {
     let amt = val > 1 ? 1 : val;
@@ -133,7 +151,8 @@ const updateScroll = ( val ) => {
 const SideScrollControls = {
     init,
     updateScroll,
-    dispatcher
+    dispatcher,
+    forceClick
 }
 
 export default SideScrollControls;

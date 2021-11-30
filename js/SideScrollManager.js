@@ -20,7 +20,7 @@ let sectionImgs = [
     { focus: 'partner_sm.png', blur:'partner_alt_sm.png' },
     { focus: 'secret_sm.png', blur:'secret_alt_sm.png' },
 ]
-
+let zIndexCtr = 99;
 let contentLength = sectionImgs.length;
 
 const init = ( params ) => {
@@ -49,30 +49,28 @@ const init = ( params ) => {
         let slideItem = document.createElement( 'div' );
         slideItem.className = 'slide-scroll-item';
         let blurImg = document.createElement( 'img' );
-        blurImg.className = 'slide-scroll-img';
+        blurImg.className = 'slide-scroll-img slide-shadow';
         let focusImg = document.createElement( 'img' );
         focusImg.className = 'slide-scroll-img';
+        let tintImg = document.createElement( 'img' );
+        tintImg.className = 'slide-scroll-img';
 
         blurImg.src = imgPath + sectionImgs[ i ].blur;
         focusImg.src = imgPath + sectionImgs[ i ].focus;
+        tintImg.src = imgPath + 'tint-img.png';
+
+        slideItem.blurImg = blurImg;
+        slideItem.focusImg = focusImg;
+        slideItem.tintImg = tintImg;
 
         slideItem.appendChild( blurImg );
         slideItem.appendChild( focusImg );
-
-        //slideItem.style.zIndex = tempContentLen - i;
+        slideItem.appendChild( tintImg );
 
         slideItem.sineFract = i / contentLength;
         slideItem.originFract = i / contentLength;
         console.log( 'SineFract ' +  slideItem.sineFract )
- 
-        /* let rots = { x: 0 * i, y: 15 * i, z: 5 * i, pers: 800 * i };
-        let perspective = { pers: 800 * i };
-        let trans = { x: 480 * i };
 
-        slideItem.rots = rots;
-        slideItem.trans = trans;
-        slideItem.perspective = perspective;
- */
 
         slideItem.transforms = { 
             rotX: 0 * Math.sin(  slideItem.sineFract ),
@@ -84,7 +82,18 @@ const init = ( params ) => {
         
         gsap.set( slideItem, { transform: `rotateX(${ slideItem.transforms.rotX }deg) rotateY(${ slideItem.transforms.rotY }deg) rotateZ(${ slideItem.transforms.rotZ }deg) translateX(${ slideItem.transforms.trans }px)`, perspective: `${ slideItem.transforms.perspective }px` });
 
-        if( i != 0 ) focusImg.style.opacity = 0;
+        if( i != 0 ) {
+            tintImg.style.opacity = 0;
+            focusImg.style.opacity = 0;
+        } else {
+        }
+        
+        slideItem.style.zIndex = zIndexCtr - i;
+        // calc tint 
+        tintImg.style.opacity = i * 0.3;
+
+        
+
 
         slideItemsContainer.appendChild( slideItem )
         slideItemsArray.push( slideItem );
@@ -94,42 +103,55 @@ const init = ( params ) => {
 }
 
 const controlItemClickedHandler = ( evt ) => {
-    //console.log( 'itemClicled in Manager ' + evt.id );
+    console.log( 'itemClicled in Manager ' + evt.id );
 
-    for( let i = 0; i < slideItemsArray.length; i++ ){
+    let newIndex = -( evt.id * 0.2 );
+    console.log( 'new index ' + newIndex );
 
-        let slideItem = slideItemsArray[ i ];
-        
-        slideItem.rots.x = 0;// -= 0
-        slideItem.rots.y = 0; //-= 15;// * ( i + 1 );
-        slideItem.rots.z = 0; //-= 5;
-        slideItem.trans.x = 0;//-= 480;
-        slideItem.perspective.pers = 0;//-= 800;
-
-        if( i == evt.id ){
-            gsap.to( slideItem.children[ 1 ], 0.6, { opacity: 1, ease: Power3.easeInOut, delay: i * 0.025 } );
-            //gsap.to( slideItem.children[ 0 ], 0.6, { opacity: 1, ease: Power3.easeOut } );
-        } else {
-            gsap.to( slideItem.children[ 1 ], 0.6, { opacity: 0, ease: Power3.easeInOut, delay: i * 0.025 } );
-
-        }
-
-        gsap.to( slideItem, 0.6, { transform: `rotateX(${ slideItem.rots.x }deg) rotateY(${ slideItem.rots.y }deg) rotateZ(${ slideItem.rots.z }deg) translateX(${ slideItem.trans.x }px)`, perspective: `${ slideItem.perspective.pers }px`, ease: Power3.easeInOut, delay: i * 0.025 } );
-
-    }
-}
-
-const updateScrollVal = ( val ) => {
-    console.log( 'updateScrollVal in SideScrollManager ' + val );
-
-    //console.log( 'index is ' + )
-
-    let newIndex = ( Math.floor( Math.abs( val  * 10 ) * 0.5 ) )
+    
 
     for( let i = 0; i<slideItemsArray.length; i++ ){
         let slideItem = slideItemsArray[ i ];
 
-        
+        slideItem.sineFract = slideItem.originFract + newIndex;
+
+        //if( i == 4 ) console.log( 'sineFract ' + Math.abs( slideItem.sineFract ) )
+
+        slideItem.transforms = { 
+            rotX: 0 * Math.sin(  slideItem.sineFract ),
+            rotY: ( 15 * contentLength ) * Math.sin(  slideItem.sineFract ),
+            rotZ: ( 5 * contentLength ) * Math.sin(  slideItem.sineFract ),
+            trans: ( 480 * contentLength ) * Math.sin(  slideItem.sineFract ),
+            perspective: ( 800 * contentLength ) * Math.sin(  slideItem.sineFract )
+        }
+
+        gsap.to( slideItem, 0.6, { transform: `rotateX(${ slideItem.transforms.rotX }deg) rotateY(${ slideItem.transforms.rotY }deg) rotateZ(${ slideItem.transforms.rotZ }deg) translateX(${ slideItem.transforms.trans }px)`, perspective: `${ slideItem.transforms.perspective }px`, ease: Power3.easeOut, delay: i * 0.0 });
+
+        if( i == evt.id ){
+            zIndexCtr++;
+            slideItem.style.zIndex = zIndexCtr;
+            gsap.to( slideItem.focusImg, 0.6, { opacity: 1, ease: Power3.easeOut, delay: i * 0.025 } );
+            gsap.to( slideItem.tintImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.025  } );
+        } else { 
+            slideItem.style.zIndex = zIndexCtr - Math.ceil( Math.abs( slideItem.sineFract * 10  )) ;
+            gsap.to( slideItem.focusImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.025 } );
+            gsap.to( slideItem.tintImg, 0.6, { alpha: Math.abs( slideItem.sineFract ) * 1.5, ease: Power3.easeOut, delay: i * 0.025  } );
+        }
+    }
+}
+
+const updateScrollVal = ( val ) => {
+
+    let newIndex = ( Math.floor( Math.abs( val  * 10 ) * 0.5 ) );
+    
+    SideScrollControls.forceClick( newIndex );
+
+    let activeIndex = Math.round( Math.abs( val * 5 ) );
+
+    console.log( 'activeIndex ' + activeIndex );
+
+    for( let i = 0; i<slideItemsArray.length; i++ ){
+        let slideItem = slideItemsArray[ i ];
 
         slideItem.sineFract = slideItem.originFract + val;
 
@@ -142,14 +164,16 @@ const updateScrollVal = ( val ) => {
         }
 
         gsap.to( slideItem, 0.6, { transform: `rotateX(${ slideItem.transforms.rotX }deg) rotateY(${ slideItem.transforms.rotY }deg) rotateZ(${ slideItem.transforms.rotZ }deg) translateX(${ slideItem.transforms.trans }px)`, perspective: `${ slideItem.transforms.perspective }px`, ease: Power3.easeOut, delay: i * 0.0 });
-        //gsap.set( slideItem, { transform: `rotateX(${ slideItem.transforms.rotX }deg) rotateY(${ slideItem.transforms.rotY }deg) rotateZ(${ slideItem.transforms.rotZ }deg) translateX(${ slideItem.transforms.trans }px)`, perspective: `${ slideItem.transforms.perspective }px` });
-        
-        if( i == newIndex ){
-            gsap.to( slideItem.children[ 1 ], 0.6, { opacity: 1, ease: Power3.easeOut, delay: i * 0.0 } );
-            //gsap.to( slideItem.children[ 0 ], 0.6, { opacity: 1, ease: Power3.easeOut } );
-        } else {
-            gsap.to( slideItem.children[ 1 ], 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.00 } );
-
+ 
+        if( i == activeIndex ){
+            zIndexCtr++;
+            slideItem.style.zIndex = zIndexCtr;
+            gsap.to( slideItem.focusImg, 0.6, { opacity: 1, ease: Power3.easeOut, delay: i * 0.0 } );
+            gsap.to( slideItem.tintImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.0  } );
+        } else { 
+            slideItem.style.zIndex = zIndexCtr - Math.ceil( Math.abs( slideItem.sineFract * 10  )) ;
+            gsap.to( slideItem.focusImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.0 } );
+            gsap.to( slideItem.tintImg, 0.6, { alpha: Math.abs( slideItem.sineFract ) * 1.5, ease: Power3.easeOut, delay: i * 0.0  } );
         }
     }
 }
