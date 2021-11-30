@@ -1,5 +1,5 @@
 import 'regenerator-runtime/runtime'
-import { TweenLite, Power1, Power4, Linear } from 'gsap';
+import { gsap, Power1, Power4, Linear } from 'gsap';
 import Stats from '../../examples/jsm/libs/stats.module';
 import WebaWorld from './WebaWorld';
 import { GUI } from '../../examples/jsm/libs/dat.gui.module.js';
@@ -47,7 +47,7 @@ function init(){
     WebaWorld.dispatcher.addEventListener( 'audioInitMobile', UI.forceComplete );
 
        
-    /* UI.dispatcher.addEventListener( 'toggleAudio', function( e ){
+    UI.dispatcher.addEventListener( 'toggleAudio', function( e ){
         console.log( 'toggleAudio');
         if( e.audioToggle ) {
             WebaWorld.getAudioManager().playAll();
@@ -59,7 +59,7 @@ function init(){
     });
 
 
-    UI.init( { isMobile: isMobile } ); */
+    UI.init( { isMobile: isMobile } );
 
     contentContainer = document.querySelector( '.content-container' );
     ContentManager.init( { 
@@ -93,22 +93,20 @@ function init(){
         container: document.querySelector( '.app-container' ),
     } );
 
-    guiParams = {
+   /*  guiParams = {
         drag: 0.0,
     };
 
     const gui = new GUI();
     gui.add( guiParams, 'drag', -0.8, 0.0 ).step( 0.2 ).onChange( function ( value ) {
         
-        /* WebaWorld.updateWorldTime( value );
-        foregroundImg.style.filter = 'grayscale(' + ( value ) * 100 + '%)';
-        foregroundImg.style.filter = 'brightness(' + value + ' )'; */
+        
         console.log( 'scrollVal ' + value)
         ContentManager.updateDragVal( value );
         
     } );
     
-    gui.open();
+    gui.open(); */
 
     if( showStats ) document.body.appendChild( stats.dom );
 
@@ -137,7 +135,7 @@ const update = () => {
 
 const updateScroll = ( e ) => {
     var yVal = window.scrollY / window.innerHeight;
-    TweenLite.set( contentContainer, { y: -( yVal * ( window.innerHeight * 0.25 ) ) })
+    gsap.set( contentContainer, { y: -( yVal * ( window.innerHeight * 0.25 ) ) })
     WebaWorld.updateCameraPosition( yVal );
     ContentManager.updateScroll( yVal );
 }

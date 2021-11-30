@@ -16,7 +16,7 @@ const init = ( params ) => {
     
     SideScrollManager.init( {
         container: sideScrollComponentContainer,
-        scrollLength: 11,
+        scrollLength: 5,
     })
 }
 

@@ -64242,8 +64242,7 @@ var init = function init(params) {
       focusImg.style.opacity = 0;
     } else {}
 
-    slideItem.style.zIndex = zIndexCtr - i; // calc tint 
-
+    slideItem.style.zIndex = zIndexCtr - i;
     tintImg.style.opacity = i * 0.3;
     slideItemsContainer.appendChild(slideItem);
     slideItemsArray.push(slideItem);
@@ -64261,8 +64260,7 @@ var controlItemClickedHandler = function controlItemClickedHandler(evt) {
 
   for (var i = 0; i < slideItemsArray.length; i++) {
     var slideItem = slideItemsArray[i];
-    slideItem.sineFract = slideItem.originFract + newIndex; //if( i == 4 ) console.log( 'sineFract ' + Math.abs( slideItem.sineFract ) )
-
+    slideItem.sineFract = slideItem.originFract + newIndex;
     slideItem.transforms = {
       rotX: 0 * Math.sin(slideItem.sineFract),
       rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
@@ -64369,29 +64367,29 @@ var updateScrollVal = function updateScrollVal(val) {
     }
   }
 };
-/* 
-const pointerDown = ( evt ) => {
-    console.log( 'pointerDown ' + evt.clientX )
-}
 
-const pointerUp = ( evt ) => {
-    console.log( 'pointerUp' );
-    evt.target.removeEventListener( 'mousemove', mousemove );
-}
+var pointerDown = function pointerDown(evt) {
+  console.log('pointerDown ' + evt.clientX);
+  evt.target.addEventListener('mousemove', mousemove);
+};
 
-const mousemove = ( evt ) => {
-    let dragDist;
-}
+var pointerUp = function pointerUp(evt) {
+  console.log('pointerUp');
+  evt.target.removeEventListener('mousemove', mousemove);
+};
 
-const updateScroll = ( val ) => {
-    let amt = val > 1 ? 1 : val;
-}
- */
+var mousemove = function mousemove(evt) {
+  var dragDist;
+};
 
+var updateScroll = function updateScroll(val) {
+  var amt = val > 1 ? 1 : val;
+};
 
 var SideScrollManager = {
   init: init,
-  updateScrollVal: updateScrollVal
+  updateScrollVal: updateScrollVal,
+  controlItemClickedHandler: controlItemClickedHandler
 };
 var _default = SideScrollManager;
 exports.default = _default;
@@ -64421,7 +64419,7 @@ var init = function init(params) {
 
   _SideScrollManager.default.init({
     container: sideScrollComponentContainer,
-    scrollLength: 11
+    scrollLength: 5
   });
 };
 
@@ -64494,16 +64492,20 @@ function init() {
   });
 
   _WebaWorld.default.dispatcher.addEventListener('audioInitMobile', _UI.default.forceComplete);
-  /* UI.dispatcher.addEventListener( 'toggleAudio', function( e ){
-      console.log( 'toggleAudio');
-      if( e.audioToggle ) {
-          WebaWorld.getAudioManager().playAll();
-       } else {
-          WebaWorld.getAudioManager().stopAll();
-      }
-   });
-    UI.init( { isMobile: isMobile } ); */
 
+  _UI.default.dispatcher.addEventListener('toggleAudio', function (e) {
+    console.log('toggleAudio');
+
+    if (e.audioToggle) {
+      _WebaWorld.default.getAudioManager().playAll();
+    } else {
+      _WebaWorld.default.getAudioManager().stopAll();
+    }
+  });
+
+  _UI.default.init({
+    isMobile: isMobile
+  });
 
   contentContainer = document.querySelector('.content-container');
 
@@ -64557,20 +64559,21 @@ function init() {
     isMobile: isMobile,
     container: document.querySelector('.app-container')
   });
+  /*  guiParams = {
+       drag: 0.0,
+   };
+    const gui = new GUI();
+   gui.add( guiParams, 'drag', -0.8, 0.0 ).step( 0.2 ).onChange( function ( value ) {
+       
+       
+       console.log( 'scrollVal ' + value)
+       ContentManager.updateDragVal( value );
+       
+   } );
+   
+   gui.open(); */
 
-  guiParams = {
-    drag: 0.0
-  };
-  var gui = new _datGuiModule.GUI();
-  gui.add(guiParams, 'drag', -0.8, 0.0).step(0.2).onChange(function (value) {
-    /* WebaWorld.updateWorldTime( value );
-    foregroundImg.style.filter = 'grayscale(' + ( value ) * 100 + '%)';
-    foregroundImg.style.filter = 'brightness(' + value + ' )'; */
-    console.log('scrollVal ' + value);
 
-    _ContentManager.default.updateDragVal(value);
-  });
-  gui.open();
   if (showStats) document.body.appendChild(stats.dom);
   window.addEventListener('resize', resize, false);
   window.addEventListener("scroll", updateScroll);
@@ -64600,7 +64603,7 @@ var update = function update() {
 var updateScroll = function updateScroll(e) {
   var yVal = window.scrollY / window.innerHeight;
 
-  _gsap.TweenLite.set(contentContainer, {
+  _gsap.gsap.set(contentContainer, {
     y: -(yVal * (window.innerHeight * 0.25))
   });
 
@@ -64649,7 +64652,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49326" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54934" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

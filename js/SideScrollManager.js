@@ -89,7 +89,7 @@ const init = ( params ) => {
         }
         
         slideItem.style.zIndex = zIndexCtr - i;
-        // calc tint 
+
         tintImg.style.opacity = i * 0.3;
 
         
@@ -108,14 +108,10 @@ const controlItemClickedHandler = ( evt ) => {
     let newIndex = -( evt.id * 0.2 );
     console.log( 'new index ' + newIndex );
 
-    
-
     for( let i = 0; i<slideItemsArray.length; i++ ){
         let slideItem = slideItemsArray[ i ];
 
         slideItem.sineFract = slideItem.originFract + newIndex;
-
-        //if( i == 4 ) console.log( 'sineFract ' + Math.abs( slideItem.sineFract ) )
 
         slideItem.transforms = { 
             rotX: 0 * Math.sin(  slideItem.sineFract ),
@@ -178,9 +174,11 @@ const updateScrollVal = ( val ) => {
     }
 }
 
-/* 
+
 const pointerDown = ( evt ) => {
     console.log( 'pointerDown ' + evt.clientX )
+    evt.target.addEventListener( 'mousemove', mousemove );
+
 }
 
 const pointerUp = ( evt ) => {
@@ -190,15 +188,17 @@ const pointerUp = ( evt ) => {
 
 const mousemove = ( evt ) => {
     let dragDist;
+    
 }
 
 const updateScroll = ( val ) => {
     let amt = val > 1 ? 1 : val;
 }
- */
+
 const SideScrollManager = {
     init,
     updateScrollVal,
+    controlItemClickedHandler
 }
 
 export default SideScrollManager
