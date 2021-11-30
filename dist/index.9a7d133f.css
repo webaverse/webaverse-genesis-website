@@ -344,6 +344,7 @@ html, body {
     margin-bottom: 1rem;
   }
 }
+
 @media only screen and (min-width: 768px) {
   .header-text {
     font-size: 4rem;
@@ -369,8 +370,9 @@ html, body {
     margin-bottom: 1rem;
   }
 }
+
 .content-scroller {
-  background-image: url("../dist/imgs/content-bg-imgs/content-bg-img-00.jpg");
+  background-image: url("content-bg-img-00.8fe51904.jpg");
   position: relative;
   height: 100%;
   background-repeat: no-repeat;
@@ -399,6 +401,7 @@ html, body {
 }
 
 /* CSS transition applied when translation of items happen */
+
 .slider-container-transition {
   transition: transform 0.7s ease-in-out;
 }
@@ -444,3 +447,4 @@ html, body {
   background-color: yellow;
   color: red;
 }
+
