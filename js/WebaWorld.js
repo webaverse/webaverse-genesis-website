@@ -1,8 +1,8 @@
 import 'regenerator-runtime/runtime';
-import * as THREE from '../build/three.module';
-import { OrbitControls } from '../examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from '../examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from '../examples/jsm/loaders/DRACOLoader';
+import * as THREE from '../../build/three.module';
+import { OrbitControls } from '../../examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from '../../examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from '../../examples/jsm/loaders/DRACOLoader';
 
 import { TweenLite, Power1, Power4, Linear } from 'gsap';
 import StarryNightShader from './shaders/StarryNightShader';
@@ -778,7 +778,7 @@ const updateCameraPosition = ( val ) => {
     streetLight1.intensity = 1 - ( val * 0.5 );
     streetLight2.intensity = 0.5 - ( val * 0.5 );
 
-    if( val > 0.8 ) {
+    if( val > 0.75 ) {
         allowUpdate = false;
     } else {
         allowUpdate = true;

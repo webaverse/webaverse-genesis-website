@@ -108,8 +108,11 @@ const init = ( params ) => {
 
 const controlItemClickedHandler = ( evt ) => {
     console.log( 'itemClicled in Manager ' + evt.id );
-    var move = evt.id - currentIndex;
-    currentIndex=evt.id
+
+    var move = (parseInt(evt.id)+1) - (currentIndex);
+    console.log("\n\n move: ",move ,"currentIndex : ",currentIndex,"clicked index : ",parseInt(evt.id)+1)
+
+    currentIndex=parseInt(evt.id)+1
     if (move>0)
         {
             FlexSlider.gotoNext();
@@ -233,6 +236,29 @@ const FlexSlider = {
             
         }
         
+    }, 
+    scrollValChange :function(){
+        if(currentIndex==1){
+            updateScrollVal(0)
+
+        }
+        else if(currentIndex==2){
+            updateScrollVal(-0.2)
+
+        }
+        else if(currentIndex==3){
+            updateScrollVal(-0.4)
+
+        }
+        else if(currentIndex==4){
+            updateScrollVal(-0.6)
+
+        }
+        else {
+            updateScrollVal(-0.8)
+
+        }
+
     },
 	addEvents: function() {
 		var that = this;
@@ -244,8 +270,8 @@ const FlexSlider = {
             console.log("currindex: ",currentIndex)
             currentIndex=(currentIndex+1)%5
             console.log("currindex: after  ",currentIndex)
-
-            // updateScrollVal(currentIndex)
+            this.scrollValChange()
+            
             this.gotoNext();
 		});
 
@@ -258,15 +284,18 @@ const FlexSlider = {
             this.btn1=1
             this.btn2=0
             currentIndex = currentIndex-1
+            this.scrollValChange()
+
 			this.gotoNext2();
 		});
 
 	},
-
+   
 	changeOrder: function() {
-        console.log("Xcurr: ",this.current,"Xnum_ : ",this. num_items)
+        // console.log("Xcurr: ",this.current,"Xnum_ : ",this. num_items)
         var b = parseInt(currentIndex)
         let val_in= b;
+        console.log("(change order )currentIndex: ",currentIndex)
         if(val_in==0)
         {
             currentIndex=5

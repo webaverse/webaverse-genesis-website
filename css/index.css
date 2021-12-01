@@ -17,7 +17,7 @@ html, body {
 
 .content-container {
   width: 100%;
-  height: 2000px;
+  height: auto !important;
   background-color: #0e161f;
   display: none;
 }
@@ -43,9 +43,16 @@ html, body {
   max-width: 760px;
 }
 
+@media only screen and (max-width: 600px) {
+  .header-content-container {
+    width: 100%;
+    margin: 5%;
+  }
+}
 .slide-scroll-component {
   margin-top: 50px;
   width: 100%;
+  overflow: hidden;
   height: 500px;
   display: flex;
   flex-direction: column;
@@ -83,6 +90,26 @@ html, body {
   box-shadow: 0px 5px 25px 10px #0e161f;
 }
 
+@media only screen and (max-width: 600px) {
+  .slide-scroll-component {
+    width: 100%;
+  }
+
+  .slide-scroll-items-container {
+    width: 100%;
+    margin: 0 !important;
+    left: 0;
+    transform: none !important;
+  }
+
+  .slide-scroll-item {
+    width: 80%;
+  }
+
+  .slide-scroll-img {
+    width: 100%;
+  }
+}
 .slide-scroll-controls-container {
   width: 300px;
   height: 30px;
@@ -140,9 +167,9 @@ html, body {
 .content-scroller {
   background-image: url("../dist/imgs/content-bg-imgs/content-bg-img-00.jpg");
   position: relative;
-  height: 100%;
+  height: 60%;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   transition: 1s linear;
 }
 
@@ -150,9 +177,10 @@ html, body {
   background-color: rgba(10, 18, 34, 0.9);
   content: "";
   display: block;
-  height: 100%;
+  height: inherit;
   position: absolute;
   width: 100%;
+  height: 100%;
 }
 
 #slider-container-outer {
@@ -174,6 +202,7 @@ html, body {
 .slider-item {
   width: 100%;
   align-items: center;
+  margin-top: 100px;
   height: 50vh;
   flex-shrink: 0;
 }
