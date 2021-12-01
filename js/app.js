@@ -1,8 +1,8 @@
 import 'regenerator-runtime/runtime'
 import { gsap, Power1, Power4, Linear } from 'gsap';
-import Stats from '../../examples/jsm/libs/stats.module';
+import Stats from '../examples/jsm/libs/stats.module';
 import WebaWorld from './WebaWorld';
-import { GUI } from '../../examples/jsm/libs/dat.gui.module.js';
+import { GUI } from '../examples/jsm/libs/dat.gui.module.js';
 import userAgent from './userAgent';
 import UI from './UI';
 import ContentManager from './ContentManager';
@@ -124,165 +124,8 @@ function init(){
     
     resize();
     update();
-    FlexSlider.init()
+    // FlexSlider.init()
 }
-const FlexSlider = {
-    btn1:0,
-    btn2:0,
-	// total no of items
-	num_items: document.querySelectorAll(".slider-item").length,
-	
-	// position of current item in view
-	current: 1,
-
-	init: function() {
-		// set CSS order of each item initially
-        console.log("CNDLE---2")
-	
-
-		this.addEvents();
-	},
-    imgChange:function(){
-        console.log("\n\nIMG CHNSGE",this.current)
-        if(this.current==1){
-            document.querySelector(".content-scroller").style.backgroundImage= `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-    
-    
-        }
-        else if(this.current==2){
-            document.querySelector(".content-scroller").style.backgroundImage= `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
-    
-        }
-        else if(this.current==3){
-            console.log("curr_ ")
-            document.querySelector(".content-scroller").style.backgroundImage= `url('./imgs/content-bg-imgs/content-bg-img-00.jpg')`;
-    
-            
-        }else if(this.current==4){
-            document.querySelector(".content-scroller").style.backgroundImage= `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`
-            
-        }else if(this.current==5){
-            document.querySelector(".content-scroller").style.backgroundImage= `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-    
-            
-        }else if(this.current==6){
-            document.querySelector(".content-scroller").style.backgroundImage= `url('http://www.freeimageslive.com/galleries/light/pics/light01043.jpg')`;
-    
-            
-        }else if(this.current==7){
-            document.querySelector(".content-scroller").style.backgroundImage= `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-    
-            
-        }
-        
-    },
-	addEvents: function() {
-		var that = this;
-
-		// click on move item button
-		document.querySelector("#move-button").addEventListener('click', () => {
-            this.btn2=1;
-            this.btn1=0
-            this.gotoNext();
-
-		});
-
-		// after each item slides in, slider container fires transitionend event
-		document.querySelector("#slider-container").addEventListener('transitionend', () => {
-			this.changeOrder();
-		});
-        document.querySelector("#move-button-left").addEventListener('click', () => {
-            console.log("Button prev")
-            this.btn1=1
-            this.btn2=0
-			this.gotoNext2();
-		});
-
-	},
-
-	changeOrder: function() {
-        console.log("Xcurr: ",this.current,"Xnum_ : ",this. num_items)
-
-        if(this.btn2==1){
-        console.log("curr: ",this.current,"num_ : ",this. num_items)//left btn
-        if(this.current == this.num_items)
-        this.current = 1;
-    else 
-        this.current++;
-
-    let order = 1;
-
-    // change order from current position till last
-    for(let i=this.current; i<=this.num_items; i++) {
-        document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-        order++;
-    }
-
-    // change order from first position till current
-    for(let i=1; i<this.current; i++) {
-        document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-        order++;
-    }
-
-    // translate back to 0 from -100%
-    document.querySelector("#slider-container").classList.remove('slider-container-transition');
-    document.querySelector("#slider-container").style.transform = 'translateX(0)';
-    }
-        else{
-        console.log("curr: ",this.current,"2num_ : ",this. num_items)//right btn
-        // console.log("curr: ",this.current,"num_ : ",this. num_items)//left btn
-        if(this.current == 1)
-        this.current = this.num_items;
-    else 
-        this.current--;
-
-    let order = 1;
-
-    // change order from current position till last
-    for(let i=this.current; i<=this.num_items; i++) {
-        document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-        order++;
-    }
-
-    // change order from first position till current
-    for(let i=1; i<this.current; i++) {
-        document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-        order++;
-    }
-
-    document.querySelector("#slider-container").classList.remove('slider-container-transition');
-    document.querySelector("#slider-container").style.transform = 'translateX(0)';
-   
-}
-
-		
-	},
-
-
-	
-
-
-	gotoNext: function() {
-        console.log("\n\nNEXT")
-		document.querySelector("#slider-container").classList.add('slider-container-transition');
-		document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
-        this.imgChange()
-
-       
-
-	},
-    gotoNext2: function() {
-        console.log("\n\nNEXT")
-
-		document.querySelector("#slider-container").classList.add('slider-container-transition');
-		document.querySelector("#slider-container").style.transform = 'translateX(+100%)';
-        this.imgChange()
-        
-	}
-};
-
-
-
 
 
 const update = () => {
@@ -299,7 +142,6 @@ const updateScroll = ( e ) => {
     gsap.set( contentContainer, { y: -( yVal * ( window.innerHeight * 0.25 ) ) })
     WebaWorld.updateCameraPosition( yVal );
     ContentManager.updateScroll( yVal );
-    console.log("is this the value?", yVal)
 }
 
 

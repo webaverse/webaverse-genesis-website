@@ -1,4 +1,4 @@
-import { Group, Mesh, PlaneBufferGeometry, Vector3, MeshBasicMaterial, FrontSide } from '../../build/three.module';
+import { Group, Mesh, PlaneBufferGeometry, Vector3, MeshBasicMaterial, FrontSide } from '../build/three.module';
 //import SimplexNoise from 'simplex-noise';
 
 export default class Fireflies extends Group {

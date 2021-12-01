@@ -4,6 +4,7 @@ $slide-tyint-col: #0e161f;
 .slide-scroll-component {
     margin-top: 50px;
     width: 100%;
+    overflow: hidden;
     height: 500px;
     //background-color: rgba( 44, 61, 79, 0.5 );
     display: flex;
@@ -47,4 +48,28 @@ $slide-tyint-col: #0e161f;
     -webkit-box-shadow: 0px 5px 25px 10px $slide-tyint-col;
     -moz-box-shadow:    0px 5px 25px 10px $slide-tyint-col;
     box-shadow:         0px 5px 25px 10px $slide-tyint-col;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .slide-scroll-component{
+        // background-color: red;
+        width:100%;
+    }
+    .slide-scroll-items-container{
+        // background-color: green;
+        width:100%;
+        margin:0 !important;
+        left:0;
+        transform: none !important;
+    }
+
+    
+
+    .slide-scroll-img{
+        width:100%;
+        // margin-left: 200px;;
+        
+    
+    }
 }

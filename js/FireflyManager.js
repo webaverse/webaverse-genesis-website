@@ -1,6 +1,6 @@
-import * as THREE from '../../build/three.module';
-import { GLTFLoader } from '../../examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from '../../examples/jsm/loaders/DRACOLoader';
+import * as THREE from '../build/three.module';
+import { GLTFLoader } from '../examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from '../examples/jsm/loaders/DRACOLoader';
 import { TweenLite, Power1, Power2, Bounce } from 'gsap';
 import gsap from 'gsap';
 import MotionPathPlugin from 'gsap/dist/MotionPathPlugin';
@@ -163,23 +163,40 @@ const init = ( params ) => {
 }
 
 const startFlyBehavior = () => {
-    flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 10 );
-    returnToMouse( 17 );
+    flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 2 );
+    console.log("\n\nfirst")
+    returnToMouse( 3 );
+    console.log("\n\nfirst")
+
     flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 25 );
+    // console.log("\n\nfirst1")
+
     returnToMouse( 32 );
+    // console.log("\n\nfirst1")
+
     flyTo3DPoint( new THREE.Vector3( -1, 2, -1 ), 40 );
+    // console.log("\n\nfirst2")
+
+
     returnToMouse( 47 );
+    // console.log("\n\nfirst2")
+
     flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 53 );
+    // console.log("\n\nfirst3")
+
     returnToMouse( 60 );
+    // console.log("\n\nfirst3")
+
 }
 
 function flyTo2DPoint( point, delay ){
 
-    //console.log( 'flyTo2DPoint()' );
+
+    // console.log( 'flyTo2DPoint() in' );
     
     fireflyTimeout = setTimeout( function(){
-        
-        let newMousePoint = translate2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 } );
+        console.log("-> ",document.querySelector('').getBoundingClientRect())
+        let newMousePoint = translate2DPoint( { x: screen.width-900 , y: window.innerHeight - 30 } );
         let currentMousePoint = new THREE.Vector2( dynamicMouse.x, dynamicMouse.y );
 
         let lerpPoint = new THREE.Vector2().lerpVectors( newMousePoint, currentMousePoint, 0.5 );
@@ -205,6 +222,8 @@ function flyTo2DPoint( point, delay ){
         TweenLite.to( currentMousePoint, 0.6, { onStart: function(){ newMousePoint = translate2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 } ) }.bind( this ), motionPath: [ { x: lerpPoint.x + ( bezierAmount - ( Math.random() * bezierAmount * 2 ) ), y: lerpPoint.y + ( bezierAmount - ( Math.random() * bezierAmount * 2 ) ) }, { x: newMousePoint.x, y: newMousePoint.y } ], ease: Power1.easeInOut, onUpdate: function(){
             dynamicMouse = new THREE.Vector2( currentMousePoint.x, currentMousePoint.y );
         } });
+        // console.log( 'flyTo2DPoint() out' );
+
     }, delay * 1000 );
 }
 

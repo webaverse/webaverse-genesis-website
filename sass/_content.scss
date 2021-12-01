@@ -1,6 +1,6 @@
 .content-container {
     width: 100%;
-    height: 2000px;
+    height: auto !important;
     background-color: #0e161f;
     display: none;
     //overflow:hidden;
@@ -27,4 +27,11 @@
     margin-top: 100px;
     margin-bottom: 100px;
     max-width: 760px;
+}
+@media only screen and (max-width: 600px) {
+    .header-content-container {
+    // background-color: red;
+    width:100%;
+    margin:5%;
+    }
 }
