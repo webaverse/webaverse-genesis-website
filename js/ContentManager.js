@@ -1,7 +1,8 @@
-//import ScrollerManager from './SideScrollManager';
+import SideScrollManager from './SideScrollManager';
 
 let container;
 let topGrad;
+let sideScrollComponentContainer;
 
 const init = ( params ) => {
     
@@ -9,6 +10,14 @@ const init = ( params ) => {
     topGrad = document.createElement( 'div' );
     topGrad.className = "content-top-grad";
     container.appendChild( topGrad );
+
+    // Scroll compoment
+    sideScrollComponentContainer = document.querySelector( '.slide-scroll-component' );
+    
+    SideScrollManager.init( {
+        container: sideScrollComponentContainer,
+        scrollLength: 5,
+    })
 }
 
 const updateScroll = ( val ) => {
@@ -17,9 +26,15 @@ const updateScroll = ( val ) => {
     topGrad.style.marginTop = -( ( window.innerHeight * 0.5 ) * val ) + 'px';
 }
 
+const updateDragVal = ( val ) => {
+    SideScrollManager.updateScrollVal( val );
+}
+
+
 const Content = {
     init,
     updateScroll,
+    updateDragVal,
 }
 
 export default Content;

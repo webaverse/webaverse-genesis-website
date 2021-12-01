@@ -60994,7 +60994,7 @@ var updateCameraPosition = function updateCameraPosition(val) {
   streetLight1.intensity = 1 - val * 0.5;
   streetLight2.intensity = 0.5 - val * 0.5;
 
-  if (val > 0.8) {
+  if (val > 0.75) {
     allowUpdate = false;
   } else {
     allowUpdate = true;
@@ -63937,22 +63937,490 @@ exports.getUserAgent = function () {
   exports.isMobile = /(iPad|iPhone|Android)/i.test(navigator.userAgent);
   return exports.isMobile;
 };
-},{}],"js/ContentManager.js":[function(require,module,exports) {
+},{}],"js/SideScrollControls.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-//import ScrollerManager from './SideScrollManager';
+
+var _gsap = require("gsap");
+
+var _EventDispatcher = _interopRequireDefault(require("./EventDispatcher"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//import SideNav from './SideNav';
+var container;
+var controlItemsArray = [];
+var controlItemsLength;
+var colorsArray = ['#36f5b8', '#15feff', '#9751a9', '#de40ac', '#de7f40', '#f5e536', '#9df536', '#36f5b8', '#15feff', '#9751a9', '#de40ac'];
+var bar;
+var innerItemSizes = {
+  focus: 20,
+  blur: 9
+};
+var outerItemSizes = {
+  focus: 26,
+  blur: 13
+};
+var dispatcher = new _EventDispatcher.default();
+
+var init = function init(params) {
+  console.log('SideScrollControls.init()');
+  container = params.container;
+  controlItemsLength = params.numItems;
+  bar = document.createElement('div');
+  bar.className = 'side-scroll-controls-bar';
+  container.appendChild(bar);
+
+  for (var i = 0; i < controlItemsLength; i++) {
+    var controlItem = document.createElement('div');
+    controlItem.className = 'slide-scroll-control-item';
+    var controlItemOuter = document.createElement('div');
+    controlItemOuter.className = 'side-scroll-controls-item-outer round';
+
+    _gsap.TweenLite.set(controlItemOuter, {
+      width: outerItemSizes.blur,
+      height: outerItemSizes.blur
+    });
+
+    var controlItemInner = document.createElement('div');
+    controlItemInner.className = 'side-scroll-controls-item-inner round';
+
+    _gsap.TweenLite.set(controlItemInner, {
+      width: innerItemSizes.blur,
+      height: innerItemSizes.blur
+    }); //controlItemInner.style.width = controlItemInner.style.height = innerItemSizes.blur;
+
+
+    controlItemInner.style.backgroundColor = colorsArray[i];
+    controlItem.appendChild(controlItemOuter);
+    controlItem.appendChild(controlItemInner);
+    controlItem.id = i;
+    controlItem.isActive = true;
+
+    if (i == 0) {
+      _gsap.TweenLite.set(controlItemOuter, {
+        width: outerItemSizes.focus,
+        height: outerItemSizes.focus
+      });
+
+      _gsap.TweenLite.set(controlItemInner, {
+        width: innerItemSizes.focus,
+        height: innerItemSizes.focus
+      });
+
+      controlItem.isActive = false;
+    }
+
+    container.appendChild(controlItem);
+    controlItemsArray.push(controlItem);
+    controlItem.addEventListener('click', itemClicked, false);
+    controlItem.addEventListener('mouseover', itemOver, false);
+    controlItem.addEventListener('mouseout', itemOut, false);
+  }
+};
+
+var itemClicked = function itemClicked(evt) {
+  if (!evt.target.isActive) return;
+  console.log('itemClicked ' + evt.target.id);
+  var activeItem = controlItemsArray[evt.target.id];
+  activeItem.isActive = false;
+
+  _gsap.TweenLite.to(activeItem.children[0], 0.3, {
+    width: outerItemSizes.focus,
+    height: outerItemSizes.focus,
+    ease: _gsap.Power3.easeOut
+  });
+
+  _gsap.TweenLite.to(activeItem.children[1], 0.3, {
+    width: innerItemSizes.focus,
+    height: innerItemSizes.focus,
+    ease: _gsap.Power3.easeOut
+  });
+
+  for (var i = 0; i < controlItemsArray.length; i++) {
+    var ci = controlItemsArray[i];
+
+    if (i != evt.target.id && ci.isActive == false) {
+      ci.isActive = true;
+
+      _gsap.TweenLite.to(ci.children[0], 0.3, {
+        width: outerItemSizes.blur,
+        height: outerItemSizes.blur,
+        ease: _gsap.Power3.easeOut
+      });
+
+      _gsap.TweenLite.to(ci.children[1], 0.3, {
+        width: innerItemSizes.blur,
+        height: innerItemSizes.blur,
+        ease: _gsap.Power3.easeOut
+      });
+    }
+  }
+
+  dispatcher.dispatchEvent('controlItemClicked', {
+    id: evt.target.id
+  });
+};
+
+var itemOver = function itemOver(evt) {
+  if (!evt.target.isActive) return; //console.log( 'itemOver ' + evt.target.id );
+};
+
+var itemOut = function itemOut(evt) {
+  if (!evt.target.isActive) return; //console.log( 'itemOver ' + evt.target.id );
+};
+
+var pointerDown = function pointerDown(evt) {
+  /* console.log( 'pointerDown ' + evt.clientX )
+  evt.target.addEventListener( 'mousemove', mousemove );
+  scrollerStartXPos = contentInnerCont.getBoundingClientRect().left;
+  console.log( 'startX ' + scrollerStartXPos )
+  pointerDownXPos = evt.clientX; */
+};
+
+var pointerUp = function pointerUp(evt) {
+  /* console.log( 'pointerUp' );
+  evt.target.removeEventListener( 'mousemove', mousemove ); */
+};
+/* const mousemove = ( evt ) => {
+    let dragDist;
+
+    TweenLite.set( contentInnerCont, { x: scrollerStartXPos + ( evt.clientX - pointerDownXPos ) } );
+    
+ 
+}
+ */
+
+
+var forceClick = function forceClick(index) {
+  var activeItem = controlItemsArray[index];
+  activeItem.isActive = false;
+
+  _gsap.TweenLite.to(activeItem.children[0], 0.3, {
+    width: outerItemSizes.focus,
+    height: outerItemSizes.focus,
+    ease: _gsap.Power3.easeOut
+  });
+
+  _gsap.TweenLite.to(activeItem.children[1], 0.3, {
+    width: innerItemSizes.focus,
+    height: innerItemSizes.focus,
+    ease: _gsap.Power3.easeOut
+  });
+
+  for (var i = 0; i < controlItemsArray.length; i++) {
+    var ci = controlItemsArray[i];
+
+    if (i != index && ci.isActive == false) {
+      ci.isActive = true;
+
+      _gsap.TweenLite.to(ci.children[0], 0.3, {
+        width: outerItemSizes.blur,
+        height: outerItemSizes.blur,
+        ease: _gsap.Power3.easeOut
+      });
+
+      _gsap.TweenLite.to(ci.children[1], 0.3, {
+        width: innerItemSizes.blur,
+        height: innerItemSizes.blur,
+        ease: _gsap.Power3.easeOut
+      });
+    }
+  }
+};
+
+var updateScroll = function updateScroll(val) {
+  var amt = val > 1 ? 1 : val;
+};
+
+var SideScrollControls = {
+  init: init,
+  updateScroll: updateScroll,
+  dispatcher: dispatcher,
+  forceClick: forceClick
+};
+var _default = SideScrollControls;
+exports.default = _default;
+},{"gsap":"node_modules/gsap/index.js","./EventDispatcher":"js/EventDispatcher.js"}],"js/SideScrollManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _gsap = require("gsap");
+
+var _SideScrollControls = _interopRequireDefault(require("./SideScrollControls"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var container;
+var controlsContainer;
+var slideItemsContainer;
+var imgPath = './imgs/content-scroll-imgs/';
+var scrollItemsLength;
+var scrollItemsArray;
+var slideItemsArray = [];
+var slideStartX;
+var sectionImgs = [{
+  focus: 'info_sm.png',
+  blur: 'info_alt_sm.png'
+}, {
+  focus: 'engine_sm.png',
+  blur: 'engine_alt_sm.png'
+}, {
+  focus: 'street_sm.png',
+  blur: 'street_alt_sm.png'
+}, {
+  focus: 'partner_sm.png',
+  blur: 'partner_alt_sm.png'
+}, {
+  focus: 'secret_sm.png',
+  blur: 'secret_alt_sm.png'
+}];
+var zIndexCtr = 99;
+var contentLength = sectionImgs.length;
+
+var init = function init(params) {
+  console.log('SideScrollManager.init()');
+  container = params.container;
+  scrollItemsLength = params.itemsLength; // Slides 
+
+  slideItemsContainer = document.querySelector('.slide-scroll-items-container'); // Controls
+
+  controlsContainer = document.querySelector('.slide-scroll-controls-container');
+
+  _SideScrollControls.default.init({
+    container: controlsContainer,
+    numItems: contentLength
+  });
+
+  _SideScrollControls.default.dispatcher.addEventListener('controlItemClicked', controlItemClickedHandler, false); // build slides;
+
+
+  for (var i = 0; i < contentLength; i++) {
+    var slideItem = document.createElement('div');
+    slideItem.className = 'slide-scroll-item';
+    var blurImg = document.createElement('img');
+    blurImg.className = 'slide-scroll-img slide-shadow';
+    var focusImg = document.createElement('img');
+    focusImg.className = 'slide-scroll-img';
+    var tintImg = document.createElement('img');
+    tintImg.className = 'slide-scroll-img';
+    blurImg.src = imgPath + sectionImgs[i].blur;
+    focusImg.src = imgPath + sectionImgs[i].focus;
+    tintImg.src = imgPath + 'tint-img.png';
+    slideItem.blurImg = blurImg;
+    slideItem.focusImg = focusImg;
+    slideItem.tintImg = tintImg;
+    slideItem.appendChild(blurImg);
+    slideItem.appendChild(focusImg);
+    slideItem.appendChild(tintImg);
+    slideItem.sineFract = i / contentLength;
+    slideItem.originFract = i / contentLength;
+    console.log('SineFract ' + slideItem.sineFract);
+    slideItem.transforms = {
+      rotX: 0 * Math.sin(slideItem.sineFract),
+      rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
+      rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
+      trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+      perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
+    };
+
+    _gsap.gsap.set(slideItem, {
+      transform: "rotateX(".concat(slideItem.transforms.rotX, "deg) rotateY(").concat(slideItem.transforms.rotY, "deg) rotateZ(").concat(slideItem.transforms.rotZ, "deg) translateX(").concat(slideItem.transforms.trans, "px)"),
+      perspective: "".concat(slideItem.transforms.perspective, "px")
+    });
+
+    if (i != 0) {
+      tintImg.style.opacity = 0;
+      focusImg.style.opacity = 0;
+    } else {}
+
+    slideItem.style.zIndex = zIndexCtr - i;
+    tintImg.style.opacity = i * 0.3;
+    slideItemsContainer.appendChild(slideItem);
+    slideItemsArray.push(slideItem);
+  }
+
+  _gsap.gsap.set(slideItemsContainer, {
+    x: (window.innerWidth - 480) * 0.5
+  });
+};
+
+var controlItemClickedHandler = function controlItemClickedHandler(evt) {
+  console.log('itemClicled in Manager ' + evt.id);
+  var newIndex = -(evt.id * 0.2);
+  console.log('new index ' + newIndex);
+
+  for (var i = 0; i < slideItemsArray.length; i++) {
+    var slideItem = slideItemsArray[i];
+    slideItem.sineFract = slideItem.originFract + newIndex;
+    slideItem.transforms = {
+      rotX: 0 * Math.sin(slideItem.sineFract),
+      rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
+      rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
+      trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+      perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
+    };
+
+    _gsap.gsap.to(slideItem, 0.6, {
+      transform: "rotateX(".concat(slideItem.transforms.rotX, "deg) rotateY(").concat(slideItem.transforms.rotY, "deg) rotateZ(").concat(slideItem.transforms.rotZ, "deg) translateX(").concat(slideItem.transforms.trans, "px)"),
+      perspective: "".concat(slideItem.transforms.perspective, "px"),
+      ease: _gsap.Power3.easeOut,
+      delay: i * 0.0
+    });
+
+    if (i == evt.id) {
+      zIndexCtr++;
+      slideItem.style.zIndex = zIndexCtr;
+
+      _gsap.gsap.to(slideItem.focusImg, 0.6, {
+        opacity: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.025
+      });
+
+      _gsap.gsap.to(slideItem.tintImg, 0.6, {
+        opacity: 0,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.025
+      });
+    } else {
+      slideItem.style.zIndex = zIndexCtr - Math.ceil(Math.abs(slideItem.sineFract * 10));
+
+      _gsap.gsap.to(slideItem.focusImg, 0.6, {
+        opacity: 0,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.025
+      });
+
+      _gsap.gsap.to(slideItem.tintImg, 0.6, {
+        alpha: Math.abs(slideItem.sineFract) * 1.5,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.025
+      });
+    }
+  }
+};
+
+var updateScrollVal = function updateScrollVal(val) {
+  var newIndex = Math.floor(Math.abs(val * 10) * 0.5);
+
+  _SideScrollControls.default.forceClick(newIndex);
+
+  var activeIndex = Math.round(Math.abs(val * 5));
+  console.log('activeIndex ' + activeIndex);
+
+  for (var i = 0; i < slideItemsArray.length; i++) {
+    var slideItem = slideItemsArray[i];
+    slideItem.sineFract = slideItem.originFract + val;
+    slideItem.transforms = {
+      rotX: 0 * Math.sin(slideItem.sineFract),
+      rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
+      rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
+      trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+      perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
+    };
+
+    _gsap.gsap.to(slideItem, 0.6, {
+      transform: "rotateX(".concat(slideItem.transforms.rotX, "deg) rotateY(").concat(slideItem.transforms.rotY, "deg) rotateZ(").concat(slideItem.transforms.rotZ, "deg) translateX(").concat(slideItem.transforms.trans, "px)"),
+      perspective: "".concat(slideItem.transforms.perspective, "px"),
+      ease: _gsap.Power3.easeOut,
+      delay: i * 0.0
+    });
+
+    if (i == activeIndex) {
+      zIndexCtr++;
+      slideItem.style.zIndex = zIndexCtr;
+
+      _gsap.gsap.to(slideItem.focusImg, 0.6, {
+        opacity: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.0
+      });
+
+      _gsap.gsap.to(slideItem.tintImg, 0.6, {
+        opacity: 0,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.0
+      });
+    } else {
+      slideItem.style.zIndex = zIndexCtr - Math.ceil(Math.abs(slideItem.sineFract * 10));
+
+      _gsap.gsap.to(slideItem.focusImg, 0.6, {
+        opacity: 0,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.0
+      });
+
+      _gsap.gsap.to(slideItem.tintImg, 0.6, {
+        alpha: Math.abs(slideItem.sineFract) * 1.5,
+        ease: _gsap.Power3.easeOut,
+        delay: i * 0.0
+      });
+    }
+  }
+};
+
+var pointerDown = function pointerDown(evt) {
+  console.log('pointerDown ' + evt.clientX);
+  evt.target.addEventListener('mousemove', mousemove);
+};
+
+var pointerUp = function pointerUp(evt) {
+  console.log('pointerUp');
+  evt.target.removeEventListener('mousemove', mousemove);
+};
+
+var mousemove = function mousemove(evt) {
+  var dragDist;
+};
+
+var updateScroll = function updateScroll(val) {
+  var amt = val > 1 ? 1 : val;
+};
+
+var SideScrollManager = {
+  init: init,
+  updateScrollVal: updateScrollVal,
+  controlItemClickedHandler: controlItemClickedHandler
+};
+var _default = SideScrollManager;
+exports.default = _default;
+},{"gsap":"node_modules/gsap/index.js","./SideScrollControls":"js/SideScrollControls.js"}],"js/ContentManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _SideScrollManager = _interopRequireDefault(require("./SideScrollManager"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var container;
 var topGrad;
+var sideScrollComponentContainer;
 
 var init = function init(params) {
   container = params.container;
   topGrad = document.createElement('div');
   topGrad.className = "content-top-grad";
-  container.appendChild(topGrad);
+  container.appendChild(topGrad); // Scroll compoment
+
+  sideScrollComponentContainer = document.querySelector('.slide-scroll-component');
+
+  _SideScrollManager.default.init({
+    container: sideScrollComponentContainer,
+    scrollLength: 5
+  });
 };
 
 var updateScroll = function updateScroll(val) {
@@ -63961,13 +64429,18 @@ var updateScroll = function updateScroll(val) {
   topGrad.style.marginTop = -(window.innerHeight * 0.5 * val) + 'px';
 };
 
+var updateDragVal = function updateDragVal(val) {
+  _SideScrollManager.default.updateScrollVal(val);
+};
+
 var Content = {
   init: init,
-  updateScroll: updateScroll
+  updateScroll: updateScroll,
+  updateDragVal: updateDragVal
 };
 var _default = Content;
 exports.default = _default;
-},{}],"js/app.js":[function(require,module,exports) {
+},{"./SideScrollManager":"js/SideScrollManager.js"}],"js/app.js":[function(require,module,exports) {
 "use strict";
 
 require("regenerator-runtime/runtime");
@@ -64086,6 +64559,20 @@ function init() {
     isMobile: isMobile,
     container: document.querySelector('.app-container')
   });
+  /*  guiParams = {
+       drag: 0.0,
+   };
+    const gui = new GUI();
+   gui.add( guiParams, 'drag', -0.8, 0.0 ).step( 0.2 ).onChange( function ( value ) {
+       
+       
+       console.log( 'scrollVal ' + value)
+       ContentManager.updateDragVal( value );
+       
+   } );
+   
+   gui.open(); */
+
 
   if (showStats) document.body.appendChild(stats.dom);
   window.addEventListener('resize', resize, false);
@@ -64116,7 +64603,7 @@ var update = function update() {
 var updateScroll = function updateScroll(e) {
   var yVal = window.scrollY / window.innerHeight;
 
-  _gsap.TweenLite.set(contentContainer, {
+  _gsap.gsap.set(contentContainer, {
     y: -(yVal * (window.innerHeight * 0.25))
   });
 
@@ -64137,160 +64624,6 @@ var resize = function resize() {
 
   _WebaWorld.default.resize(windowWidth, windowHeight);
 };
-/* class App extends Component {
-
-    componentDidMount() {
-
-        document.querySelector( '#content-container-temp' ).style.display = "none";
-    
-        
-        if( showStats ) stats = new Stats();
-        
-        isMobile = userAgent.getUserAgent();
-        console.log( 'isMobile ' + isMobile )
-
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-
-        console.log( 'App.init');
-
-        WebaWorld.dispatcher.once( 'modelLoaded', function() { 
-            console.log( 'app.modelLoaded()')
-            document.querySelector( '#root' ).style.backgroundColor = "#0e161f";
-            document.querySelector( 'body' ).style.backgroundColor = "#0e161f";
-            //UI.showSplash();
-            //UI.hideSplash();
-
-            WebaWorld.getAudioManager().dispatcher.addEventListener( 'audioInitByInteraction', UI.toggleAudioIconOn )
-
-        } )
-
-        WebaWorld.dispatcher.addEventListener( 'audioInitMobile', UI.forceComplete );
-       
-        UI.dispatcher.addEventListener( 'toggleAudio', function( e ){
-            console.log( 'toggleAudio');
-            if( e.audioToggle ) {
-                WebaWorld.getAudioManager().playAll();
-
-            } else {
-                WebaWorld.getAudioManager().stopAll();
-            }
-            //WebaWorld.initAudio();
-        });
-
-        UI.init( { isMobile: isMobile } );
-
-        WebaWorld.init( { 
-            modelPath: "./assets/models/homespace/homespace_shell_V12_galad.glb",
-            modelPos: { x: -2, y: -0.5, z: 0 },
-            modelScale: 8.0,
-            modelRotationAngles: { x: 17, y: 48.5, z: 0 },
-            width: windowWidth, 
-            height: windowHeight,
-            fov: 45, 
-            near: 1,
-            far: 10000,
-            fogNear: 0.1,
-            fogFar: 100,
-            fogColor: 0xffffff,
-            fogDensity: 0.00007,
-            fogSpeed: 0.001,
-            cameraPos: { x: 0, y: 200, z: 500 },
-            sunlightColor: 0xdbdf66,
-            sunlightIntensity: 3.5,
-            sunlightPos: { x: -20, y: 20, z: 10 },
-            sunlightShadowMapSize: 5,
-            wireframe: false, 
-            colors: { fog: 0x222222, top: 0x222222, bot: 0x04FFFF },
-            cloudRotationSpeed: 0.0002,
-            isMobile: isMobile
-        } );
-
-        
-
-        guiParams = {
-            time: 1.0,
-        };
-
-        
-
-
-        const contentElement = document.getElementById( "content-container-temp" );
-
-        rootElement.appendChild( contentElement );
-         
-        this.mount.appendChild( WebaWorld.getRenderer().domElement );
-        
-        if( showStats ) document.body.appendChild( stats.dom );
-        
-        function update() {
-            requestAnimationFrame( ( t ) => {
-                WebaWorld.update( t );
-                UI.update();
-                //updateParallax( WebaWorld.getParaAmount() )
-                
-                if( showStats ) stats.update();
-                update();
-            } );
-        };
-        
-        let updateParallax = ( val ) => {
-            //foreground.style.left =  -parallaxAmount - ( val * parallaxAmount ) + 'px'; 
-            foreground.style.left =  -parallaxAmount + ( -val * parallaxAmount ) + 'px'; 
-        }
-        
-        this.resize();
-        window.addEventListener( 'resize', this.resize, false );
-        document.body.addEventListener("scroll", this.updateScroll );
-
-        if( isMobile ){
-            window.addEventListener('touchstart', function( e ){
-                WebaWorld.touchMove( e );
-                //e.preventDefault();
-            }, false );
-
-            window.addEventListener( 'touchmove', function( e ){
-                WebaWorld.touchMove( e );
-                //e.preventDefault();
-            }, false )
-    
-        } else {
-            window.addEventListener( 'mousemove', function( e ){
-                WebaWorld.mouseMove( e );
-                //e.preventDefault();
-            }, false )
-        }
-        update();
-
-    }
-
-    updateScroll( e ) {
-        var yPos = e.target.scrollTop / window.innerHeight
-        TweenLite.set( contentContainer, { y: -( yPos * ( window.innerHeight * 0.25 ) ) })
-        WebaWorld.updateCameraPosition( yPos );
-        Content.updateScroll( yPos );
-    }
-
-    
-    render() {
-      return (
-        <div ref={ ref => ( this.mount = ref ) } />
-      )
-    }
-
-    resize() {
-
-        console.log( 'resizing!!!!!!!! ')
-
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        
-        WebaWorld.resize( windowWidth, windowHeight );
-
-    }
-
-
-} */
 },{"regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","gsap":"node_modules/gsap/index.js","../../examples/jsm/libs/stats.module":"../examples/jsm/libs/stats.module.js","./WebaWorld":"js/WebaWorld.js","../../examples/jsm/libs/dat.gui.module.js":"../examples/jsm/libs/dat.gui.module.js","./userAgent":"js/userAgent.js","./UI":"js/UI.js","./ContentManager":"js/ContentManager.js"}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -64319,7 +64652,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64671" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54934" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

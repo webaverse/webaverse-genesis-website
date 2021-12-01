@@ -1,6 +1,6 @@
-import * as THREE from '../build/three.module';
-import { GLTFLoader } from '../examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from '../examples/jsm/loaders/DRACOLoader';
+import * as THREE from '../../build/three.module';
+import { GLTFLoader } from '../../examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from '../../examples/jsm/loaders/DRACOLoader';
 import { TweenLite, Power1, Power2, Bounce } from 'gsap';
 import gsap from 'gsap';
 import MotionPathPlugin from 'gsap/dist/MotionPathPlugin';

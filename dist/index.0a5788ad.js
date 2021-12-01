@@ -462,18 +462,17 @@ function hmrAcceptRun(bundle, id) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _runtime = require("regenerator-runtime/runtime");
 var _gsap = require("gsap");
-var _statsModule = require("../examples/jsm/libs/stats.module");
+var _statsModule = require("../../examples/jsm/libs/stats.module");
 var _statsModuleDefault = parcelHelpers.interopDefault(_statsModule);
 var _webaWorld = require("./WebaWorld");
 var _webaWorldDefault = parcelHelpers.interopDefault(_webaWorld);
-var _datGuiModuleJs = require("../examples/jsm/libs/dat.gui.module.js");
+var _datGuiModuleJs = require("../../examples/jsm/libs/dat.gui.module.js");
 var _userAgent = require("./userAgent");
 var _userAgentDefault = parcelHelpers.interopDefault(_userAgent);
 var _ui = require("./UI");
 var _uiDefault = parcelHelpers.interopDefault(_ui);
 var _contentManager = require("./ContentManager");
 var _contentManagerDefault = parcelHelpers.interopDefault(_contentManager);
-// import ItemSlider from "./Content-Scroller-Slider"
 let world;
 let windowWidth;
 let windowHeight;
@@ -492,7 +491,7 @@ function init() {
     console.log('app.init');
     if (showStats) stats = new _statsModuleDefault.default();
     isMobile = _userAgentDefault.default.getUserAgent();
-    console.log('isMobile ->' + isMobile);
+    console.log('isMobile ' + isMobile);
     windowWidth = window.innerWidth;
     windowHeight = window.innerHeight;
     _webaWorldDefault.default.dispatcher.once('modelLoaded', function() {
@@ -559,6 +558,16 @@ function init() {
         isMobile: isMobile,
         container: document.querySelector('.app-container')
     });
+    guiParams = {
+        drag: 0
+    };
+    const gui = new _datGuiModuleJs.GUI();
+    gui.add(guiParams, 'drag', -0.8, 0).step(0.2).onChange(function(value) {
+        console.log('scrollVal ' + value);
+        _contentManagerDefault.default.updateDragVal(value);
+    });
+    gui.open();
+    // ContentManager.updateDragVal( -0.2 );
     if (showStats) document.body.appendChild(stats.dom);
     window.addEventListener('resize', resize, false);
     window.addEventListener("scroll", updateScroll);
@@ -568,8 +577,7 @@ function init() {
     } else window.addEventListener('mousemove', _webaWorldDefault.default.mouseMove, false);
     resize();
     update();
-    FlexSlider.init();
-// ItemSlider.init()
+// FlexSlider.init()
 }
 const update = ()=>{
     requestAnimationFrame((t)=>{
@@ -581,157 +589,11 @@ const update = ()=>{
 };
 const updateScroll = (e)=>{
     var yVal = window.scrollY / window.innerHeight;
-    _gsap.TweenLite.set(contentContainer, {
+    _gsap.gsap.set(contentContainer, {
         y: -(yVal * (window.innerHeight * 0.25))
     });
     _webaWorldDefault.default.updateCameraPosition(yVal);
     _contentManagerDefault.default.updateScroll(yVal);
-};
-const FlexSlider = {
-    btn1: 0,
-    btn2: 0,
-    // total no of items
-    num_items: document.querySelectorAll(".slider-item").length,
-    // position of current item in view
-    current: 1,
-    init: function() {
-        // set CSS order of each item initially
-        console.log("CNDLE---2");
-        // document.querySelectorAll(".slider-item").forEach(function(element, index) {
-        // 	elethis.gotoNext();ment.style.order = index+1;
-        // });
-        this.addEvents();
-    },
-    imgChange: function() {
-        console.log("\n\nIMG CHNSGE", this.current);
-        if (this.current == 1) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-        else if (this.current == 2) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
-        else if (this.current == 3) {
-            console.log("curr_ ");
-            document.querySelector(".content-scroller").style.backgroundImage = `url('./imgs/content-bg-imgs/content-bg-img-00.jpg')`;
-        } else if (this.current == 4) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
-        else if (this.current == 5) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-        else if (this.current == 6) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light01043.jpg')`;
-        else if (this.current == 7) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-    },
-    addEvents: function() {
-        var that = this;
-        // click on move item button
-        document.querySelector("#move-button").addEventListener('click', ()=>{
-            this.btn2 = 1;
-            this.btn1 = 0;
-            this.gotoNext();
-        });
-        // after each item slides in, slider container fires transitionend event
-        document.querySelector("#slider-container").addEventListener('transitionend', ()=>{
-            this.changeOrder();
-        });
-        document.querySelector("#move-button-left").addEventListener('click', ()=>{
-            console.log("Button prev");
-            this.btn1 = 1;
-            this.btn2 = 0;
-            this.gotoNext2();
-        });
-    // after each item slides in, slider container fires transitionend event
-    // document.querySelector("#slider-container").addEventListener('transitionend', () => {
-    // 	this.changeOrder2();
-    // });
-    },
-    changeOrder: function() {
-        // change current position
-        // document.querySelectorAll(".slider-item").forEach(function(element, index) {
-        // 	element.style.order = index+1;
-        // });
-        console.log("Xcurr: ", this.current, "Xnum_ : ", this.num_items);
-        if (this.btn2 == 1) {
-            console.log("curr: ", this.current, "num_ : ", this.num_items) //left btn
-            ;
-            if (this.current == this.num_items) this.current = 1;
-            else this.current++;
-            let order = 1;
-            // change order from current position till last
-            for(let i = this.current; i <= this.num_items; i++){
-                document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-                order++;
-            }
-            // change order from first position till current
-            for(let i1 = 1; i1 < this.current; i1++){
-                document.querySelector(".slider-item[data-position='" + i1 + "']").style.order = order;
-                order++;
-            }
-            // translate back to 0 from -100%
-            // we don't need transitionend to fire for this translation, so remove transition CSS
-            document.querySelector("#slider-container").classList.remove('slider-container-transition');
-            document.querySelector("#slider-container").style.transform = 'translateX(0)';
-        } else {
-            console.log("curr: ", this.current, "2num_ : ", this.num_items) //right btn
-            ;
-            // console.log("curr: ",this.current,"num_ : ",this. num_items)//left btn
-            if (this.current == 1) this.current = this.num_items;
-            else this.current--;
-            let order = 1;
-            // change order from current position till last
-            for(let i = this.current; i <= this.num_items; i++){
-                document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-                order++;
-            }
-            // change order from first position till current
-            for(let i2 = 1; i2 < this.current; i2++){
-                document.querySelector(".slider-item[data-position='" + i2 + "']").style.order = order;
-                order++;
-            }
-            // translate back to 0 from -100%
-            // we don't need transitionend to fire for this translation, so remove transition CSS
-            document.querySelector("#slider-container").classList.remove('slider-container-transition');
-            document.querySelector("#slider-container").style.transform = 'translateX(0)';
-        }
-    },
-    // changeOrder2: function() {
-    //     console.log("curr: ",this.current,"num_ 2: : ",this. num_items)
-    // 	// change current position
-    // 	if(this.current == this.num_items)
-    // 		this.current = 4;
-    // 	else 
-    // 		this.current--;
-    // 	let order = 4;
-    // 	// change order from current position till last
-    // 	for(let i=this.current; i<=this.num_items; i++) {
-    // 		document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-    // 		order--;
-    // 	}
-    // 	// change order from first position till current
-    // 	for(let i=1; i<this.current; i++) {
-    // 		document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-    // 		order--;
-    // 	}
-    // 	// translate back to 0 from -100%
-    // 	// we don't need transitionend to fire for this translation, so remove transition CSS
-    // 	document.querySelector("#slider-container").classList.remove('slider-container-transition2');
-    // 	document.querySelector("#slider-container").style.transform = 'translateX(0)';
-    // },
-    gotoNext: function() {
-        console.log("\n\nNEXT");
-        // translate from 0 to -100% 
-        // we need transitionend to fire for this translation, so add transition CSS
-        document.querySelector("#slider-container").classList.add('slider-container-transition');
-        document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
-        this.imgChange();
-    // document.querySelector(".content-scroller").classList.add('slider-img-transition');
-    // document.querySelector(".content-scroller").style.transform = 'translateX(-100%)';
-    // document.body.style.backgroundImage = "url('img_tree.png')";
-    // background-image: url('../dist/imgs/content-bg-imgs/content-bg-img-00.jpg');
-    },
-    gotoNext2: function() {
-        console.log("\n\nNEXT");
-        // translate from 0 to -100% 
-        // we need transitionend to fire for this translation, so add transition CSS
-        document.querySelector("#slider-container").classList.add('slider-container-transition');
-        document.querySelector("#slider-container").style.transform = 'translateX(+100%)';
-        this.imgChange();
-    // document.querySelector(".content-scroller").classList.add('slider-img-transition');
-    // document.querySelector(".content-scroller").style.transform = 'translateX(+100%)';
-    // document.querySelector("#bg-img::before").style.backgroundColor= "rgba(10,10,10,5)";
-    }
 };
 const render = ()=>{
 /* return (
@@ -741,162 +603,9 @@ const resize = ()=>{
     windowWidth = window.innerWidth;
     windowHeight = window.innerHeight;
     _webaWorldDefault.default.resize(windowWidth, windowHeight);
-} /* class App extends Component {
+};
 
-    componentDidMount() {
-
-        document.querySelector( '#content-container-temp' ).style.display = "none";
-    
-        
-        if( showStats ) stats = new Stats();
-        
-        isMobile = userAgent.getUserAgent();
-        console.log( 'isMobile ' + isMobile )
-
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-
-        console.log( 'App.init');
-
-        WebaWorld.dispatcher.once( 'modelLoaded', function() { 
-            console.log( 'app.modelLoaded()')
-            document.querySelector( '#root' ).style.backgroundColor = "#0e161f";
-            document.querySelector( 'body' ).style.backgroundColor = "#0e161f";
-            //UI.showSplash();
-            //UI.hideSplash();
-
-            WebaWorld.getAudioManager().dispatcher.addEventListener( 'audioInitByInteraction', UI.toggleAudioIconOn )
-
-        } )
-
-        WebaWorld.dispatcher.addEventListener( 'audioInitMobile', UI.forceComplete );
-       
-        UI.dispatcher.addEventListener( 'toggleAudio', function( e ){
-            console.log( 'toggleAudio');
-            if( e.audioToggle ) {
-                WebaWorld.getAudioManager().playAll();
-
-            } else {
-                WebaWorld.getAudioManager().stopAll();
-            }
-            //WebaWorld.initAudio();
-        });
-
-        UI.init( { isMobile: isMobile } );
-
-        WebaWorld.init( { 
-            modelPath: "./assets/models/homespace/homespace_shell_V12_galad.glb",
-            modelPos: { x: -2, y: -0.5, z: 0 },
-            modelScale: 8.0,
-            modelRotationAngles: { x: 17, y: 48.5, z: 0 },
-            width: windowWidth, 
-            height: windowHeight,
-            fov: 45, 
-            near: 1,
-            far: 10000,
-            fogNear: 0.1,
-            fogFar: 100,
-            fogColor: 0xffffff,
-            fogDensity: 0.00007,
-            fogSpeed: 0.001,
-            cameraPos: { x: 0, y: 200, z: 500 },
-            sunlightColor: 0xdbdf66,
-            sunlightIntensity: 3.5,
-            sunlightPos: { x: -20, y: 20, z: 10 },
-            sunlightShadowMapSize: 5,
-            wireframe: false, 
-            colors: { fog: 0x222222, top: 0x222222, bot: 0x04FFFF },
-            cloudRotationSpeed: 0.0002,
-            isMobile: isMobile
-        } );
-
-        
-
-        guiParams = {
-            time: 1.0,
-        };
-
-        
-
-
-        const contentElement = document.getElementById( "content-container-temp" );
-
-        rootElement.appendChild( contentElement );
-         
-        this.mount.appendChild( WebaWorld.getRenderer().domElement );
-        
-        if( showStats ) document.body.appendChild( stats.dom );
-        
-        function update() {
-            requestAnimationFrame( ( t ) => {
-                WebaWorld.update( t );
-                UI.update();
-                //updateParallax( WebaWorld.getParaAmount() )
-                
-                if( showStats ) stats.update();
-                update();
-            } );
-        };
-        
-        let updateParallax = ( val ) => {
-            //foreground.style.left =  -parallaxAmount - ( val * parallaxAmount ) + 'px'; 
-            foreground.style.left =  -parallaxAmount + ( -val * parallaxAmount ) + 'px'; 
-        }
-        
-        this.resize();
-        window.addEventListener( 'resize', this.resize, false );
-        document.body.addEventListener("scroll", this.updateScroll );
-
-        if( isMobile ){
-            window.addEventListener('touchstart', function( e ){
-                WebaWorld.touchMove( e );
-                //e.preventDefault();
-            }, false );
-
-            window.addEventListener( 'touchmove', function( e ){
-                WebaWorld.touchMove( e );
-                //e.preventDefault();
-            }, false )
-    
-        } else {
-            window.addEventListener( 'mousemove', function( e ){
-                WebaWorld.mouseMove( e );
-                //e.preventDefault();
-            }, false )
-        }
-        update();
-
-    }
-
-    updateScroll( e ) {
-        var yPos = e.target.scrollTop / window.innerHeight
-        TweenLite.set( contentContainer, { y: -( yPos * ( window.innerHeight * 0.25 ) ) })
-        WebaWorld.updateCameraPosition( yPos );
-        Content.updateScroll( yPos );
-    }
-
-    
-    render() {
-      return (
-        <div ref={ ref => ( this.mount = ref ) } />
-      )
-    }
-
-    resize() {
-
-        console.log( 'resizing!!!!!!!! ')
-
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        
-        WebaWorld.resize( windowWidth, windowHeight );
-
-    }
-
-
-} */ ;
-
-},{"regenerator-runtime/runtime":"5qc87","gsap":"3ZIKo","../examples/jsm/libs/stats.module":"bhGvB","./WebaWorld":"4nnER","../examples/jsm/libs/dat.gui.module.js":"1dgD0","./userAgent":"lpfek","./UI":"dUnf8","./ContentManager":"hgBeC","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"5qc87":[function(require,module,exports) {
+},{"regenerator-runtime/runtime":"5qc87","gsap":"3ZIKo","../../examples/jsm/libs/stats.module":"6w0UI","./WebaWorld":"4nnER","../../examples/jsm/libs/dat.gui.module.js":"eS2ts","./userAgent":"lpfek","./UI":"dUnf8","./ContentManager":"hgBeC","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"5qc87":[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -5172,7 +4881,7 @@ _gsapCoreJs._forEachName("x,y,z,top,right,bottom,left,width,height,fontSize,padd
 });
 _gsapCoreJs.gsap.registerPlugin(CSSPlugin);
 
-},{"./gsap-core.js":"3HSju","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"bhGvB":[function(require,module,exports) {
+},{"./gsap-core.js":"3HSju","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"6w0UI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var Stats = function() {
@@ -5272,10 +4981,10 @@ exports.default = Stats;
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _runtime = require("regenerator-runtime/runtime");
-var _threeModule = require("../build/three.module");
-var _orbitControls = require("../examples/jsm/controls/OrbitControls");
-var _gltfloader = require("../examples/jsm/loaders/GLTFLoader");
-var _dracoloader = require("../examples/jsm/loaders/DRACOLoader");
+var _threeModule = require("../../build/three.module");
+var _orbitControls = require("../../examples/jsm/controls/OrbitControls");
+var _gltfloader = require("../../examples/jsm/loaders/GLTFLoader");
+var _dracoloader = require("../../examples/jsm/loaders/DRACOLoader");
 var _gsap = require("gsap");
 var _starryNightShader = require("./shaders/StarryNightShader");
 var _starryNightShaderDefault = parcelHelpers.interopDefault(_starryNightShader);
@@ -5923,7 +5632,7 @@ const updateCameraPosition = (val)=>{
     nightAmbientLight.intensity = 1 - val * 4;
     streetLight1.intensity = 1 - val * 0.5;
     streetLight2.intensity = 0.5 - val * 0.5;
-    if (val > 0.8) allowUpdate = false;
+    if (val > 0.75) allowUpdate = false;
     else allowUpdate = true;
 };
 const WebaWorld = {
@@ -5944,7 +5653,7 @@ const WebaWorld = {
 };
 exports.default = WebaWorld;
 
-},{"regenerator-runtime/runtime":"5qc87","../build/three.module":"cD1Og","../examples/jsm/controls/OrbitControls":"gCz4U","../examples/jsm/loaders/GLTFLoader":"jHZWE","../examples/jsm/loaders/DRACOLoader":"g2JRE","gsap":"3ZIKo","./shaders/StarryNightShader":"1brpW","./FireFlies":"a5Zvn","./TreesManager":"4wndq","./shaders/MistShader":"8dWiq","simplex-noise":"kFw5t","./FireflyManager":"gE7sV","./EventDispatcher":"i7RiA","./AudioManager":"eaKY2","./UI":"dUnf8","./modifiers.min":"gIwbI","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"cD1Og":[function(require,module,exports) {
+},{"regenerator-runtime/runtime":"5qc87","../../build/three.module":"1RGoz","../../examples/jsm/controls/OrbitControls":"44OY1","../../examples/jsm/loaders/GLTFLoader":"eFbyr","../../examples/jsm/loaders/DRACOLoader":"5gAZ4","gsap":"3ZIKo","./shaders/StarryNightShader":"1brpW","./FireFlies":"a5Zvn","./TreesManager":"4wndq","./shaders/MistShader":"8dWiq","simplex-noise":"kFw5t","./FireflyManager":"gE7sV","./EventDispatcher":"i7RiA","./AudioManager":"eaKY2","./UI":"dUnf8","./modifiers.min":"gIwbI","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"1RGoz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ACESFilmicToneMapping", ()=>ACESFilmicToneMapping
@@ -35861,7 +35570,7 @@ if (typeof window !== 'undefined') {
     else window.__THREE__ = REVISION;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"gCz4U":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"44OY1":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "OrbitControls", ()=>OrbitControls
@@ -36569,7 +36278,7 @@ class MapControls extends OrbitControls {
     }
 }
 
-},{"../../../build/three.module.js":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"jHZWE":[function(require,module,exports) {
+},{"../../../build/three.module.js":"1RGoz","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"eFbyr":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "GLTFLoader", ()=>GLTFLoader
@@ -38858,7 +38567,7 @@ function buildNodeHierarchy(nodeId, parentObject, json, parser) {
     return newGeometry;
 }
 
-},{"../../../build/three.module.js":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"g2JRE":[function(require,module,exports) {
+},{"../../../build/three.module.js":"1RGoz","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"5gAZ4":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DRACOLoader", ()=>DRACOLoader
@@ -39228,7 +38937,7 @@ class DRACOLoader extends _threeModuleJs.Loader {
     }
 }
 
-},{"../../../build/three.module.js":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"1brpW":[function(require,module,exports) {
+},{"../../../build/three.module.js":"1RGoz","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"1brpW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 const StarrySkyShader = {
@@ -39358,7 +39067,7 @@ exports.default = StarrySkyShader;
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"a5Zvn":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _threeModule = require("../build/three.module");
+var _threeModule = require("../../build/three.module");
 class Fireflies extends _threeModule.Group {
     constructor(params){
         super();
@@ -39417,7 +39126,7 @@ class Fireflies extends _threeModule.Group {
 }
 exports.default = Fireflies;
 
-},{"../build/three.module":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"4wndq":[function(require,module,exports) {
+},{"../../build/three.module":"1RGoz","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"4wndq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _curlNoise = require("./curlNoise");
@@ -40237,9 +39946,9 @@ exports.default = MistShader;
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"gE7sV":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _threeModule = require("../build/three.module");
-var _gltfloader = require("../examples/jsm/loaders/GLTFLoader");
-var _dracoloader = require("../examples/jsm/loaders/DRACOLoader");
+var _threeModule = require("../../build/three.module");
+var _gltfloader = require("../../examples/jsm/loaders/GLTFLoader");
+var _dracoloader = require("../../examples/jsm/loaders/DRACOLoader");
 var _gsap = require("gsap");
 var _gsapDefault = parcelHelpers.interopDefault(_gsap);
 var _motionPathPlugin = require("gsap/dist/MotionPathPlugin");
@@ -40727,7 +40436,7 @@ const FireflyManager = {
 };
 exports.default = FireflyManager;
 
-},{"../build/three.module":"cD1Og","../examples/jsm/loaders/GLTFLoader":"jHZWE","../examples/jsm/loaders/DRACOLoader":"g2JRE","gsap":"3ZIKo","gsap/dist/MotionPathPlugin":"ekmDM","./AudioManager":"eaKY2","./UI":"dUnf8","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"ekmDM":[function(require,module,exports) {
+},{"../../build/three.module":"1RGoz","../../examples/jsm/loaders/GLTFLoader":"eFbyr","../../examples/jsm/loaders/DRACOLoader":"5gAZ4","gsap":"3ZIKo","gsap/dist/MotionPathPlugin":"ekmDM","./AudioManager":"eaKY2","./UI":"dUnf8","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"ekmDM":[function(require,module,exports) {
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define([
         'exports'
@@ -46240,7 +45949,7 @@ exports.default = UI;
     ]);
 });
 
-},{}],"1dgD0":[function(require,module,exports) {
+},{}],"eS2ts":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "color", ()=>color1
@@ -48564,25 +48273,601 @@ exports.getUserAgent = function() {
 },{}],"hgBeC":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-//import ScrollerManager from './SideScrollManager';
+var _sideScrollManager = require("./SideScrollManager");
+var _sideScrollManagerDefault = parcelHelpers.interopDefault(_sideScrollManager);
 let container;
 let topGrad;
+let sideScrollComponentContainer;
 const init = (params)=>{
     container = params.container;
     topGrad = document.createElement('div');
     topGrad.className = "content-top-grad";
     container.appendChild(topGrad);
+    // Scroll compoment
+    sideScrollComponentContainer = document.querySelector('.slide-scroll-component');
+    _sideScrollManagerDefault.default.init({
+        container: sideScrollComponentContainer,
+        scrollLength: 5
+    });
 };
 const updateScroll = (val)=>{
     //let amt = val > 1 ? 1 : val;
     topGrad.style.height = window.innerHeight * 0.5 * val + 'px';
     topGrad.style.marginTop = -(window.innerHeight * 0.5 * val) + 'px';
 };
+const updateDragVal = (val)=>{
+    _sideScrollManagerDefault.default.updateScrollVal(val);
+};
 const Content = {
     init,
-    updateScroll
+    updateScroll,
+    updateDragVal
 };
 exports.default = Content;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}]},["4gVS6","2dX4u"], "2dX4u", "parcelRequirecb31")
+},{"./SideScrollManager":"axfwX","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"axfwX":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _gsap = require("gsap");
+var _sideScrollControls = require("./SideScrollControls");
+var _sideScrollControlsDefault = parcelHelpers.interopDefault(_sideScrollControls);
+// import ContentManager from './ContentManager';
+let container;
+let controlsContainer;
+let slideItemsContainer;
+let imgPath = './imgs/content-scroll-imgs/';
+let scrollItemsLength;
+let scrollItemsArray;
+let slideItemsArray = [];
+let currentIndex = 1;
+let slideStartX;
+let sectionImgs = [
+    {
+        focus: 'info_sm.png',
+        blur: 'info_alt_sm.png'
+    },
+    {
+        focus: 'engine_sm.png',
+        blur: 'engine_alt_sm.png'
+    },
+    {
+        focus: 'street_sm.png',
+        blur: 'street_alt_sm.png'
+    },
+    {
+        focus: 'partner_sm.png',
+        blur: 'partner_alt_sm.png'
+    },
+    {
+        focus: 'secret_sm.png',
+        blur: 'secret_alt_sm.png'
+    }, 
+];
+let zIndexCtr = 99;
+let contentLength = sectionImgs.length;
+var scrollIndex;
+const init = (params)=>{
+    console.log('SideScrollManager.init()');
+    FlexSlider.init();
+    container = params.container;
+    scrollItemsLength = params.itemsLength;
+    // Slides 
+    slideItemsContainer = document.querySelector('.slide-scroll-items-container');
+    // Controls
+    controlsContainer = document.querySelector('.slide-scroll-controls-container');
+    _sideScrollControlsDefault.default.init({
+        container: controlsContainer,
+        numItems: contentLength
+    });
+    _sideScrollControlsDefault.default.dispatcher.addEventListener('controlItemClicked', controlItemClickedHandler, false);
+    // build slides;
+    for(let i = 0; i < contentLength; i++){
+        let slideItem = document.createElement('div');
+        slideItem.className = 'slide-scroll-item';
+        let blurImg = document.createElement('img');
+        blurImg.className = 'slide-scroll-img slide-shadow';
+        let focusImg = document.createElement('img');
+        focusImg.className = 'slide-scroll-img';
+        let tintImg = document.createElement('img');
+        tintImg.className = 'slide-scroll-img';
+        blurImg.src = imgPath + sectionImgs[i].blur;
+        focusImg.src = imgPath + sectionImgs[i].focus;
+        tintImg.src = imgPath + 'tint-img.png';
+        slideItem.blurImg = blurImg;
+        slideItem.focusImg = focusImg;
+        slideItem.tintImg = tintImg;
+        slideItem.appendChild(blurImg);
+        slideItem.appendChild(focusImg);
+        slideItem.appendChild(tintImg);
+        slideItem.sineFract = i / contentLength;
+        slideItem.originFract = i / contentLength;
+        console.log('SineFract ' + slideItem.sineFract);
+        slideItem.transforms = {
+            rotX: 0 * Math.sin(slideItem.sineFract),
+            rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
+            rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
+            trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+            perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
+        };
+        _gsap.gsap.set(slideItem, {
+            transform: `rotateX(${slideItem.transforms.rotX}deg) rotateY(${slideItem.transforms.rotY}deg) rotateZ(${slideItem.transforms.rotZ}deg) translateX(${slideItem.transforms.trans}px)`,
+            perspective: `${slideItem.transforms.perspective}px`
+        });
+        if (i != 0) {
+            tintImg.style.opacity = 0;
+            focusImg.style.opacity = 0;
+        }
+        slideItem.style.zIndex = zIndexCtr - i;
+        tintImg.style.opacity = i * 0.3;
+        slideItemsContainer.appendChild(slideItem);
+        slideItemsArray.push(slideItem);
+    }
+    _gsap.gsap.set(slideItemsContainer, {
+        x: (window.innerWidth - 480) * 0.5
+    });
+};
+const controlItemClickedHandler = (evt)=>{
+    console.log('itemClicled in Manager ' + evt.id);
+    var move = evt.id - currentIndex;
+    currentIndex = evt.id;
+    if (move > 0) FlexSlider.gotoNext();
+    else FlexSlider.gotoNext2();
+    let newIndex = -(evt.id * 0.2);
+    console.log('new index ' + newIndex);
+    for(let i = 0; i < slideItemsArray.length; i++){
+        let slideItem = slideItemsArray[i];
+        slideItem.sineFract = slideItem.originFract + newIndex;
+        slideItem.transforms = {
+            rotX: 0 * Math.sin(slideItem.sineFract),
+            rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
+            rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
+            trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+            perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
+        };
+        _gsap.gsap.to(slideItem, 0.6, {
+            transform: `rotateX(${slideItem.transforms.rotX}deg) rotateY(${slideItem.transforms.rotY}deg) rotateZ(${slideItem.transforms.rotZ}deg) translateX(${slideItem.transforms.trans}px)`,
+            perspective: `${slideItem.transforms.perspective}px`,
+            ease: _gsap.Power3.easeOut,
+            delay: i * 0
+        });
+        if (i == evt.id) {
+            zIndexCtr++;
+            slideItem.style.zIndex = zIndexCtr;
+            _gsap.gsap.to(slideItem.focusImg, 0.6, {
+                opacity: 1,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+            _gsap.gsap.to(slideItem.tintImg, 0.6, {
+                opacity: 0,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+        } else {
+            slideItem.style.zIndex = zIndexCtr - Math.ceil(Math.abs(slideItem.sineFract * 10));
+            _gsap.gsap.to(slideItem.focusImg, 0.6, {
+                opacity: 0,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+            _gsap.gsap.to(slideItem.tintImg, 0.6, {
+                alpha: Math.abs(slideItem.sineFract) * 1.5,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+        }
+    }
+};
+const change = (value)=>{
+    let newIndex = -(value * 0.2);
+    console.log('new index ' + newIndex);
+    for(let i = 0; i < slideItemsArray.length; i++){
+        let slideItem = slideItemsArray[i];
+        slideItem.sineFract = slideItem.originFract + newIndex;
+        slideItem.transforms = {
+            rotX: 0 * Math.sin(slideItem.sineFract),
+            rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
+            rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
+            trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+            perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
+        };
+        _gsap.gsap.to(slideItem, 0.6, {
+            transform: `rotateX(${slideItem.transforms.rotX}deg) rotateY(${slideItem.transforms.rotY}deg) rotateZ(${slideItem.transforms.rotZ}deg) translateX(${slideItem.transforms.trans}px)`,
+            perspective: `${slideItem.transforms.perspective}px`,
+            ease: _gsap.Power3.easeOut,
+            delay: i * 0
+        });
+        if (i == evt.id) {
+            zIndexCtr++;
+            slideItem.style.zIndex = zIndexCtr;
+            _gsap.gsap.to(slideItem.focusImg, 0.6, {
+                opacity: 1,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+            _gsap.gsap.to(slideItem.tintImg, 0.6, {
+                opacity: 0,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+        } else {
+            slideItem.style.zIndex = zIndexCtr - Math.ceil(Math.abs(slideItem.sineFract * 10));
+            _gsap.gsap.to(slideItem.focusImg, 0.6, {
+                opacity: 0,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+            _gsap.gsap.to(slideItem.tintImg, 0.6, {
+                alpha: Math.abs(slideItem.sineFract) * 1.5,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+        }
+    }
+};
+const FlexSlider = {
+    btn1: 0,
+    btn2: 0,
+    // total no of items
+    num_items: document.querySelectorAll(".slider-item").length,
+    // position of current item in view
+    current: 1,
+    init: function() {
+        // set CSS order of each item initially
+        console.log("CNDLE---2");
+        this.addEvents();
+    },
+    imgChange: function() {
+        console.log("\n\nIMG CHNSGE", this.current);
+        if (this.current == 1) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
+        else if (this.current == 2) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
+        else if (this.current == 3) {
+            console.log("curr_ ");
+            document.querySelector(".content-scroller").style.backgroundImage = `url('./imgs/content-bg-imgs/content-bg-img-00.jpg')`;
+        } else if (this.current == 4) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
+        else if (this.current == 5) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
+        else if (this.current == 6) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light01043.jpg')`;
+        else if (this.current == 7) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
+    },
+    addEvents: function() {
+        var that = this;
+        // click on move item button
+        document.querySelector("#move-button").addEventListener('click', ()=>{
+            this.btn2 = 1;
+            this.btn1 = 0;
+            console.log("currindex: ", currentIndex);
+            currentIndex = (currentIndex + 1) % 5;
+            console.log("currindex: after  ", currentIndex);
+            // updateScrollVal(currentIndex)
+            this.gotoNext();
+        });
+        // after each item slides in, slider container fires transitionend event
+        document.querySelector("#slider-container").addEventListener('transitionend', ()=>{
+            this.changeOrder();
+        });
+        document.querySelector("#move-button-left").addEventListener('click', ()=>{
+            console.log("Button prev");
+            this.btn1 = 1;
+            this.btn2 = 0;
+            currentIndex = currentIndex - 1;
+            this.gotoNext2();
+        });
+    },
+    changeOrder: function() {
+        console.log("Xcurr: ", this.current, "Xnum_ : ", this.num_items);
+        var b = parseInt(currentIndex);
+        let val_in = b;
+        if (val_in == 0) {
+            currentIndex = 5;
+            val_in = 5;
+        }
+        console.log(val_in, "dddd");
+        if (this.btn2 == 1) {
+            console.log("curr: ", this.current, "num_ IFFFFF : ", this.num_items) //left btn
+            ;
+            if (this.current == this.num_items) this.current = 1;
+            else this.current++;
+            let order = 1;
+            // change order from current position till last
+            for(let i = val_in; i <= this.num_items; i++){
+                console.log("Order: ", order, "i: ", i);
+                document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
+                order++;
+            }
+            // change order from first position till current
+            for(let i1 = val_in - 1; i1 >= 1; i1--){
+                console.log("Order: ", order, "i: ", i1);
+                document.querySelector(".slider-item[data-position='" + i1 + "']").style.order = order;
+                order++;
+            }
+            // translate back to 0 from -100%
+            document.querySelector("#slider-container").classList.remove('slider-container-transition');
+            document.querySelector("#slider-container").style.transform = 'translateX(0)';
+        } else {
+            console.log("curr: ", this.current, "2num_ : ", this.num_items) //right btn
+            ;
+            // console.log("curr: ",this.current,"num_ : ",this. num_items)//left btn
+            if (this.current == 1) this.current = this.num_items;
+            else this.current--;
+            let order = 1;
+            // change order from current position till last
+            for(let i = val_in; i <= this.num_items; i++){
+                console.log("Order: ", order, "i: ", i);
+                document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
+                order++;
+            }
+            // change order from first position till current
+            for(let i2 = val_in - 1; i2 >= 1; i2--){
+                console.log("Order: ", order, "i: ", i2);
+                document.querySelector(".slider-item[data-position='" + i2 + "']").style.order = order;
+                order++;
+            }
+            document.querySelector("#slider-container").classList.remove('slider-container-transition');
+            document.querySelector("#slider-container").style.transform = 'translateX(0)';
+        }
+    },
+    gotoNext: function() {
+        console.log("\n\nNEXT");
+        document.querySelector("#slider-container").classList.add('slider-container-transition');
+        document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+        this.imgChange();
+    },
+    gotoNext2: function() {
+        console.log("\n\nNEXT");
+        document.querySelector("#slider-container").classList.add('slider-container-transition');
+        document.querySelector("#slider-container").style.transform = 'translateX(+100%)';
+        this.imgChange();
+    }
+};
+const updateScrollVal = (val)=>{
+    let newIndex = Math.floor(Math.abs(val * 10) * 0.5);
+    _sideScrollControlsDefault.default.forceClick(newIndex);
+    let activeIndex = Math.round(Math.abs(val * 5));
+    console.log('activeIndex ' + activeIndex);
+    for(let i = 0; i < slideItemsArray.length; i++){
+        let slideItem = slideItemsArray[i];
+        slideItem.sineFract = slideItem.originFract + val;
+        slideItem.transforms = {
+            rotX: 0 * Math.sin(slideItem.sineFract),
+            rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
+            rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
+            trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+            perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
+        };
+        _gsap.gsap.to(slideItem, 0.6, {
+            transform: `rotateX(${slideItem.transforms.rotX}deg) rotateY(${slideItem.transforms.rotY}deg) rotateZ(${slideItem.transforms.rotZ}deg) translateX(${slideItem.transforms.trans}px)`,
+            perspective: `${slideItem.transforms.perspective}px`,
+            ease: _gsap.Power3.easeOut,
+            delay: i * 0
+        });
+        if (i == activeIndex) {
+            zIndexCtr++;
+            slideItem.style.zIndex = zIndexCtr;
+            _gsap.gsap.to(slideItem.focusImg, 0.6, {
+                opacity: 1,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0
+            });
+            _gsap.gsap.to(slideItem.tintImg, 0.6, {
+                opacity: 0,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0
+            });
+        } else {
+            slideItem.style.zIndex = zIndexCtr - Math.ceil(Math.abs(slideItem.sineFract * 10));
+            _gsap.gsap.to(slideItem.focusImg, 0.6, {
+                opacity: 0,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0
+            });
+            _gsap.gsap.to(slideItem.tintImg, 0.6, {
+                alpha: Math.abs(slideItem.sineFract) * 1.5,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0
+            });
+        }
+    }
+};
+const pointerDown = (evt)=>{
+    console.log('pointerDown ' + evt.clientX);
+    evt.target.addEventListener('mousemove', mousemove);
+};
+const pointerUp = (evt)=>{
+    console.log('pointerUp');
+    evt.target.removeEventListener('mousemove', mousemove);
+};
+const mousemove = (evt)=>{
+    let dragDist;
+};
+const updateScroll = (val)=>{
+    let amt = val > 1 ? 1 : val;
+};
+const SideScrollManager = {
+    init,
+    updateScrollVal,
+    controlItemClickedHandler,
+    FlexSlider
+};
+exports.default = SideScrollManager;
+
+},{"gsap":"3ZIKo","./SideScrollControls":"5gtCT","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}],"5gtCT":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _gsap = require("gsap");
+var _eventDispatcher = require("./EventDispatcher");
+var _eventDispatcherDefault = parcelHelpers.interopDefault(_eventDispatcher);
+//import SideNav from './SideNav';
+let container;
+let controlItemsArray = [];
+let controlItemsLength;
+let colorsArray = [
+    '#36f5b8',
+    '#15feff',
+    '#9751a9',
+    '#de40ac',
+    '#de7f40',
+    '#f5e536',
+    '#9df536',
+    '#36f5b8',
+    '#15feff',
+    '#9751a9',
+    '#de40ac'
+];
+let bar;
+let innerItemSizes = {
+    focus: 20,
+    blur: 9
+};
+let outerItemSizes = {
+    focus: 26,
+    blur: 13
+};
+const dispatcher = new _eventDispatcherDefault.default();
+const init = (params)=>{
+    console.log('SideScrollControls.init()');
+    container = params.container;
+    controlItemsLength = params.numItems;
+    bar = document.createElement('div');
+    bar.className = 'side-scroll-controls-bar';
+    container.appendChild(bar);
+    for(let i = 0; i < controlItemsLength; i++){
+        let controlItem = document.createElement('div');
+        controlItem.className = 'slide-scroll-control-item';
+        let controlItemOuter = document.createElement('div');
+        controlItemOuter.className = 'side-scroll-controls-item-outer round';
+        _gsap.TweenLite.set(controlItemOuter, {
+            width: outerItemSizes.blur,
+            height: outerItemSizes.blur
+        });
+        let controlItemInner = document.createElement('div');
+        controlItemInner.className = 'side-scroll-controls-item-inner round';
+        _gsap.TweenLite.set(controlItemInner, {
+            width: innerItemSizes.blur,
+            height: innerItemSizes.blur
+        });
+        //controlItemInner.style.width = controlItemInner.style.height = innerItemSizes.blur;
+        controlItemInner.style.backgroundColor = colorsArray[i];
+        controlItem.appendChild(controlItemOuter);
+        controlItem.appendChild(controlItemInner);
+        controlItem.id = i;
+        controlItem.isActive = true;
+        if (i == 0) {
+            _gsap.TweenLite.set(controlItemOuter, {
+                width: outerItemSizes.focus,
+                height: outerItemSizes.focus
+            });
+            _gsap.TweenLite.set(controlItemInner, {
+                width: innerItemSizes.focus,
+                height: innerItemSizes.focus
+            });
+            controlItem.isActive = false;
+        }
+        container.appendChild(controlItem);
+        controlItemsArray.push(controlItem);
+        controlItem.addEventListener('click', itemClicked, false);
+        controlItem.addEventListener('mouseover', itemOver, false);
+        controlItem.addEventListener('mouseout', itemOut, false);
+    }
+};
+const itemClicked = (evt)=>{
+    if (!evt.target.isActive) return;
+    console.log('itemClicked ' + evt.target.id);
+    let activeItem = controlItemsArray[evt.target.id];
+    activeItem.isActive = false;
+    _gsap.TweenLite.to(activeItem.children[0], 0.3, {
+        width: outerItemSizes.focus,
+        height: outerItemSizes.focus,
+        ease: _gsap.Power3.easeOut
+    });
+    _gsap.TweenLite.to(activeItem.children[1], 0.3, {
+        width: innerItemSizes.focus,
+        height: innerItemSizes.focus,
+        ease: _gsap.Power3.easeOut
+    });
+    for(let i = 0; i < controlItemsArray.length; i++){
+        let ci = controlItemsArray[i];
+        if (i != evt.target.id && ci.isActive == false) {
+            ci.isActive = true;
+            _gsap.TweenLite.to(ci.children[0], 0.3, {
+                width: outerItemSizes.blur,
+                height: outerItemSizes.blur,
+                ease: _gsap.Power3.easeOut
+            });
+            _gsap.TweenLite.to(ci.children[1], 0.3, {
+                width: innerItemSizes.blur,
+                height: innerItemSizes.blur,
+                ease: _gsap.Power3.easeOut
+            });
+        }
+    }
+    dispatcher.dispatchEvent('controlItemClicked', {
+        id: evt.target.id
+    });
+};
+const itemOver = (evt)=>{
+    if (!evt.target.isActive) return;
+//console.log( 'itemOver ' + evt.target.id );
+};
+const itemOut = (evt)=>{
+    if (!evt.target.isActive) return;
+//console.log( 'itemOver ' + evt.target.id );
+};
+const pointerDown = (evt)=>{
+/* console.log( 'pointerDown ' + evt.clientX )
+    evt.target.addEventListener( 'mousemove', mousemove );
+    scrollerStartXPos = contentInnerCont.getBoundingClientRect().left;
+    console.log( 'startX ' + scrollerStartXPos )
+    pointerDownXPos = evt.clientX; */ };
+const pointerUp = (evt)=>{
+/* console.log( 'pointerUp' );
+    evt.target.removeEventListener( 'mousemove', mousemove ); */ };
+/* const mousemove = ( evt ) => {
+    let dragDist;
+
+    TweenLite.set( contentInnerCont, { x: scrollerStartXPos + ( evt.clientX - pointerDownXPos ) } );
+    
+ 
+}
+ */ const forceClick = (index)=>{
+    let activeItem = controlItemsArray[index];
+    activeItem.isActive = false;
+    _gsap.TweenLite.to(activeItem.children[0], 0.3, {
+        width: outerItemSizes.focus,
+        height: outerItemSizes.focus,
+        ease: _gsap.Power3.easeOut
+    });
+    _gsap.TweenLite.to(activeItem.children[1], 0.3, {
+        width: innerItemSizes.focus,
+        height: innerItemSizes.focus,
+        ease: _gsap.Power3.easeOut
+    });
+    for(let i = 0; i < controlItemsArray.length; i++){
+        let ci = controlItemsArray[i];
+        if (i != index && ci.isActive == false) {
+            ci.isActive = true;
+            _gsap.TweenLite.to(ci.children[0], 0.3, {
+                width: outerItemSizes.blur,
+                height: outerItemSizes.blur,
+                ease: _gsap.Power3.easeOut
+            });
+            _gsap.TweenLite.to(ci.children[1], 0.3, {
+                width: innerItemSizes.blur,
+                height: innerItemSizes.blur,
+                ease: _gsap.Power3.easeOut
+            });
+        }
+    }
+};
+const updateScroll = (val)=>{
+    let amt = val > 1 ? 1 : val;
+};
+const SideScrollControls = {
+    init,
+    updateScroll,
+    dispatcher,
+    forceClick
+};
+exports.default = SideScrollControls;
+
+},{"gsap":"3ZIKo","./EventDispatcher":"i7RiA","@parcel/transformer-js/src/esmodule-helpers.js":"5AX3k"}]},["4gVS6","2dX4u"], "2dX4u", "parcelRequirecb31")
 
