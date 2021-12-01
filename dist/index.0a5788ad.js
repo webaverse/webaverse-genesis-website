@@ -577,106 +577,8 @@ function init() {
     } else window.addEventListener('mousemove', _webaWorldDefault.default.mouseMove, false);
     resize();
     update();
-    FlexSlider.init();
+// FlexSlider.init()
 }
-const FlexSlider = {
-    btn1: 0,
-    btn2: 0,
-    // total no of items
-    num_items: document.querySelectorAll(".slider-item").length,
-    // position of current item in view
-    current: 1,
-    init: function() {
-        // set CSS order of each item initially
-        console.log("CNDLE---2");
-        this.addEvents();
-    },
-    imgChange: function() {
-        console.log("\n\nIMG CHNSGE", this.current);
-        if (this.current == 1) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-        else if (this.current == 2) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
-        else if (this.current == 3) {
-            console.log("curr_ ");
-            document.querySelector(".content-scroller").style.backgroundImage = `url('./imgs/content-bg-imgs/content-bg-img-00.jpg')`;
-        } else if (this.current == 4) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
-        else if (this.current == 5) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-        else if (this.current == 6) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light01043.jpg')`;
-        else if (this.current == 7) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-    },
-    addEvents: function() {
-        var that = this;
-        // click on move item button
-        document.querySelector("#move-button").addEventListener('click', ()=>{
-            this.btn2 = 1;
-            this.btn1 = 0;
-            this.gotoNext();
-        });
-        // after each item slides in, slider container fires transitionend event
-        document.querySelector("#slider-container").addEventListener('transitionend', ()=>{
-            this.changeOrder();
-        });
-        document.querySelector("#move-button-left").addEventListener('click', ()=>{
-            console.log("Button prev");
-            this.btn1 = 1;
-            this.btn2 = 0;
-            this.gotoNext2();
-        });
-    },
-    changeOrder: function() {
-        console.log("Xcurr: ", this.current, "Xnum_ : ", this.num_items);
-        if (this.btn2 == 1) {
-            console.log("curr: ", this.current, "num_ : ", this.num_items) //left btn
-            ;
-            if (this.current == this.num_items) this.current = 1;
-            else this.current++;
-            let order = 1;
-            // change order from current position till last
-            for(let i = this.current; i <= this.num_items; i++){
-                document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-                order++;
-            }
-            // change order from first position till current
-            for(let i1 = 1; i1 < this.current; i1++){
-                document.querySelector(".slider-item[data-position='" + i1 + "']").style.order = order;
-                order++;
-            }
-            // translate back to 0 from -100%
-            document.querySelector("#slider-container").classList.remove('slider-container-transition');
-            document.querySelector("#slider-container").style.transform = 'translateX(0)';
-        } else {
-            console.log("curr: ", this.current, "2num_ : ", this.num_items) //right btn
-            ;
-            // console.log("curr: ",this.current,"num_ : ",this. num_items)//left btn
-            if (this.current == 1) this.current = this.num_items;
-            else this.current--;
-            let order = 1;
-            // change order from current position till last
-            for(let i = this.current; i <= this.num_items; i++){
-                document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-                order++;
-            }
-            // change order from first position till current
-            for(let i2 = 1; i2 < this.current; i2++){
-                document.querySelector(".slider-item[data-position='" + i2 + "']").style.order = order;
-                order++;
-            }
-            document.querySelector("#slider-container").classList.remove('slider-container-transition');
-            document.querySelector("#slider-container").style.transform = 'translateX(0)';
-        }
-    },
-    gotoNext: function() {
-        console.log("\n\nNEXT");
-        document.querySelector("#slider-container").classList.add('slider-container-transition');
-        document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
-        this.imgChange();
-    },
-    gotoNext2: function() {
-        console.log("\n\nNEXT");
-        document.querySelector("#slider-container").classList.add('slider-container-transition');
-        document.querySelector("#slider-container").style.transform = 'translateX(+100%)';
-        this.imgChange();
-    }
-};
 const update = ()=>{
     requestAnimationFrame((t)=>{
         _webaWorldDefault.default.update(t);
@@ -692,7 +594,6 @@ const updateScroll = (e)=>{
     });
     _webaWorldDefault.default.updateCameraPosition(yVal);
     _contentManagerDefault.default.updateScroll(yVal);
-    console.log("is this the value?", yVal);
 };
 const render = ()=>{
 /* return (
@@ -40198,26 +40099,35 @@ const startFlyBehavior = ()=>{
     flyTo2DPoint({
         x: window.innerWidth - 320,
         y: window.innerHeight - 30
-    }, 10);
-    returnToMouse(17);
+    }, 2);
+    console.log("\n\nfirst");
+    returnToMouse(3);
+    console.log("\n\nfirst");
     flyTo2DPoint({
         x: window.innerWidth - 320,
         y: window.innerHeight - 30
     }, 25);
+    // console.log("\n\nfirst1")
     returnToMouse(32);
+    // console.log("\n\nfirst1")
     flyTo3DPoint(new _threeModule.Vector3(-1, 2, -1), 40);
+    // console.log("\n\nfirst2")
     returnToMouse(47);
+    // console.log("\n\nfirst2")
     flyTo2DPoint({
         x: window.innerWidth - 320,
         y: window.innerHeight - 30
     }, 53);
+    // console.log("\n\nfirst3")
     returnToMouse(60);
+// console.log("\n\nfirst3")
 };
 function flyTo2DPoint(point, delay) {
-    //console.log( 'flyTo2DPoint()' );
+    // console.log( 'flyTo2DPoint() in' );
     fireflyTimeout = setTimeout(function() {
+        console.log("-> ", document.querySelector('').getBoundingClientRect());
         let newMousePoint = translate2DPoint({
-            x: window.innerWidth - 320,
+            x: screen.width - 900,
             y: window.innerHeight - 30
         });
         let currentMousePoint = new _threeModule.Vector2(dynamicMouse.x, dynamicMouse.y);
@@ -40266,6 +40176,7 @@ function flyTo2DPoint(point, delay) {
                 dynamicMouse = new _threeModule.Vector2(currentMousePoint.x, currentMousePoint.y);
             }
         });
+    // console.log( 'flyTo2DPoint() out' );
     }, delay * 1000);
 }
 function returnToMouse(delay) {
@@ -48410,6 +48321,7 @@ parcelHelpers.defineInteropFlag(exports);
 var _gsap = require("gsap");
 var _sideScrollControls = require("./SideScrollControls");
 var _sideScrollControlsDefault = parcelHelpers.interopDefault(_sideScrollControls);
+// import ContentManager from './ContentManager';
 let container;
 let controlsContainer;
 let slideItemsContainer;
@@ -48417,6 +48329,7 @@ let imgPath = './imgs/content-scroll-imgs/';
 let scrollItemsLength;
 let scrollItemsArray;
 let slideItemsArray = [];
+let currentIndex = 1;
 let slideStartX;
 let sectionImgs = [
     {
@@ -48442,8 +48355,10 @@ let sectionImgs = [
 ];
 let zIndexCtr = 99;
 let contentLength = sectionImgs.length;
+var scrollIndex;
 const init = (params)=>{
     console.log('SideScrollManager.init()');
+    FlexSlider.init();
     container = params.container;
     scrollItemsLength = params.itemsLength;
     // Slides 
@@ -48503,6 +48418,11 @@ const init = (params)=>{
 };
 const controlItemClickedHandler = (evt)=>{
     console.log('itemClicled in Manager ' + evt.id);
+    var move = parseInt(evt.id) + 1 - currentIndex;
+    console.log("\n\n move: ", move, "currentIndex : ", currentIndex, "clicked index : ", parseInt(evt.id) + 1);
+    currentIndex = parseInt(evt.id) + 1;
+    if (move > 0) FlexSlider.gotoNext();
+    else FlexSlider.gotoNext2();
     let newIndex = -(evt.id * 0.2);
     console.log('new index ' + newIndex);
     for(let i = 0; i < slideItemsArray.length; i++){
@@ -48547,6 +48467,176 @@ const controlItemClickedHandler = (evt)=>{
                 delay: i * 0.025
             });
         }
+    }
+};
+const change = (value)=>{
+    let newIndex = -(value * 0.2);
+    console.log('new index ' + newIndex);
+    for(let i = 0; i < slideItemsArray.length; i++){
+        let slideItem = slideItemsArray[i];
+        slideItem.sineFract = slideItem.originFract + newIndex;
+        slideItem.transforms = {
+            rotX: 0 * Math.sin(slideItem.sineFract),
+            rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
+            rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
+            trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+            perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
+        };
+        _gsap.gsap.to(slideItem, 0.6, {
+            transform: `rotateX(${slideItem.transforms.rotX}deg) rotateY(${slideItem.transforms.rotY}deg) rotateZ(${slideItem.transforms.rotZ}deg) translateX(${slideItem.transforms.trans}px)`,
+            perspective: `${slideItem.transforms.perspective}px`,
+            ease: _gsap.Power3.easeOut,
+            delay: i * 0
+        });
+        if (i == evt.id) {
+            zIndexCtr++;
+            slideItem.style.zIndex = zIndexCtr;
+            _gsap.gsap.to(slideItem.focusImg, 0.6, {
+                opacity: 1,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+            _gsap.gsap.to(slideItem.tintImg, 0.6, {
+                opacity: 0,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+        } else {
+            slideItem.style.zIndex = zIndexCtr - Math.ceil(Math.abs(slideItem.sineFract * 10));
+            _gsap.gsap.to(slideItem.focusImg, 0.6, {
+                opacity: 0,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+            _gsap.gsap.to(slideItem.tintImg, 0.6, {
+                alpha: Math.abs(slideItem.sineFract) * 1.5,
+                ease: _gsap.Power3.easeOut,
+                delay: i * 0.025
+            });
+        }
+    }
+};
+const FlexSlider = {
+    btn1: 0,
+    btn2: 0,
+    // total no of items
+    num_items: document.querySelectorAll(".slider-item").length,
+    // position of current item in view
+    current: 1,
+    init: function() {
+        // set CSS order of each item initially
+        console.log("CNDLE---4");
+        this.addEvents();
+    },
+    imgChange: function() {
+        console.log("\n\nIMG CHNSGE", this.current);
+        if (this.current == 1) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
+        else if (this.current == 2) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
+        else if (this.current == 3) {
+            console.log("curr_ ");
+            document.querySelector(".content-scroller").style.backgroundImage = `url('./imgs/content-bg-imgs/content-bg-img-00.jpg')`;
+        } else if (this.current == 4) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
+        else if (this.current == 5) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
+        else if (this.current == 6) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light01043.jpg')`;
+        else if (this.current == 7) document.querySelector(".content-scroller").style.backgroundImage = `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
+    },
+    scrollValChange: function() {
+        if (currentIndex == 1) updateScrollVal(0);
+        else if (currentIndex == 2) updateScrollVal(-0.2);
+        else if (currentIndex == 3) updateScrollVal(-0.4);
+        else if (currentIndex == 4) updateScrollVal(-0.6);
+        else updateScrollVal(-0.8);
+    },
+    addEvents: function() {
+        var that = this;
+        // click on move item button
+        document.querySelector("#move-button").addEventListener('click', ()=>{
+            this.btn2 = 1;
+            this.btn1 = 0;
+            console.log("currindex: ", currentIndex);
+            currentIndex = (currentIndex + 1) % 5;
+            console.log("currindex: after  ", currentIndex);
+            this.scrollValChange();
+            this.gotoNext();
+        });
+        // after each item slides in, slider container fires transitionend event
+        document.querySelector("#slider-container").addEventListener('transitionend', ()=>{
+            this.changeOrder();
+        });
+        document.querySelector("#move-button-left").addEventListener('click', ()=>{
+            console.log("Button prev");
+            this.btn1 = 1;
+            this.btn2 = 0;
+            currentIndex = currentIndex - 1;
+            this.scrollValChange();
+            this.gotoNext2();
+        });
+    },
+    changeOrder: function() {
+        // console.log("Xcurr: ",this.current,"Xnum_ : ",this. num_items)
+        var b = parseInt(currentIndex);
+        let val_in = b;
+        console.log("(change order )currentIndex: ", currentIndex);
+        if (val_in == 0) {
+            currentIndex = 5;
+            val_in = 5;
+        }
+        console.log(val_in, "dddd");
+        if (this.btn2 == 1) {
+            console.log("curr: ", this.current, "num_ IFFFFF : ", this.num_items) //left btn
+            ;
+            if (this.current == this.num_items) this.current = 1;
+            else this.current++;
+            let order = 1;
+            // change order from current position till last
+            for(let i = val_in; i <= this.num_items; i++){
+                console.log("Order: ", order, "i: ", i);
+                document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
+                order++;
+            }
+            // change order from first position till current
+            for(let i1 = val_in - 1; i1 >= 1; i1--){
+                console.log("Order: ", order, "i: ", i1);
+                document.querySelector(".slider-item[data-position='" + i1 + "']").style.order = order;
+                order++;
+            }
+            // translate back to 0 from -100%
+            document.querySelector("#slider-container").classList.remove('slider-container-transition');
+            document.querySelector("#slider-container").style.transform = 'translateX(0)';
+        } else {
+            console.log("curr: ", this.current, "2num_ : ", this.num_items) //right btn
+            ;
+            // console.log("curr: ",this.current,"num_ : ",this. num_items)//left btn
+            if (this.current == 1) this.current = this.num_items;
+            else this.current--;
+            let order = 1;
+            // change order from current position till last
+            for(let i = val_in; i <= this.num_items; i++){
+                console.log("Order: ", order, "i: ", i);
+                document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
+                order++;
+            }
+            // change order from first position till current
+            for(let i2 = val_in - 1; i2 >= 1; i2--){
+                console.log("Order: ", order, "i: ", i2);
+                document.querySelector(".slider-item[data-position='" + i2 + "']").style.order = order;
+                order++;
+            }
+            document.querySelector("#slider-container").classList.remove('slider-container-transition');
+            document.querySelector("#slider-container").style.transform = 'translateX(0)';
+        }
+    },
+    gotoNext: function() {
+        console.log("\n\nNEXT");
+        document.querySelector("#slider-container").classList.add('slider-container-transition');
+        document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+        this.imgChange();
+    },
+    gotoNext2: function() {
+        console.log("\n\nNEXT");
+        document.querySelector("#slider-container").classList.add('slider-container-transition');
+        document.querySelector("#slider-container").style.transform = 'translateX(+100%)';
+        this.imgChange();
     }
 };
 const updateScrollVal = (val)=>{
@@ -48615,7 +48705,8 @@ const updateScroll = (val)=>{
 const SideScrollManager = {
     init,
     updateScrollVal,
-    controlItemClickedHandler
+    controlItemClickedHandler,
+    FlexSlider
 };
 exports.default = SideScrollManager;
 
