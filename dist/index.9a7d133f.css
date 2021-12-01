@@ -258,18 +258,16 @@ html, body {
   }
 
   .btn-scroll2 {
-    display: none;
     margin-top: -10%;
   }
 
   .btn-scroll {
-    display: none;
     margin-top: -10%;
   }
 }
 
 .text-col {
-  max-width: 90%;
+  max-width: 75%;
 }
 
 @media only screen and (max-width: 1024px) {
