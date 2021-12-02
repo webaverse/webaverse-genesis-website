@@ -36636,9 +36636,9 @@ const startFlyBehavior = ()=>{
     flyTo2DPoint({
         x: window.innerWidth - 320,
         y: window.innerHeight - 30
-    }, 2);
+    }, 10);
     console.log("\n\nfirst");
-    returnToMouse(3);
+    returnToMouse(17);
     console.log("\n\nfirst");
     flyTo2DPoint({
         x: window.innerWidth - 320,
@@ -36662,9 +36662,9 @@ const startFlyBehavior = ()=>{
 function flyTo2DPoint(point, delay) {
     // console.log( 'flyTo2DPoint() in' );
     fireflyTimeout = setTimeout(function() {
-        console.log("-> ", document.querySelector('').getBoundingClientRect());
+        // console.log("-> ",document.querySelector('').getBoundingClientRect())
         let newMousePoint = translate2DPoint({
-            x: screen.width - 900,
+            x: window.innerWidth * 0.5 - 150,
             y: window.innerHeight - 30
         });
         let currentMousePoint = new _threeModule.Vector2(dynamicMouse.x, dynamicMouse.y);
@@ -45922,6 +45922,7 @@ let scrollItemsArray;
 let slideItemsArray = [];
 let currentIndex = 1;
 let slideStartX;
+let Image;
 let sectionImgs = [
     {
         focus: 'info_sm.png',
@@ -45969,8 +45970,20 @@ const init = (params)=>{
         blurImg.className = 'slide-scroll-img slide-shadow';
         let focusImg = document.createElement('img');
         focusImg.className = 'slide-scroll-img';
+        // focusImg.onclick=()=>
+        // {
+        //     console.log('HELOO MATHAFAKA')
+        // }
         let tintImg = document.createElement('img');
         tintImg.className = 'slide-scroll-img';
+        tintImg.onclick = ()=>{
+            console.log(i);
+            if (currentIndex != i + 1) {
+                currentIndex = i + 1;
+                FlexSlider.gotoNext();
+                FlexSlider.scrollValChange();
+            }
+        };
         blurImg.src = imgPath + sectionImgs[i].blur;
         focusImg.src = imgPath + sectionImgs[i].focus;
         tintImg.src = imgPath + 'tint-img.png';
@@ -46165,6 +46178,8 @@ const FlexSlider = {
     },
     changeOrder: function() {
         // console.log("Xcurr: ",this.current,"Xnum_ : ",this. num_items)
+        // console.log("pointer dowen")
+        // pointerDown()
         var b = parseInt(currentIndex);
         let val_in = b;
         console.log("(change order )currentIndex: ", currentIndex);
@@ -46213,20 +46228,38 @@ const FlexSlider = {
                 document.querySelector(".slider-item[data-position='" + i2 + "']").style.order = order;
                 order++;
             }
+            // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
+            // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
+            console.log("\n\n\nUNIQUE\n\n\n");
             document.querySelector("#slider-container").classList.remove('slider-container-transition');
             document.querySelector("#slider-container").style.transform = 'translateX(0)';
+        // document.querySelector(".slider-container-transition2").style.transform = 'translateX(-100%)';
+        // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
+        // document.querySelector("#slider-container").classList.add('slider-container-transition3');
+        // document.querySelector(".slider-container-transition3").style.transform = 'translateX(0)';
+        // document.querySelector("#slider-container").classList.remove('slider-container-transition3');
+        // document.querySelector("#slider-container").classList.add('slider-container-transition5');
+        // document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+        // document.querySelector("#slider-container").style.transform = 'translateX(0)';
+        // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
+        // document.querySelector("#slider-container").style.transform = 'translateX(-10%)';
+        // document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
         }
+        this.btn1 = 0;
+        this.btn2 = 0;
     },
     gotoNext: function() {
         console.log("\n\nNEXT");
         document.querySelector("#slider-container").classList.add('slider-container-transition');
         document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+        // document.querySelector("#slider-container").style.transform = 'transition: transform 0.7s';
         this.imgChange();
     },
     gotoNext2: function() {
-        console.log("\n\nNEXT");
+        console.log("\n\nNEXT2");
+        // document.querySelector("#slider-container").classList.add('slider-container-transition');
         document.querySelector("#slider-container").classList.add('slider-container-transition');
-        document.querySelector("#slider-container").style.transform = 'translateX(+100%)';
+        document.querySelector(".slider-container-transition").style.transform = 'translateX(-100%)';
         this.imgChange();
     }
 };
@@ -46280,7 +46313,7 @@ const updateScrollVal = (val)=>{
     }
 };
 const pointerDown = (evt)=>{
-    console.log('pointerDown ' + evt.clientX);
+    console.log('pointerDown ' + evt);
     evt.target.addEventListener('mousemove', mousemove);
 };
 const pointerUp = (evt)=>{

@@ -198,6 +198,14 @@ html, body {
   transition: transform 0.7s ease-in-out;
 }
 
+.slider-container-transition2 {
+  transition: transform 0.7s;
+}
+
+.slider-container-transition3 {
+  transition: transform 1s;
+}
+
 .slider-item {
   width: 100%;
   align-items: center;
@@ -219,20 +227,22 @@ html, body {
   margin-top: 100px;
 }
 
+.button-flex {
+  width: 850px;
+  margin: auto;
+  display: flex;
+}
+
 .btn-scroll {
-  position: absolute;
-  margin-top: -20%;
-  top: 50vh;
   background-color: rgba(255, 255, 255, 0);
   padding: 1%;
   border: none;
+  align-self: flex-start;
 }
 
 .btn-scroll2 {
-  position: absolute;
-  margin-top: -20%;
-  right: 0;
-  top: 50vh;
+  align-self: flex-end;
+  margin-left: auto;
   background-color: rgba(255, 255, 255, 0);
   padding: 1%;
   border: none;
@@ -253,41 +263,21 @@ html, body {
 }
 
 @media only screen and (max-width: 600px) {
-  .content-img {
-    width: 10%;
-  }
-
-  .btn-scroll2 {
-    margin-top: -10%;
+  .button-flex {
+    width: 100%;
   }
 
   .btn-scroll {
-    margin-top: -10%;
+    width: 5px;
+  }
+
+  .content-img {
+    width: 10%;
   }
 }
 
 .text-col {
   max-width: 75%;
-}
-
-@media only screen and (max-width: 1024px) {
-  .btn-scroll2 {
-    margin-top: -45%;
-  }
-
-  .btn-scroll {
-    margin-top: -45%;
-  }
-}
-
-@media only screen and (min-width: 1025px) {
-  .btn-scroll2 {
-    margin-top: -15%;
-  }
-
-  .btn-scroll {
-    margin-top: -15%;
-  }
 }
 
 .foreground-div {
