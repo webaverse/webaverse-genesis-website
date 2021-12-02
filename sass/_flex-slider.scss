@@ -49,9 +49,17 @@
 
 /* CSS transition applied when translation of items happen */
 .slider-container-transition {
-	transition: transform 0.7s ease-in-out;
+	transition: transform 0.7s  ease-in-out;
+}
+.slider-container-transition2 {
+	transition: transform 0.7s ;
+  // ease-in-out;
 }
 
+.slider-container-transition3 {
+	transition: transform 1s ;
+  // ease-in-out;
+}
 .slider-item {
 	width: 100%;
     align-items: center;
@@ -77,29 +85,37 @@ text-align: center;}
 
 }
 
+
+.button-flex
+{
+  width: 850px; margin: auto; display: flex;
+}
+
 // #move-button{
 //     position: relative;
 //     text-align: center;
 // color: rgba(10, 18, 34,0.9);
 // }
 .btn-scroll{
-    position: absolute;
-    margin-top: -20%;
-    top:50vh;
+    // position: absolute;
+    // margin-top: -20%;
+    // top:50vh;
     background-color: rgba(255, 255, 255, 0);
     padding:1%;
     border: none;
+    align-self: flex-start;
     // align-items: center;
     // width:220px;
     // height:90px;
 }
 .btn-scroll2{
-    position: absolute;
+    // position: absolute;
     // max-width: 600px;
     // background-color: red;
-    margin-top: -20%;
-    right:0;
-    top:50vh;
+    // margin-top: -20%;
+    align-self: flex-end;
+    margin-left: auto;
+    // top:50vh;
     background-color: rgba(255, 255, 255, 0);
     padding:1%;
     border: none;
@@ -117,6 +133,18 @@ text-align: center;}
   margin-left: auto; margin-right: auto; width: 5%;position: relative;
 }
 @media only screen and (max-width: 600px) {
+
+  .button-flex
+  {
+    width: 100%;
+  }
+
+  .btn-scroll
+  {
+    width:5px ;
+  }
+
+
 //   .btn-scroll{
 //     position: absolute;
 //     // max-width: 600px;
@@ -144,19 +172,19 @@ text-align: center;}
 .content-img {
 width:10%;
 }
-.btn-scroll2 
-{
-  // display: none;;
-  margin-top: -10%;
+// .btn-scroll2 
+// {
+//   // display: none;;
+//   margin-top: -10%;
 
-}
+// }
 
-.btn-scroll
-  {
-    // display: none;;
+// .btn-scroll
+//   {
+//     // display: none;;
 
-    margin-top: -10%;
-  }
+//     margin-top: -10%;
+//   }
 }
 .text-col{
   max-width: 75%;
@@ -165,26 +193,26 @@ width:10%;
 
 @media only screen and (max-width: 1024px) 
 {
-  .btn-scroll2 
-  {
-    margin-top: -45%;
-  }
+  // .btn-scroll2 
+  // {
+  //   margin-top: -45%;
+  // }
 
-  .btn-scroll
-  {
-    margin-top: -45%;
-  }
+  // .btn-scroll
+  // {
+  //   margin-top: -45%;
+  // }
 }
 
 @media only screen and (min-width: 1025px) 
 {
-  .btn-scroll2 
-  {
-    margin-top: -15%;
-  }
+  // .btn-scroll2 
+  // {
+  //   margin-top: -15%;
+  // }
 
-  .btn-scroll
-  {
-    margin-top: -15%;
-  }
+  // .btn-scroll
+  // {
+  //   margin-top: -15%;
+  // }
 }

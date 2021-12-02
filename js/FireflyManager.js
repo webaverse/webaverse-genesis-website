@@ -163,9 +163,9 @@ const init = ( params ) => {
 }
 
 const startFlyBehavior = () => {
-    flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 2 );
+    flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 10 );
     console.log("\n\nfirst")
-    returnToMouse( 3 );
+    returnToMouse( 17 );
     console.log("\n\nfirst")
 
     flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 25 );
@@ -195,8 +195,8 @@ function flyTo2DPoint( point, delay ){
     // console.log( 'flyTo2DPoint() in' );
     
     fireflyTimeout = setTimeout( function(){
-        console.log("-> ",document.querySelector('').getBoundingClientRect())
-        let newMousePoint = translate2DPoint( { x: screen.width-900 , y: window.innerHeight - 30 } );
+        // console.log("-> ",document.querySelector('').getBoundingClientRect())
+        let newMousePoint = translate2DPoint( { x: (window.innerWidth*0.5)-150, y: window.innerHeight - 30 } );
         let currentMousePoint = new THREE.Vector2( dynamicMouse.x, dynamicMouse.y );
 
         let lerpPoint = new THREE.Vector2().lerpVectors( newMousePoint, currentMousePoint, 0.5 );

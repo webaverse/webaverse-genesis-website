@@ -13,6 +13,7 @@ let scrollItemsArray;
 let slideItemsArray = [];
 let currentIndex = 1;
 let slideStartX;
+let Image;
 
 let sectionImgs = [ 
     { focus: 'info_sm.png', blur:'info_alt_sm.png' },
@@ -40,6 +41,7 @@ const init = ( params ) => {
     // Controls
     controlsContainer = document.querySelector( '.slide-scroll-controls-container' );
 
+
     SideScrollControls.init( { 
         container: controlsContainer,
         numItems: contentLength,
@@ -56,8 +58,22 @@ const init = ( params ) => {
         blurImg.className = 'slide-scroll-img slide-shadow';
         let focusImg = document.createElement( 'img' );
         focusImg.className = 'slide-scroll-img';
+        // focusImg.onclick=()=>
+        // {
+        //     console.log('HELOO MATHAFAKA')
+        // }
         let tintImg = document.createElement( 'img' );
         tintImg.className = 'slide-scroll-img';
+        tintImg.onclick=()=>
+        {
+            console.log(i)
+            if (currentIndex!=i+1)
+            {
+            currentIndex = i+1
+            FlexSlider.gotoNext();
+            FlexSlider.scrollValChange()
+            }
+        }
 
         blurImg.src = imgPath + sectionImgs[ i ].blur;
         focusImg.src = imgPath + sectionImgs[ i ].focus;
@@ -207,8 +223,6 @@ const FlexSlider = {
         console.log("\n\nIMG CHNSGE",this.current)
         if(this.current==1){
             document.querySelector(".content-scroller").style.backgroundImage= `url('http://www.freeimageslive.com/galleries/light/pics/light00002g.jpg')`;
-    
-    
         }
         else if(this.current==2){
             document.querySelector(".content-scroller").style.backgroundImage= `url('http://www.freeimageslive.com/galleries/home/diningroom/pics/diningroom_table.jpg')`;
@@ -293,6 +307,8 @@ const FlexSlider = {
    
 	changeOrder: function() {
         // console.log("Xcurr: ",this.current,"Xnum_ : ",this. num_items)
+        // console.log("pointer dowen")
+        // pointerDown()
         var b = parseInt(currentIndex)
         let val_in= b;
         console.log("(change order )currentIndex: ",currentIndex)
@@ -355,10 +371,41 @@ const FlexSlider = {
         order++;
     }
 
+    // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
+    // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
+
+    console.log("\n\n\nUNIQUE\n\n\n")
     document.querySelector("#slider-container").classList.remove('slider-container-transition');
     document.querySelector("#slider-container").style.transform = 'translateX(0)';
-   
+5
+      
+
+
+    // document.querySelector(".slider-container-transition2").style.transform = 'translateX(-100%)';
+    // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
+    // document.querySelector("#slider-container").classList.add('slider-container-transition3');
+
+    // document.querySelector(".slider-container-transition3").style.transform = 'translateX(0)';
+
+    // document.querySelector("#slider-container").classList.remove('slider-container-transition3');
+
+
+    // document.querySelector("#slider-container").classList.add('slider-container-transition5');
+    // document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+
+    // document.querySelector("#slider-container").style.transform = 'translateX(0)';
+
+
+    // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
+
+    // document.querySelector("#slider-container").style.transform = 'translateX(-10%)';
+    // document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+
+
 }
+this.btn1=0;
+
+this.btn2=0;
 
 		
 	},
@@ -371,16 +418,26 @@ const FlexSlider = {
         console.log("\n\nNEXT")
 		document.querySelector("#slider-container").classList.add('slider-container-transition');
 		document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+        
+        // document.querySelector("#slider-container").style.transform = 'transition: transform 0.7s';
+
+
+
         this.imgChange()
 
        
 
 	},
     gotoNext2: function() {
-        console.log("\n\nNEXT")
+        console.log("\n\nNEXT2")
        
-		document.querySelector("#slider-container").classList.add('slider-container-transition');
-		document.querySelector("#slider-container").style.transform = 'translateX(+100%)';
+        // document.querySelector("#slider-container").classList.add('slider-container-transition');
+        document.querySelector("#slider-container").classList.add('slider-container-transition');
+
+        document.querySelector(".slider-container-transition").style.transform = 'translateX(-100%)';
+
+
+
         this.imgChange()
         
 	}
@@ -426,7 +483,7 @@ const updateScrollVal = ( val ) => {
 
 
 const pointerDown = ( evt ) => {
-    console.log( 'pointerDown ' + evt.clientX )
+    console.log( 'pointerDown ' + evt )
     evt.target.addEventListener( 'mousemove', mousemove );
 
 }
