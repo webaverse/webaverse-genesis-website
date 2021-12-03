@@ -9,6 +9,7 @@ let imgPath = './imgs/content-scroll-imgs/'
 let scrollItemsLength;
 let scrollItemsArray;
 
+let globalCheck=0;
 
 let slideItemsArray = [];
 let currentIndex = 1;
@@ -291,13 +292,35 @@ const FlexSlider = {
 
 		// after each item slides in, slider container fires transitionend event
 		document.querySelector("#slider-container").addEventListener('transitionend', () => {
+            
+//             if(globalCheck>0){
+//                 // document.querySelector("#slider-container").classList.remove('slider-container-transition3');
+//                 // document.querySelector("#slider-container").style.transform = 'translateX(50%)';
+//                 // document.querySelector("#slider-container").classList.remove('slider-container-transition');
+
+//                 console.log("\n\n\n GOVAL")
+//                 document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+
+// globalCheck=0
+
+//             }
+//             else{
+            console.log("\n\nTRANS END")
+
 			this.changeOrder();
+            // }
 		});
         document.querySelector("#move-button-left").addEventListener('click', () => {
             console.log("Button prev")
             this.btn1=1
             this.btn2=0
-            currentIndex = currentIndex-1
+            console.log("curr KKKKHHH : ",currentIndex)
+            if(currentIndex>0)
+                {
+                    currentIndex = currentIndex-1
+                }
+            console.log("curr KKKKHHH : ",currentIndex)
+
             this.scrollValChange()
 
 			this.gotoNext2();
@@ -311,15 +334,16 @@ const FlexSlider = {
         // pointerDown()
         var b = parseInt(currentIndex)
         let val_in= b;
-        console.log("(change order )currentIndex: ",currentIndex)
+        // console.log("(change order )currentIndex: ",currentIndex,"val_in : ",val_in)
         if(val_in==0)
         {
-            currentIndex=5
-            val_in=5
+            currentIndex=this.num_items
+            val_in=this.num_items
         }
-        console.log(val_in,"dddd")
+        // console.log(val_in,"dddd")
         if(this.btn2==1){
-        console.log("curr: ",this.current,"num_ IFFFFF : ",this. num_items)//left btn
+             console.log("if")
+        // console.log("curr: ",this.current,"num_ IFFFFF : ",this. num_items)//left btn
         if(this.current == this.num_items)
         this.current = 1;
     else 
@@ -329,7 +353,7 @@ const FlexSlider = {
 
     // change order from current position till last
     for(let i=val_in; i<=this.num_items; i++) {
-        console.log("Order: ",order , "i: ",i)
+        // console.log("Order: ",order , "i: ",i)
         document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
         order++;
     }
@@ -343,11 +367,13 @@ const FlexSlider = {
     }
 
     // translate back to 0 from -100%
-    document.querySelector("#slider-container").classList.remove('slider-container-transition');
     document.querySelector("#slider-container").style.transform = 'translateX(0)';
+        document.querySelector("#slider-container").classList.remove('slider-container-transition');
+
     }
         else{
-        console.log("curr: ",this.current,"2num_ : ",this. num_items)//right btn
+            console.log("else")
+        // console.log("curr: ",this.current,"2num_ : ",this. num_items)//right btn
         // console.log("curr: ",this.current,"num_ : ",this. num_items)//left btn
         if(this.current == 1)
         this.current = this.num_items;
@@ -356,50 +382,35 @@ const FlexSlider = {
 
     let order = 1;
 
-    // change order from current position till last
-    for(let i=val_in; i<=this.num_items; i++) {
-        console.log("Order: ",order , "i: ",i)
-        document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-        order++;
-    }
 
-    // change order from first position till current
-    for(let i=val_in-1; i>=1; i--) {
-        console.log("Order: ",order , "i: ",i)
+//         }
+for(let i=val_in; i<=this.num_items; i++) {
+    console.log("Order: ",order , "i: ",i)
+    document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
+    order++;
+}
 
-        document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
-        order++;
-    }
+// change order from first position till current
+for(let i=val_in-1; i>=1; i--) {
+    console.log("Order: ",order , "i: ",i)
 
-    // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
-    // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
+    document.querySelector(".slider-item[data-position='" + i + "']").style.order = order;
+    order++;
+}
+document.querySelector("#slider-container").classList.remove('slider-container-transition');
 
-    console.log("\n\n\nUNIQUE\n\n\n")
-    document.querySelector("#slider-container").classList.remove('slider-container-transition');
-    document.querySelector("#slider-container").style.transform = 'translateX(0)';
-5
-      
+document.querySelector("#slider-container").style.transform = 'translateX(0)';
+// if(globalCheck==0){
 
+// }
 
-    // document.querySelector(".slider-container-transition2").style.transform = 'translateX(-100%)';
-    // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
-    // document.querySelector("#slider-container").classList.add('slider-container-transition3');
+// globalCheck=1;
 
-    // document.querySelector(".slider-container-transition3").style.transform = 'translateX(0)';
-
-    // document.querySelector("#slider-container").classList.remove('slider-container-transition3');
+//     }
 
 
-    // document.querySelector("#slider-container").classList.add('slider-container-transition5');
-    // document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
 
-    // document.querySelector("#slider-container").style.transform = 'translateX(0)';
-
-
-    // document.querySelector("#slider-container").classList.remove('slider-container-transition2');
-
-    // document.querySelector("#slider-container").style.transform = 'translateX(-10%)';
-    // document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+  
 
 
 }
@@ -415,7 +426,7 @@ this.btn2=0;
 
 
 	gotoNext: function() {
-        console.log("\n\nNEXT")
+        // console.log("\n\nNEXT")
 		document.querySelector("#slider-container").classList.add('slider-container-transition');
 		document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
         
@@ -429,12 +440,14 @@ this.btn2=0;
 
 	},
     gotoNext2: function() {
-        console.log("\n\nNEXT2")
+        // console.log("\n\nNEXT2")
        
         // document.querySelector("#slider-container").classList.add('slider-container-transition');
         document.querySelector("#slider-container").classList.add('slider-container-transition');
 
-        document.querySelector(".slider-container-transition").style.transform = 'translateX(-100%)';
+        document.querySelector("#slider-container").style.transform = 'translateX(-100%)';
+
+        // document.querySelector("#slider-container").classList.remove('slider-container-transition');
 
 
 
