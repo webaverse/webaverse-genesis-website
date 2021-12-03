@@ -187,16 +187,15 @@ html, body {
 
 #slider-container {
   display: flex;
-  flex-direction: row;
 }
 
 /* CSS transition applied when translation of items happen */
 .slider-container-transition {
-  transition: transform 0.7s ease-in-out;
+  transition: transform 0.7s;
 }
 
 .slider-container-transition2 {
-  transition: transform 0.7s;
+  transition: transform 0.5s;
 }
 
 .slider-container-transition3 {
