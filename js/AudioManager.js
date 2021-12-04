@@ -52,6 +52,8 @@ function canplay () {
 
 function start( audioContext, shouldBuffer ) {
 
+  return;
+
   for( let i = 0; i < manifest.length; i++ ){
 
       let src = manifest[ i ].src;
@@ -117,6 +119,8 @@ exports.stopAll = function(){
 exports.playAll = function(){
   //console.log( 'AudioManager.playAll()')
 
+  return;
+
   audioObjectsArr.forEach( player => {
 
     //console.log( 'player ', player.player )
@@ -133,6 +137,8 @@ exports.playAll = function(){
 }
 
 function click( id, volume = 1.0 ){
+
+  return;
 
   if( !allowplay ) return;
   allowplay = false;
@@ -154,6 +160,8 @@ function click( id, volume = 1.0 ){
 
 
 exports.play = function( id, volume = 1.0 ){
+  return;
+
   if( click ) {
     click( id, volume );
   }

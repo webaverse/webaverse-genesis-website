@@ -5,7 +5,7 @@ import EventDispatcher from './EventDispatcher';
 let container;
 let controlItemsArray = [];
 let controlItemsLength;
-let colorsArray = [ '#36f5b8', '#15feff', '#9751a9', '#de40ac', '#de7f40', '#f5e536', '#9df536', '#36f5b8', '#15feff', '#9751a9', '#de40ac' ];
+let colorsArray = [ '#c15ed4', '#d25856', '#54a1e2', '#d761ec', '#5be2a7', '#f5e536', '#9df536', '#36f5b8', '#15feff', '#9751a9', '#de40ac' ];
 let bar;
 
 let innerItemSizes = { focus: 20, blur: 9 };

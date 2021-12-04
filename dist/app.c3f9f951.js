@@ -57181,6 +57181,8 @@ function canplay() {
 }
 
 function start(audioContext, shouldBuffer) {
+  return;
+
   var _loop = function _loop(i) {
     var src = manifest[i].src;
     var player = (0, _audioPlayer.default)(src, {
@@ -57239,6 +57241,7 @@ exports.stopAll = function () {
 
 exports.playAll = function () {
   //console.log( 'AudioManager.playAll()')
+  return;
   audioObjectsArr.forEach(function (player) {
     //console.log( 'player ', player.player )
     player.player.play();
@@ -57254,6 +57257,7 @@ exports.playAll = function () {
 
 function click(id) {
   var volume = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.0;
+  return;
   if (!allowplay) return;
   allowplay = false;
   var playerObj = audioObjectsArr.find(function (p) {
@@ -57274,6 +57278,7 @@ function click(id) {
 
 exports.play = function (id) {
   var volume = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.0;
+  return;
 
   if (click) {
     click(id, volume);
@@ -63955,7 +63960,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var container;
 var controlItemsArray = [];
 var controlItemsLength;
-var colorsArray = ['#36f5b8', '#15feff', '#9751a9', '#de40ac', '#de7f40', '#f5e536', '#9df536', '#36f5b8', '#15feff', '#9751a9', '#de40ac'];
+var colorsArray = ['#c15ed4', '#d25856', '#54a1e2', '#d761ec', '#5be2a7', '#f5e536', '#9df536', '#36f5b8', '#15feff', '#9751a9', '#de40ac'];
 var bar;
 var innerItemSizes = {
   focus: 20,
@@ -64157,6 +64162,8 @@ var _gsap = require("gsap");
 
 var _SideScrollControls = _interopRequireDefault(require("./SideScrollControls"));
 
+var _EventDispatcher = _interopRequireDefault(require("./EventDispatcher"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var container;
@@ -64166,6 +64173,7 @@ var imgPath = './imgs/content-scroll-imgs/';
 var scrollItemsLength;
 var scrollItemsArray;
 var slideItemsArray = [];
+var slideWidth = 480;
 var slideStartX;
 var sectionImgs = [{
   focus: 'info_sm.png',
@@ -64185,6 +64193,7 @@ var sectionImgs = [{
 }];
 var zIndexCtr = 99;
 var contentLength = sectionImgs.length;
+var dispatcher = new _EventDispatcher.default();
 
 var init = function init(params) {
   console.log('SideScrollManager.init()');
@@ -64215,6 +64224,7 @@ var init = function init(params) {
     blurImg.src = imgPath + sectionImgs[i].blur;
     focusImg.src = imgPath + sectionImgs[i].focus;
     tintImg.src = imgPath + 'tint-img.png';
+    slideItem.id = i;
     slideItem.blurImg = blurImg;
     slideItem.focusImg = focusImg;
     slideItem.tintImg = tintImg;
@@ -64228,7 +64238,7 @@ var init = function init(params) {
       rotX: 0 * Math.sin(slideItem.sineFract),
       rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
       rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
-      trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+      trans: slideWidth * contentLength * Math.sin(slideItem.sineFract),
       perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
     };
 
@@ -64246,16 +64256,48 @@ var init = function init(params) {
     tintImg.style.opacity = i * 0.3;
     slideItemsContainer.appendChild(slideItem);
     slideItemsArray.push(slideItem);
+    slideItem.addEventListener('click', slideItemClickedHandler);
   }
 
   _gsap.gsap.set(slideItemsContainer, {
-    x: (window.innerWidth - 480) * 0.5
+    x: (window.innerWidth - slideWidth) * 0.5
   });
+};
+
+var updateItemIndex = function updateItemIndex(index) {
+  if (index > contentLength - 1) {
+    index = 0;
+  } else if (index < 0) {
+    index = contentLength - 1;
+  }
+
+  console.log('SideScrollManager.updateItemIndex  ' + index);
+  updateSlidePos(index);
+
+  _SideScrollControls.default.forceClick(index);
+};
+
+var slideItemClickedHandler = function slideItemClickedHandler(evt) {
+  console.log('clicked ' + evt.currentTarget.id);
+  dispatcher.dispatchEvent('conponentIndexChange', {
+    index: evt.currentTarget.id
+  });
+
+  _SideScrollControls.default.forceClick(evt.currentTarget.id);
+
+  updateSlidePos(evt.currentTarget.id);
 };
 
 var controlItemClickedHandler = function controlItemClickedHandler(evt) {
   console.log('itemClicled in Manager ' + evt.id);
-  var newIndex = -(evt.id * 0.2);
+  dispatcher.dispatchEvent('conponentIndexChange', {
+    index: evt.id
+  });
+  updateSlidePos(evt.id);
+};
+
+var updateSlidePos = function updateSlidePos(index) {
+  var newIndex = -(index * 0.2);
   console.log('new index ' + newIndex);
 
   for (var i = 0; i < slideItemsArray.length; i++) {
@@ -64265,7 +64307,7 @@ var controlItemClickedHandler = function controlItemClickedHandler(evt) {
       rotX: 0 * Math.sin(slideItem.sineFract),
       rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
       rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
-      trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+      trans: slideWidth * contentLength * Math.sin(slideItem.sineFract),
       perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
     };
 
@@ -64276,7 +64318,7 @@ var controlItemClickedHandler = function controlItemClickedHandler(evt) {
       delay: i * 0.0
     });
 
-    if (i == evt.id) {
+    if (i == index) {
       zIndexCtr++;
       slideItem.style.zIndex = zIndexCtr;
 
@@ -64324,7 +64366,7 @@ var updateScrollVal = function updateScrollVal(val) {
       rotX: 0 * Math.sin(slideItem.sineFract),
       rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
       rotZ: 5 * contentLength * Math.sin(slideItem.sineFract),
-      trans: 480 * contentLength * Math.sin(slideItem.sineFract),
+      trans: slideWidth * contentLength * Math.sin(slideItem.sineFract),
       perspective: 800 * contentLength * Math.sin(slideItem.sineFract)
     };
 
@@ -64386,14 +64428,25 @@ var updateScroll = function updateScroll(val) {
   var amt = val > 1 ? 1 : val;
 };
 
+var resize = function resize(width, height) {
+  console.log('SideScrollManager.resize()');
+
+  _gsap.gsap.set(slideItemsContainer, {
+    x: (window.innerWidth - slideWidth) * 0.5
+  });
+};
+
 var SideScrollManager = {
   init: init,
   updateScrollVal: updateScrollVal,
-  controlItemClickedHandler: controlItemClickedHandler
+  controlItemClickedHandler: controlItemClickedHandler,
+  resize: resize,
+  dispatcher: dispatcher,
+  updateItemIndex: updateItemIndex
 };
 var _default = SideScrollManager;
 exports.default = _default;
-},{"gsap":"node_modules/gsap/index.js","./SideScrollControls":"js/SideScrollControls.js"}],"js/ContentManager.js":[function(require,module,exports) {
+},{"gsap":"node_modules/gsap/index.js","./SideScrollControls":"js/SideScrollControls.js","./EventDispatcher":"js/EventDispatcher.js"}],"js/ContentManager.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64403,11 +64456,24 @@ exports.default = void 0;
 
 var _SideScrollManager = _interopRequireDefault(require("./SideScrollManager"));
 
+var _gsap = require("gsap");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var container;
 var topGrad;
 var sideScrollComponentContainer;
+var contentBackgroundImagesContainer;
+var contentBackgroundImagesArray;
+var contentBodiesArray;
+var imgsPath = './imgs/content-bg-imgs/';
+var currentContentItemIndex = 0; //let newContentItemIndex = 0;
+
+var contentItemsLength;
+var animationOffsetX = 20;
+var colorsArray = ['#c15ed4', '#d25856', '#54a1e2', '#d761ec', '#5be2a7', '#f5e536', '#9df536', '#36f5b8', '#15feff', '#9751a9', '#de40ac'];
+var currentItem;
+var nextArrow, prevArrow;
 
 var init = function init(params) {
   container = params.container;
@@ -64421,26 +64487,268 @@ var init = function init(params) {
     container: sideScrollComponentContainer,
     scrollLength: 5
   });
+
+  _SideScrollManager.default.dispatcher.addEventListener('conponentIndexChange', sideScrollComponentIndexChangeHandler, false);
+
+  contentBackgroundImagesContainer = document.querySelector('.content-bg-imgs-container');
+  contentBackgroundImagesContainer.style.top = '800px';
+  contentBackgroundImagesArray = document.querySelectorAll('.content-bg-img');
+  console.log('ContentManager contentBackgroundImagesArray() ' + contentBackgroundImagesArray.length);
+
+  for (var i = 0; i < contentBackgroundImagesArray.length; i++) {
+    var img = contentBackgroundImagesArray[i];
+    var path = i < 10 ? 'content-bg-img-0' + i + '.jpg' : 'content-bg-img-' + i + '.jpg';
+    console.log('path ' + imgsPath + path);
+    img.src = imgsPath + path;
+
+    if (i == 0) {
+      img.style.opacity = 0.34; //img.style.mixBlendMode = 'overlay';
+    }
+  } //console.log( ' imgs container height: ', contentBackgroundImagesContainer.getBoundingClientRect() ); 
+
+
+  contentBodiesArray = document.querySelectorAll('.content-scroll-item');
+  contentItemsLength = contentBodiesArray.length;
+
+  for (var j = 0; j < contentItemsLength; j++) {
+    var bodyItem = contentBodiesArray[j];
+    bodyItem.icon = bodyItem.querySelector('.content-scroll-item-icon');
+    bodyItem.headline = bodyItem.querySelector('.content-scroll-item-headline');
+    bodyItem.body = bodyItem.querySelector('.content-scroll-item-body');
+    bodyItem.headline.style.color = colorsArray[j];
+
+    if (j == 0) {
+      currentItem = bodyItem;
+      bodyItem.icon.style.opacity = 1;
+      bodyItem.headline.style.opacity = 1;
+      bodyItem.body.style.opacity = 1;
+    } else {
+      _gsap.gsap.set(bodyItem.icon, {
+        x: animationOffsetX,
+        opacity: 0
+      });
+
+      _gsap.gsap.set(bodyItem.headline, {
+        x: animationOffsetX,
+        opacity: 0
+      });
+
+      _gsap.gsap.set(bodyItem.body, {
+        x: animationOffsetX,
+        opacity: 0
+      });
+    }
+  }
+
+  nextArrow = document.querySelector('.content-scroll-next-arrow');
+  prevArrow = document.querySelector('.content-scroll-prev-arrow');
+  nextArrow.addEventListener('click', nextArrowClickHandler, false);
+  prevArrow.addEventListener('click', prevArrowClickHandler, false);
+  container.style.height = '2000px';
+};
+
+var nextArrowClickHandler = function nextArrowClickHandler() {
+  /* currentContentItemIndex++;
+   if(currentContentItemIndex > contentItemsLength ) currentContentItemIndex = 0; */
+  _SideScrollManager.default.updateItemIndex(currentContentItemIndex + 1);
+
+  changeContentFromIndex(currentContentItemIndex + 1);
+  updateBackgroundImageIndex(currentContentItemIndex + 1);
+};
+
+var prevArrowClickHandler = function prevArrowClickHandler() {
+  /* currentContentItemIndex--;
+   if(currentContentItemIndex < 0 ) currentContentItemIndex = contentItemsLength;
+  */
+  _SideScrollManager.default.updateItemIndex(currentContentItemIndex - 1);
+
+  changeContentFromIndex(currentContentItemIndex - 1);
+  updateBackgroundImageIndex(currentContentItemIndex - 1);
+};
+
+var changeContentFromIndex = function changeContentFromIndex(index) {
+  if (index > contentItemsLength - 1) {
+    index = 0;
+  } else if (index < 0) {
+    index = contentItemsLength - 1;
+  }
+
+  console.log('INDEX ' + index);
+  var nextItem = contentBodiesArray[index];
+  var nextDelayVal = 0.3;
+  console.log('currentItem ' + currentItem + ' ' + nextItem); //return;
+
+  if (index > currentContentItemIndex) {
+    _gsap.gsap.set(nextItem.icon, {
+      x: animationOffsetX
+    });
+
+    _gsap.gsap.set(nextItem.headline, {
+      x: animationOffsetX
+    });
+
+    _gsap.gsap.set(nextItem.body, {
+      x: animationOffsetX
+    });
+
+    _gsap.gsap.to(currentItem.icon, 0.3, {
+      x: -animationOffsetX,
+      opacity: 0,
+      ease: _gsap.Power3.easeIn
+    });
+
+    _gsap.gsap.to(currentItem.headline, 0.3, {
+      x: -animationOffsetX,
+      opacity: 0,
+      ease: _gsap.Power3.easeIn,
+      delay: 0.05
+    });
+
+    _gsap.gsap.to(currentItem.body, 0.3, {
+      x: -animationOffsetX,
+      opacity: 0,
+      ease: _gsap.Power3.easeIn,
+      delay: 0.1
+    });
+
+    _gsap.gsap.to(nextItem.icon, 0.3, {
+      x: 0,
+      opacity: 1,
+      ease: _gsap.Power3.easeOut,
+      delay: nextDelayVal
+    });
+
+    _gsap.gsap.to(nextItem.headline, 0.3, {
+      x: 0,
+      opacity: 1,
+      ease: _gsap.Power3.easeOut,
+      delay: nextDelayVal + 0.05
+    });
+
+    _gsap.gsap.to(nextItem.body, 0.3, {
+      x: 0,
+      opacity: 1,
+      ease: _gsap.Power3.easeOut,
+      delay: nextDelayVal + 0.1
+    });
+  } else {
+    _gsap.gsap.set(nextItem.icon, {
+      x: -animationOffsetX
+    });
+
+    _gsap.gsap.set(nextItem.headline, {
+      x: -animationOffsetX
+    });
+
+    _gsap.gsap.set(nextItem.body, {
+      x: -animationOffsetX
+    });
+
+    _gsap.gsap.to(currentItem.icon, 0.3, {
+      x: animationOffsetX,
+      opacity: 0,
+      ease: _gsap.Power3.easeIn
+    });
+
+    _gsap.gsap.to(currentItem.headline, 0.3, {
+      x: animationOffsetX,
+      opacity: 0,
+      ease: _gsap.Power3.easeIn,
+      delay: 0.05
+    });
+
+    _gsap.gsap.to(currentItem.body, 0.3, {
+      x: animationOffsetX,
+      opacity: 0,
+      ease: _gsap.Power3.easeIn,
+      delay: 0.1
+    });
+
+    _gsap.gsap.to(nextItem.icon, 0.3, {
+      x: 0,
+      opacity: 1,
+      ease: _gsap.Power3.easeOut,
+      delay: nextDelayVal
+    });
+
+    _gsap.gsap.to(nextItem.headline, 0.3, {
+      x: 0,
+      opacity: 1,
+      ease: _gsap.Power3.easeOut,
+      delay: nextDelayVal + 0.05
+    });
+
+    _gsap.gsap.to(nextItem.body, 0.3, {
+      x: 0,
+      opacity: 1,
+      ease: _gsap.Power3.easeOut,
+      delay: nextDelayVal + 0.1
+    });
+  }
+
+  currentItem = nextItem;
+  currentContentItemIndex = index;
+};
+
+var sideScrollComponentIndexChangeHandler = function sideScrollComponentIndexChangeHandler(evt) {
+  console.log('ContentManager.sideScrollComponentIndexChangeHandler() ' + evt.index); //currentContentItemIndex = evt.index;
+
+  changeContentFromIndex(evt.index);
+  updateBackgroundImageIndex(evt.index);
+};
+
+var updateBackgroundImageIndex = function updateBackgroundImageIndex(index) {
+  if (index > contentItemsLength - 1) {
+    index = 0;
+  } else if (index < 0) {
+    index = contentItemsLength - 1;
+  }
+
+  for (var i = 0; i < contentBackgroundImagesArray.length; i++) {
+    var img = contentBackgroundImagesArray[i];
+
+    if (i == index) {
+      _gsap.gsap.to(img, 1, {
+        opacity: 0.34,
+        ease: _gsap.Power3.easeOut
+      });
+    } else {
+      _gsap.gsap.to(img, 1, {
+        opacity: 0.0,
+        ease: _gsap.Power3.easeOut
+      });
+    }
+  }
 };
 
 var updateScroll = function updateScroll(val) {
-  //let amt = val > 1 ? 1 : val;
+  contentBackgroundImagesContainer.style.display = 'block'; //let amt = val > 1 ? 1 : val;
+
   topGrad.style.height = window.innerHeight * 0.5 * val + 'px';
   topGrad.style.marginTop = -(window.innerHeight * 0.5 * val) + 'px';
 };
 
-var updateDragVal = function updateDragVal(val) {
-  _SideScrollManager.default.updateScrollVal(val);
+var updateDragVal = function updateDragVal(val) {//SideScrollManager.updateScrollVal( val );
+};
+
+var resize = function resize(width, height) {
+  _SideScrollManager.default.resize(width, height); //console.log( ' imgs container height: ', contentBackgroundImagesContainer.getBoundingClientRect() ); 
+
+
+  var bgImgsRect = contentBackgroundImagesContainer.getBoundingClientRect();
+  var contHeight = bgImgsRect.y + bgImgsRect.height; //container.style.height = contHeight + 'px';
+  //gsap.set( container, { height: 'auto'})
 };
 
 var Content = {
   init: init,
   updateScroll: updateScroll,
-  updateDragVal: updateDragVal
+  //updateDragVal,
+  resize: resize
 };
 var _default = Content;
 exports.default = _default;
-},{"./SideScrollManager":"js/SideScrollManager.js"}],"js/app.js":[function(require,module,exports) {
+},{"./SideScrollManager":"js/SideScrollManager.js","gsap":"node_modules/gsap/index.js"}],"js/app.js":[function(require,module,exports) {
 "use strict";
 
 require("regenerator-runtime/runtime");
@@ -64623,6 +64931,8 @@ var resize = function resize() {
   windowHeight = window.innerHeight;
 
   _WebaWorld.default.resize(windowWidth, windowHeight);
+
+  _ContentManager.default.resize(windowWidth, windowHeight);
 };
 },{"regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","gsap":"node_modules/gsap/index.js","../../examples/jsm/libs/stats.module":"../examples/jsm/libs/stats.module.js","./WebaWorld":"js/WebaWorld.js","../../examples/jsm/libs/dat.gui.module.js":"../examples/jsm/libs/dat.gui.module.js","./userAgent":"js/userAgent.js","./UI":"js/UI.js","./ContentManager":"js/ContentManager.js"}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -64652,7 +64962,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54934" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63965" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

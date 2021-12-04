@@ -9,6 +9,10 @@ html, body {
   background-color: #0e161f;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 .app-container {
   width: 100%;
   height: 100%;
@@ -16,10 +20,12 @@ html, body {
 }
 
 .content-container {
+  position: relative;
   width: 100%;
-  height: 2000px;
+  height: auto;
   background-color: #0e161f;
   display: none;
+  bottom: 0;
 }
 
 .content-section {
@@ -43,12 +49,74 @@ html, body {
   max-width: 760px;
 }
 
+.content-scroll-container {
+  position: absolute;
+  width: 80%;
+  height: auto;
+  background-color: crimson;
+  bottom: 450px;
+  left: 10%;
+  z-index: 2;
+}
+
+.content-scroll-item {
+  position: absolute;
+  top: -500px;
+  left: 10%;
+  width: 80%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.content-scroll-item-icon {
+  width: 85px;
+  height: 50px;
+  background-color: #333333;
+  opacity: 0;
+}
+
+.content-scroll-item-headline {
+  opacity: 0;
+}
+
+.content-scroll-item-body {
+  margin-top: 30px;
+  text-align: center;
+  opacity: 0;
+}
+
+.content-scroll-span {
+  padding-bottom: 10px;
+}
+
+.content-scroll-prev-arrow {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 0;
+  top: -250px;
+}
+
+.content-scroll-next-arrow {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: 0;
+  top: -250px;
+}
+
 .slide-scroll-component {
+  position: absolute;
   margin-top: 50px;
   width: 100%;
   height: 500px;
   display: flex;
   flex-direction: column;
+  margin-bottom: -1000px;
+  z-index: 9999;
 }
 
 .slide-scroll-items-container {
@@ -64,6 +132,8 @@ html, body {
   max-height: 360px;
   border-radius: 5px;
   position: relative;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .slide-scroll-img {
@@ -75,6 +145,7 @@ html, body {
   -webkit-border-radius: 3%;
   -moz-border-radius: 3%;
   border-radius: 3%;
+  cursor: pointer;
 }
 
 .slide-shadow {
@@ -135,6 +206,26 @@ html, body {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
+}
+
+.content-bg-imgs-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1024px;
+  display: none;
+  z-index: 1;
+  padding-bottom: 100px;
+  mix-blend-mode: overlay;
+}
+
+.content-bg-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
 }
 
 .foreground-div {
@@ -375,14 +466,12 @@ html, body {
   font-family: "Bowlby One SC", cursive;
   font-size: 2.2rem;
   line-height: 2.2rem;
-  margin: 0 auto;
 }
 
 .subheader-text {
   color: white;
   font-family: "Bowlby One SC", cursive;
   font-size: 1.5rem;
-  margin: 0 auto;
 }
 
 .body-text {
@@ -391,16 +480,25 @@ html, body {
   font-weight: 300;
   font-size: 0.9rem;
   line-height: 1.2rem;
+}
+
+.intro-header-text {
+  margin-bottom: 1rem;
   margin: 0 auto;
 }
 
 .intro-sub-text {
   margin-bottom: 0.7rem;
   color: #7a1566;
+  margin: 0 auto;
 }
 
-.intro-header-text {
-  margin-bottom: 1rem;
+.intro-body-text {
+  margin: 0 auto;
+}
+
+.content-scroll-item-headline-text {
+  margin-top: 30px;
 }
 
 @media only screen and (min-width: 600px) {

@@ -153,6 +153,7 @@ const resize = () => {
     windowHeight = window.innerHeight;
     
     WebaWorld.resize( windowWidth, windowHeight );
+    ContentManager.resize(  windowWidth, windowHeight );
 
 }
 

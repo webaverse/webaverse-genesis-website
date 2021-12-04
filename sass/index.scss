@@ -7,12 +7,17 @@ html, body {
     width: 100%;
     height: auto;
     background-color: #0e161f;
-    
+}
+
+body {
+    overflow-x:hidden;
+
 }
 
 @import "app";
 @import "content";
 @import "scroll-component";
 @import "scroll-component-controls";
+@import "content-images";
 @import "ui";
 @import "text";

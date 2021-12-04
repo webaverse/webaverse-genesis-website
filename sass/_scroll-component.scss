@@ -2,6 +2,7 @@ $img-rad: 3%;
 $slide-tyint-col: #0e161f;
 
 .slide-scroll-component {
+    position: absolute;
     margin-top: 50px;
     width: 100%;
     height: 500px;
@@ -9,6 +10,8 @@ $slide-tyint-col: #0e161f;
     display: flex;
     flex-direction: column;
     //overflow-x: hidden
+    margin-bottom: -1000px;
+    z-index: 9999;
     
 }
 
@@ -27,6 +30,8 @@ $slide-tyint-col: #0e161f;
     max-height: 360px;
     border-radius: 5px;
     position: relative;
+    pointer-events: auto;
+    cursor: pointer;
     //box-shadow: 5px 5px 8px #0e161f;
 }
 
@@ -40,6 +45,8 @@ $slide-tyint-col: #0e161f;
     -webkit-border-radius: $img-rad; 
     -moz-border-radius: $img-rad; 
     border-radius: $img-rad;    
+    //pointer-events: none;
+    cursor: pointer;
 }
 
 
