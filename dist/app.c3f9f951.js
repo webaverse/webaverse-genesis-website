@@ -57489,7 +57489,7 @@ function flyTo2DPoint(point, delay) {
   //console.log( 'flyTo2DPoint()' );
   fireflyTimeout = setTimeout(function () {
     var newMousePoint = translate2DPoint({
-      x: window.innerWidth - 320,
+      x: window.innerWidth * 0.5 - 150,
       y: window.innerHeight - 30
     });
     var currentMousePoint = new THREE.Vector2(dynamicMouse.x, dynamicMouse.y);
@@ -64193,6 +64193,9 @@ var sectionImgs = [{
 }];
 var zIndexCtr = 99;
 var contentLength = sectionImgs.length;
+var currentScrollFraction = 0;
+var currentContentItemIndex = 0;
+var newScrollFraction;
 var dispatcher = new _EventDispatcher.default();
 
 var init = function init(params) {
@@ -64256,7 +64259,7 @@ var init = function init(params) {
     tintImg.style.opacity = i * 0.3;
     slideItemsContainer.appendChild(slideItem);
     slideItemsArray.push(slideItem);
-    slideItem.addEventListener('click', slideItemClickedHandler);
+    slideItem.addEventListener('click', slideItemClickedHandler); //slideItemsContainer.addEventListener( 'pointerdown', pointerDown );
   }
 
   _gsap.gsap.set(slideItemsContainer, {
@@ -64265,21 +64268,17 @@ var init = function init(params) {
 };
 
 var updateItemIndex = function updateItemIndex(index) {
-  if (index > contentLength - 1) {
-    index = 0;
-  } else if (index < 0) {
-    index = contentLength - 1;
-  }
-
   console.log('SideScrollManager.updateItemIndex  ' + index);
+  if (index > contentLength - 1) index = 0;
+  if (index < 0) index = contentLength - 1;
   updateSlidePos(index);
 
   _SideScrollControls.default.forceClick(index);
 };
 
 var slideItemClickedHandler = function slideItemClickedHandler(evt) {
-  console.log('clicked ' + evt.currentTarget.id);
-  dispatcher.dispatchEvent('conponentIndexChange', {
+  //console.log( 'clicked ' + evt.currentTarget.id );
+  dispatcher.dispatchEvent('componentIndexChange', {
     index: evt.currentTarget.id
   });
 
@@ -64290,19 +64289,21 @@ var slideItemClickedHandler = function slideItemClickedHandler(evt) {
 
 var controlItemClickedHandler = function controlItemClickedHandler(evt) {
   console.log('itemClicled in Manager ' + evt.id);
-  dispatcher.dispatchEvent('conponentIndexChange', {
+  currentScrollFraction = evt.id * 2 * 0.1;
+  console.log('currentScrollFraction ' + currentScrollFraction);
+  dispatcher.dispatchEvent('componentIndexChange', {
     index: evt.id
   });
   updateSlidePos(evt.id);
 };
 
 var updateSlidePos = function updateSlidePos(index) {
-  var newIndex = -(index * 0.2);
-  console.log('new index ' + newIndex);
+  var newFract = -(index * 0.2);
+  console.log('SideScrollManager.updateSlidePos() ' + newFract);
 
   for (var i = 0; i < slideItemsArray.length; i++) {
     var slideItem = slideItemsArray[i];
-    slideItem.sineFract = slideItem.originFract + newIndex;
+    slideItem.sineFract = slideItem.originFract + newFract;
     slideItem.transforms = {
       rotX: 0 * Math.sin(slideItem.sineFract),
       rotY: 15 * contentLength * Math.sin(slideItem.sineFract),
@@ -64349,15 +64350,23 @@ var updateSlidePos = function updateSlidePos(index) {
       });
     }
   }
+
+  currentContentItemIndex = index;
 };
 
 var updateScrollVal = function updateScrollVal(val) {
+  console.log('SideScrollManager.updateScrollVal() ' + val);
+  /* if( val > 0 ) val = 0;
+  if( val < -( ( contentLength-1 ) * 2 ) * 0.1 ) val = -( ( contentLength-1 ) * 2 ) * 0.1;
+  */
+
   var newIndex = Math.floor(Math.abs(val * 10) * 0.5);
-
-  _SideScrollControls.default.forceClick(newIndex);
-
   var activeIndex = Math.round(Math.abs(val * 5));
-  console.log('activeIndex ' + activeIndex);
+  /* console.log( 'NEW INDEX IS ' + newIndex );
+  console.log( 'ACTIVE INDEX IS ' + activeIndex ); */
+
+  if (newIndex > -1 && newIndex < contentLength) _SideScrollControls.default.forceClick(newIndex); //if( activeIndex)
+  //console.log( 'activeIndex ' + activeIndex );
 
   for (var i = 0; i < slideItemsArray.length; i++) {
     var slideItem = slideItemsArray[i];
@@ -64377,7 +64386,7 @@ var updateScrollVal = function updateScrollVal(val) {
       delay: i * 0.0
     });
 
-    if (i == activeIndex) {
+    if (i == activeIndex && activeIndex > -1 && activeIndex < contentLength) {
       zIndexCtr++;
       slideItem.style.zIndex = zIndexCtr;
 
@@ -64408,28 +64417,77 @@ var updateScrollVal = function updateScrollVal(val) {
       });
     }
   }
+
+  currentContentItemIndex = activeIndex;
 };
 
 var pointerDown = function pointerDown(evt) {
-  console.log('pointerDown ' + evt.clientX);
-  evt.target.addEventListener('mousemove', mousemove);
+  //console.log( 'pointerDown ' + evt.clientX );
+  slideStartX = evt.clientX;
+  window.addEventListener('mousemove', mousemove); //slideItemsContainer.removeEventListener( 'pointerdown', pointerDown );
+
+  window.addEventListener('pointerup', pointerUp);
 };
 
 var pointerUp = function pointerUp(evt) {
-  console.log('pointerUp');
-  evt.target.removeEventListener('mousemove', mousemove);
+  //console.log( 'pointerUp' );
+  window.removeEventListener('mousemove', mousemove); //newScrollFraction = currentScrollFraction +  -0.4;// ( Math.floor( Math.abs( newScrollFraction  * 10 ) * 0.5 ) );
+  //console.log( 'newScrollFraction ' + Math.round( newScrollFraction * 10 ) - 1  );
+  //console.log( 'to nearest ' + Math.round( newScrollFraction / 0.2 ) * 0.2 );
+  //console.log( 'fract ' + ( Math.floor(( newScrollFraction * 10 )) - 1 ) )
+
+  var nearest = Math.round(newScrollFraction / 0.2) * 0.2;
+  if (nearest > 0) nearest = 0;
+  if (nearest < -((contentLength - 1) * 2) * 0.1) nearest = -((contentLength - 1) * 2) * 0.1; //console.log( 'NEAREST is ' + nearest );
+  //currentScrollFraction = nearest;
+
+  updateScrollVal(currentScrollFraction);
+  var newIndex = Math.floor(Math.abs(currentScrollFraction) * 0.5 * 10);
+  console.log('SideScrollManager.pointerUp() ', newIndex); //dispatcher.dispatchEvent( 'componentIndexChange', { index: newIndex } );
+  //console.log( 'currentScrollFraction ' + currentScrollFraction );
 };
 
 var mousemove = function mousemove(evt) {
+  var dist = evt.clientX - slideStartX;
+  newScrollFraction = currentScrollFraction + dist / (window.innerWidth * 1);
+  updateScrollVal(newScrollFraction);
+  console.log('pointerMove ' + newScrollFraction);
   var dragDist;
+};
+
+var roundToNearest = function roundToNearest(x) {
+  return Math.round(x / 0.2) * 0.2;
 };
 
 var updateScroll = function updateScroll(val) {
   var amt = val > 1 ? 1 : val;
 };
 
+var evalScrollValues = function evalScrollValues() {};
+/* const getDist = ( x1, y1, x2, y2 ) => {
+	
+	let xs = x2 - x1, ys = y2 - y1;		
+	
+	xs *= xs;
+	ys *= ys;
+	 
+	return Math.sqrt( xs + ys );
+}; */
+
+
 var resize = function resize(width, height) {
   console.log('SideScrollManager.resize()');
+
+  if (width < 600) {
+    slideWidth = 256;
+    updateSlidePos(currentContentItemIndex);
+  } else if (width > 599 && width < 768) {
+    slideWidth = 360;
+    updateSlidePos(currentContentItemIndex);
+  } else if (width > 767) {
+    slideWidth = 480;
+    updateSlidePos(currentContentItemIndex);
+  }
 
   _gsap.gsap.set(slideItemsContainer, {
     x: (window.innerWidth - slideWidth) * 0.5
@@ -64438,7 +64496,6 @@ var resize = function resize(width, height) {
 
 var SideScrollManager = {
   init: init,
-  updateScrollVal: updateScrollVal,
   controlItemClickedHandler: controlItemClickedHandler,
   resize: resize,
   dispatcher: dispatcher,
@@ -64474,6 +64531,8 @@ var animationOffsetX = 20;
 var colorsArray = ['#c15ed4', '#d25856', '#54a1e2', '#d761ec', '#5be2a7', '#f5e536', '#9df536', '#36f5b8', '#15feff', '#9751a9', '#de40ac'];
 var currentItem;
 var nextArrow, prevArrow;
+var iconsPath = './imgs/content-icons/';
+var contentIcons = ["info-icon.png", "engine-icon.png", "street-icon.png", "partners-icon.png", "secret-icon.png"];
 
 var init = function init(params) {
   container = params.container;
@@ -64488,7 +64547,7 @@ var init = function init(params) {
     scrollLength: 5
   });
 
-  _SideScrollManager.default.dispatcher.addEventListener('conponentIndexChange', sideScrollComponentIndexChangeHandler, false);
+  _SideScrollManager.default.dispatcher.addEventListener('componentIndexChange', sideScrollComponentIndexChangeHandler, false);
 
   contentBackgroundImagesContainer = document.querySelector('.content-bg-imgs-container');
   contentBackgroundImagesContainer.style.top = '800px';
@@ -64502,7 +64561,7 @@ var init = function init(params) {
     img.src = imgsPath + path;
 
     if (i == 0) {
-      img.style.opacity = 0.34; //img.style.mixBlendMode = 'overlay';
+      img.style.opacity = 0.45; //img.style.mixBlendMode = 'overlay';
     }
   } //console.log( ' imgs container height: ', contentBackgroundImagesContainer.getBoundingClientRect() ); 
 
@@ -64516,6 +64575,7 @@ var init = function init(params) {
     bodyItem.headline = bodyItem.querySelector('.content-scroll-item-headline');
     bodyItem.body = bodyItem.querySelector('.content-scroll-item-body');
     bodyItem.headline.style.color = colorsArray[j];
+    bodyItem.icon.style.backgroundImage = 'url( ' + iconsPath + contentIcons[j] + ')';
 
     if (j == 0) {
       currentItem = bodyItem;
@@ -64542,28 +64602,27 @@ var init = function init(params) {
 
   nextArrow = document.querySelector('.content-scroll-next-arrow');
   prevArrow = document.querySelector('.content-scroll-prev-arrow');
-  nextArrow.addEventListener('click', nextArrowClickHandler, false);
-  prevArrow.addEventListener('click', prevArrowClickHandler, false);
-  container.style.height = '2000px';
+  nextArrow.addEventListener('click', nextArrowClickHandler);
+  prevArrow.addEventListener('click', prevArrowClickHandler);
 };
 
 var nextArrowClickHandler = function nextArrowClickHandler() {
-  /* currentContentItemIndex++;
-   if(currentContentItemIndex > contentItemsLength ) currentContentItemIndex = 0; */
-  _SideScrollManager.default.updateItemIndex(currentContentItemIndex + 1);
+  console.log('NEXT CLICKED ');
+  currentContentItemIndex++;
+  console.log('ContentManager.nextArrowClickHandler() ' + currentContentItemIndex);
 
-  changeContentFromIndex(currentContentItemIndex + 1);
-  updateBackgroundImageIndex(currentContentItemIndex + 1);
+  _SideScrollManager.default.updateItemIndex(currentContentItemIndex);
+
+  changeContentFromIndex(currentContentItemIndex); //updateBackgroundImageIndex( currentContentItemIndex + 1 )
 };
 
 var prevArrowClickHandler = function prevArrowClickHandler() {
-  /* currentContentItemIndex--;
-   if(currentContentItemIndex < 0 ) currentContentItemIndex = contentItemsLength;
-  */
-  _SideScrollManager.default.updateItemIndex(currentContentItemIndex - 1);
+  currentContentItemIndex--;
+  console.log('ContentManager.prevArrowClickHandler() ' + currentContentItemIndex);
 
-  changeContentFromIndex(currentContentItemIndex - 1);
-  updateBackgroundImageIndex(currentContentItemIndex - 1);
+  _SideScrollManager.default.updateItemIndex(currentContentItemIndex);
+
+  changeContentFromIndex(currentContentItemIndex);
 };
 
 var changeContentFromIndex = function changeContentFromIndex(index) {
@@ -64573,10 +64632,10 @@ var changeContentFromIndex = function changeContentFromIndex(index) {
     index = contentItemsLength - 1;
   }
 
-  console.log('INDEX ' + index);
+  console.log('ContentManager.changeContentFromIndex() ' + index);
   var nextItem = contentBodiesArray[index];
-  var nextDelayVal = 0.3;
-  console.log('currentItem ' + currentItem + ' ' + nextItem); //return;
+  var nextDelayVal = 0.3; //console.log( 'currentItem ' + currentItem  + ' ' + nextItem);
+  //return;
 
   if (index > currentContentItemIndex) {
     _gsap.gsap.set(nextItem.icon, {
@@ -64688,28 +64747,30 @@ var changeContentFromIndex = function changeContentFromIndex(index) {
 
   currentItem = nextItem;
   currentContentItemIndex = index;
+  updateBackgroundImageIndex(currentContentItemIndex);
 };
 
 var sideScrollComponentIndexChangeHandler = function sideScrollComponentIndexChangeHandler(evt) {
-  console.log('ContentManager.sideScrollComponentIndexChangeHandler() ' + evt.index); //currentContentItemIndex = evt.index;
+  console.log('ContentManager.sideScrollComponentIndexChangeHandler() ' + evt.index);
+  if (evt.index == currentContentItemIndex) return; //currentContentItemIndex = evt.index;
 
-  changeContentFromIndex(evt.index);
-  updateBackgroundImageIndex(evt.index);
+  changeContentFromIndex(evt.index); //updateBackgroundImageIndex( evt.index );
 };
 
 var updateBackgroundImageIndex = function updateBackgroundImageIndex(index) {
-  if (index > contentItemsLength - 1) {
-    index = 0;
-  } else if (index < 0) {
-    index = contentItemsLength - 1;
-  }
+  /* if( index > contentItemsLength ){
+      index = 0
+  } else if( index < 0 ){
+      index = contentItemsLength;
+  } */
+  console.log('ContentManager.updateBackgroundImageIndex() ' + index);
 
   for (var i = 0; i < contentBackgroundImagesArray.length; i++) {
     var img = contentBackgroundImagesArray[i];
 
     if (i == index) {
       _gsap.gsap.to(img, 1, {
-        opacity: 0.34,
+        opacity: 0.45,
         ease: _gsap.Power3.easeOut
       });
     } else {
@@ -64728,9 +64789,6 @@ var updateScroll = function updateScroll(val) {
   topGrad.style.marginTop = -(window.innerHeight * 0.5 * val) + 'px';
 };
 
-var updateDragVal = function updateDragVal(val) {//SideScrollManager.updateScrollVal( val );
-};
-
 var resize = function resize(width, height) {
   _SideScrollManager.default.resize(width, height); //console.log( ' imgs container height: ', contentBackgroundImagesContainer.getBoundingClientRect() ); 
 
@@ -64743,7 +64801,6 @@ var resize = function resize(width, height) {
 var Content = {
   init: init,
   updateScroll: updateScroll,
-  //updateDragVal,
   resize: resize
 };
 var _default = Content;
@@ -64962,7 +65019,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63965" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49183" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

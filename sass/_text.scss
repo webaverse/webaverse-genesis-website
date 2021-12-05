@@ -48,6 +48,8 @@ $body-family: 'Jost', sans-serif;
 
 .content-scroll-item-headline-text {
     margin-top: 30px;
+    //max-width: 600px;
+    //margin: 0 auto;
 }
 
 
@@ -87,6 +89,7 @@ $body-family: 'Jost', sans-serif;
     }
     
     .subheader-text {
+        
         font-family: $header-family;
         font-size: 2rem;
     }

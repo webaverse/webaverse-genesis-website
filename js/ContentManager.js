@@ -20,6 +20,15 @@ let colorsArray = [ '#c15ed4', '#d25856', '#54a1e2', '#d761ec', '#5be2a7', '#f5e
 let currentItem;
 let nextArrow, prevArrow;
 
+let iconsPath = './imgs/content-icons/';
+let contentIcons = [
+    "info-icon.png",
+    "engine-icon.png",
+    "street-icon.png",
+    "partners-icon.png",
+    "secret-icon.png",
+]
+
 const init = ( params ) => {
     
     container = params.container;
@@ -35,7 +44,7 @@ const init = ( params ) => {
         scrollLength: 5,
     })
 
-    SideScrollManager.dispatcher.addEventListener( 'conponentIndexChange', sideScrollComponentIndexChangeHandler, false )
+    SideScrollManager.dispatcher.addEventListener( 'componentIndexChange', sideScrollComponentIndexChangeHandler, false )
 
     contentBackgroundImagesContainer = document.querySelector( '.content-bg-imgs-container' );
     contentBackgroundImagesContainer.style.top = '800px';
@@ -49,7 +58,7 @@ const init = ( params ) => {
         console.log( 'path ' + imgsPath + path )
         img.src = imgsPath + path;
         if( i == 0 ) {
-            img.style.opacity = 0.34;
+            img.style.opacity = 0.45;
             //img.style.mixBlendMode = 'overlay';
         }
     }
@@ -66,6 +75,10 @@ const init = ( params ) => {
         bodyItem.body = bodyItem.querySelector( '.content-scroll-item-body' );
         
         bodyItem.headline.style.color = colorsArray[ j ]
+
+        
+        bodyItem.icon.style.backgroundImage = 'url( ' + iconsPath + contentIcons[ j ] + ')';
+
         if( j == 0 ){
             currentItem = bodyItem;
             bodyItem.icon.style.opacity = 1;
@@ -74,7 +87,7 @@ const init = ( params ) => {
         } else {
             gsap.set( bodyItem.icon, { x: animationOffsetX, opacity: 0 } );
             gsap.set( bodyItem.headline, { x: animationOffsetX, opacity: 0 } );
-            gsap.set( bodyItem.body, { x: animationOffsetX, opacity: 0 } );
+            gsap.set( bodyItem.body, { x: animationOffsetX, opacity: 0 } ); 
         }
     }
 
@@ -82,33 +95,33 @@ const init = ( params ) => {
     prevArrow = document.querySelector( '.content-scroll-prev-arrow' );
 
 
-    nextArrow.addEventListener( 'click', nextArrowClickHandler, false );
-    prevArrow.addEventListener( 'click', prevArrowClickHandler, false );
+    nextArrow.addEventListener( 'click', nextArrowClickHandler );
+    prevArrow.addEventListener( 'click', prevArrowClickHandler );
 
-    container.style.height = '2000px';
+    
 }
 
 const nextArrowClickHandler = () => {
+
+    console.log( 'NEXT CLICKED ')
+
+    currentContentItemIndex++;
+    console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
+    SideScrollManager.updateItemIndex( currentContentItemIndex  );
+    changeContentFromIndex( currentContentItemIndex );
     
-    /* currentContentItemIndex++;
-
-    if(currentContentItemIndex > contentItemsLength ) currentContentItemIndex = 0; */
-
-    SideScrollManager.updateItemIndex( currentContentItemIndex + 1 );
-    changeContentFromIndex( currentContentItemIndex + 1 );
-    updateBackgroundImageIndex( currentContentItemIndex + 1 )
+    //updateBackgroundImageIndex( currentContentItemIndex + 1 )
 
 }
 
 const prevArrowClickHandler = () => {
-    
-    /* currentContentItemIndex--;
 
-    if(currentContentItemIndex < 0 ) currentContentItemIndex = contentItemsLength;
- */
-    SideScrollManager.updateItemIndex( currentContentItemIndex - 1 )   
-    changeContentFromIndex( currentContentItemIndex - 1 );
-    updateBackgroundImageIndex( currentContentItemIndex - 1 )
+    currentContentItemIndex--;
+
+    console.log( 'ContentManager.prevArrowClickHandler() ' + currentContentItemIndex )
+    SideScrollManager.updateItemIndex( currentContentItemIndex )   
+    changeContentFromIndex( currentContentItemIndex );
+    
 }
 
 const changeContentFromIndex = ( index ) => {
@@ -119,12 +132,12 @@ const changeContentFromIndex = ( index ) => {
         index = contentItemsLength-1;
     }
 
-    console.log( 'INDEX ' + index )
+    console.log( 'ContentManager.changeContentFromIndex() ' + index )
 
     let nextItem = contentBodiesArray[ index ];
     let nextDelayVal = 0.3;
 
-    console.log( 'currentItem ' + currentItem  + ' ' + nextItem);
+    //console.log( 'currentItem ' + currentItem  + ' ' + nextItem);
 
     //return;
 
@@ -160,31 +173,36 @@ const changeContentFromIndex = ( index ) => {
 
     currentContentItemIndex = index;
 
+    updateBackgroundImageIndex( currentContentItemIndex );
+
 }
 
 const sideScrollComponentIndexChangeHandler = ( evt ) => {
     console.log( 'ContentManager.sideScrollComponentIndexChangeHandler() ' + evt.index );
 
+    if( evt.index == currentContentItemIndex ) return;
     //currentContentItemIndex = evt.index;
 
     changeContentFromIndex( evt.index )
     
 
-    updateBackgroundImageIndex( evt.index );
+    //updateBackgroundImageIndex( evt.index );
 }
 
 const updateBackgroundImageIndex = ( index ) => {
 
-    if( index > contentItemsLength-1 ){
+    /* if( index > contentItemsLength ){
         index = 0
     } else if( index < 0 ){
-        index = contentItemsLength-1;
-    }
+        index = contentItemsLength;
+    } */
+
+    console.log( 'ContentManager.updateBackgroundImageIndex() ' + index );
 
     for( let i = 0; i<contentBackgroundImagesArray.length; i++ ){
         let img = contentBackgroundImagesArray[ i ];
         if( i == index ){
-            gsap.to( img, 1, { opacity: 0.34, ease:Power3.easeOut } );
+            gsap.to( img, 1, { opacity: 0.45, ease:Power3.easeOut } );
         } else {
             gsap.to( img, 1, { opacity: 0.0, ease:Power3.easeOut } );
         }
@@ -198,9 +216,6 @@ const updateScroll = ( val ) => {
     topGrad.style.marginTop = -( ( window.innerHeight * 0.5 ) * val ) + 'px';
 }
 
-const updateDragVal = ( val ) => {
-    //SideScrollManager.updateScrollVal( val );
-}
 
 const resize = ( width, height ) => {
     SideScrollManager.resize( width, height )
@@ -216,7 +231,6 @@ const resize = ( width, height ) => {
 const Content = {
     init,
     updateScroll,
-    //updateDragVal,
     resize,
 }
 
