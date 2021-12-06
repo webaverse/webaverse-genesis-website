@@ -6,7 +6,7 @@
     display: none;
     bottom: 0;
     height: calc( 100vh );
-    
+    overflow-x: hidden;
 }
 
 .content-section {
@@ -94,6 +94,8 @@
     left: 20%;
     //top: calc( 50% - 30px );
     top: 25px;
+    cursor: pointer;
+
 }
 
 .content-scroll-next-arrow {
@@ -103,6 +105,7 @@
     position: absolute;
     right: 20%;
     top: 25px;
+    cursor: pointer;
 }
 
 

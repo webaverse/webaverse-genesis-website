@@ -17,6 +17,7 @@ body {
   width: 100%;
   height: 100%;
   background-color: #0e161f;
+  overflow-x: hidden;
 }
 
 .content-container {
@@ -27,6 +28,7 @@ body {
   display: none;
   bottom: 0;
   height: calc( 100vh );
+  overflow-x: hidden;
 }
 
 .content-section {
@@ -97,6 +99,7 @@ body {
   position: absolute;
   left: 20%;
   top: 25px;
+  cursor: pointer;
 }
 
 .content-scroll-next-arrow {
@@ -105,6 +108,7 @@ body {
   position: absolute;
   right: 20%;
   top: 25px;
+  cursor: pointer;
 }
 
 @media only screen and (min-width: 600px) {

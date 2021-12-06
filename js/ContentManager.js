@@ -12,6 +12,7 @@ let contentBodiesArray;
 let imgsPath = './imgs/content-bg-imgs/';
 
 let currentContentItemIndex = 0;
+let prevContentItemIndex = 0;
 //let newContentItemIndex = 0;
 let contentItemsLength;
 let animationOffsetX = 20;
@@ -29,8 +30,11 @@ let contentIcons = [
     "secret-icon.png",
 ]
 
+let isMobile;
+
 const init = ( params ) => {
     
+    isMobile = params.isMobile;
     container = params.container;
     topGrad = document.createElement( 'div' );
     topGrad.className = "content-top-grad";
@@ -39,19 +43,12 @@ const init = ( params ) => {
     // Scroll compoment
     sideScrollComponentContainer = document.querySelector( '.slide-scroll-component' );
     
-    SideScrollManager.init( {
-        container: sideScrollComponentContainer,
-        scrollLength: 5,
-    })
-
-    SideScrollManager.dispatcher.addEventListener( 'componentIndexChange', sideScrollComponentIndexChangeHandler, false )
-
     contentBackgroundImagesContainer = document.querySelector( '.content-bg-imgs-container' );
     contentBackgroundImagesContainer.style.top = '800px';
     contentBackgroundImagesArray = document.querySelectorAll( '.content-bg-img' );
-
+    
     console.log( 'ContentManager contentBackgroundImagesArray() ' + contentBackgroundImagesArray.length )
-
+    
     for( let i = 0; i<contentBackgroundImagesArray.length; i++ ){
         let img = contentBackgroundImagesArray[ i ];
         let path = i < 10 ? ('content-bg-img-0' + i + '.jpg' ) : ('content-bg-img-' + i + '.jpg' );
@@ -62,11 +59,19 @@ const init = ( params ) => {
             //img.style.mixBlendMode = 'overlay';
         }
     }
-
+    
     //console.log( ' imgs container height: ', contentBackgroundImagesContainer.getBoundingClientRect() ); 
-
+    
     contentBodiesArray = document.querySelectorAll( '.content-scroll-item' );
     contentItemsLength = contentBodiesArray.length;
+
+    SideScrollManager.init( {
+        isMobile: isMobile,
+        container: sideScrollComponentContainer,
+        scrollLength: contentItemsLength,
+    })
+
+    SideScrollManager.dispatcher.addEventListener( 'componentIndexChange', sideScrollComponentIndexChangeHandler )
 
     for( let j = 0; j < contentItemsLength; j++ ){
         let bodyItem = contentBodiesArray[ j ];
@@ -95,19 +100,26 @@ const init = ( params ) => {
     prevArrow = document.querySelector( '.content-scroll-prev-arrow' );
 
 
-    nextArrow.addEventListener( 'click', nextArrowClickHandler );
-    prevArrow.addEventListener( 'click', prevArrowClickHandler );
+    if( isMobile ){
+        nextArrow.addEventListener( 'touchend', nextArrowClickHandler );
+        prevArrow.addEventListener( 'touchend', prevArrowClickHandler );
+    } else {
+        nextArrow.addEventListener( 'click', nextArrowClickHandler );
+        prevArrow.addEventListener( 'click', prevArrowClickHandler ); 
+    }
+    
 
     
 }
 
 const nextArrowClickHandler = () => {
 
-    console.log( 'NEXT CLICKED ')
-
     currentContentItemIndex++;
-    console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
-    SideScrollManager.updateItemIndex( currentContentItemIndex  );
+    if( currentContentItemIndex > contentItemsLength-1 ) currentContentItemIndex = 0;
+    console.log( 'NEXT CLICKED ', currentContentItemIndex )
+    //console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
+    //SideScrollManager.updateItemIndex( currentContentItemIndex  );
+    SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
     changeContentFromIndex( currentContentItemIndex );
     
     //updateBackgroundImageIndex( currentContentItemIndex + 1 )
@@ -117,31 +129,34 @@ const nextArrowClickHandler = () => {
 const prevArrowClickHandler = () => {
 
     currentContentItemIndex--;
+    
+    //
+    if( currentContentItemIndex < 0 ) currentContentItemIndex = contentItemsLength-1;
+    
+    console.log( 'PREV CLICKED ', currentContentItemIndex );
+    SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
 
-    console.log( 'ContentManager.prevArrowClickHandler() ' + currentContentItemIndex )
-    SideScrollManager.updateItemIndex( currentContentItemIndex )   
     changeContentFromIndex( currentContentItemIndex );
     
 }
 
+
+// *********** NEEDS WORK 
+
 const changeContentFromIndex = ( index ) => {
 
-    if( index > contentItemsLength-1 ){
-        index = 0
-    } else if( index < 0 ){
-        index = contentItemsLength-1;
-    }
+   
 
     console.log( 'ContentManager.changeContentFromIndex() ' + index )
 
     let nextItem = contentBodiesArray[ index ];
     let nextDelayVal = 0.3;
 
-    //console.log( 'currentItem ' + currentItem  + ' ' + nextItem);
+    console.log( '*****************************  prev/next index ' + prevContentItemIndex  + ' ' + currentContentItemIndex);
 
     //return;
 
-    if( index > currentContentItemIndex ){
+    if( index > prevContentItemIndex ){
 
         gsap.set( nextItem.icon, { x: animationOffsetX } )
         gsap.set( nextItem.headline, { x: animationOffsetX } )
@@ -171,17 +186,18 @@ const changeContentFromIndex = ( index ) => {
 
     currentItem = nextItem;
 
-    currentContentItemIndex = index;
+    prevContentItemIndex = index;
 
+    //
     updateBackgroundImageIndex( currentContentItemIndex );
 
 }
 
 const sideScrollComponentIndexChangeHandler = ( evt ) => {
     console.log( 'ContentManager.sideScrollComponentIndexChangeHandler() ' + evt.index );
+    currentContentItemIndex = evt.index;
 
-    if( evt.index == currentContentItemIndex ) return;
-    //currentContentItemIndex = evt.index;
+    //if( evt.index == currentContentItemIndex ) return;
 
     changeContentFromIndex( evt.index )
     

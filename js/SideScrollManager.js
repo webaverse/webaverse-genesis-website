@@ -23,9 +23,13 @@ let sectionImgs = [
 ]
 let zIndexCtr = 99;
 let contentLength = sectionImgs.length;
-let currentScrollFraction = 0;
-let currentContentItemIndex = 0;
-let newScrollFraction;
+let currentScrollVal = 0;
+let currentContentIndex = 0;
+let newDragScrollVal = 0;
+let globalScrollDist = 0;
+let isMobile;
+
+
 const dispatcher = new EventDispatcher();
 
 
@@ -33,6 +37,7 @@ const init = ( params ) => {
     
     console.log( 'SideScrollManager.init()' );
 
+    isMobile = params.isMobile;
     container = params.container;
     scrollItemsLength = params.itemsLength;
 
@@ -43,6 +48,7 @@ const init = ( params ) => {
     controlsContainer = document.querySelector( '.slide-scroll-controls-container' );
 
     SideScrollControls.init( { 
+        isMobile: isMobile,
         container: controlsContainer,
         numItems: contentLength,
     })
@@ -75,16 +81,16 @@ const init = ( params ) => {
         slideItem.appendChild( focusImg );
         slideItem.appendChild( tintImg );
 
-        slideItem.sineFract = i / contentLength;
-        slideItem.originFract = i / contentLength;
-        console.log( 'SineFract ' +  slideItem.sineFract );
+        slideItem.sineVal = i / contentLength;
+        slideItem.originVal = i / contentLength;
+        console.log( 'sineVal ' +  slideItem.sineVal );
 
         slideItem.transforms = { 
-            rotX: 0 * Math.sin(  slideItem.sineFract ),
-            rotY: ( 15 * contentLength ) * Math.sin(  slideItem.sineFract ),
-            rotZ: ( 5 * contentLength ) * Math.sin(  slideItem.sineFract ),
-            trans: ( slideWidth * contentLength ) * Math.sin(  slideItem.sineFract ),
-            perspective: ( 800 * contentLength ) * Math.sin(  slideItem.sineFract )
+            rotX: 0 * Math.sin(  slideItem.sineVal ),
+            rotY: ( 15 * contentLength ) * Math.sin(  slideItem.sineVal ),
+            rotZ: ( 5 * contentLength ) * Math.sin(  slideItem.sineVal ),
+            trans: ( slideWidth * contentLength ) * Math.sin(  slideItem.sineVal ),
+            perspective: ( 800 * contentLength ) * Math.sin(  slideItem.sineVal )
         }
         
         gsap.set( slideItem, { transform: `rotateX(${ slideItem.transforms.rotX }deg) rotateY(${ slideItem.transforms.rotY }deg) rotateZ(${ slideItem.transforms.rotZ }deg) translateX(${ slideItem.transforms.trans }px)`, perspective: `${ slideItem.transforms.perspective }px` });
@@ -93,6 +99,7 @@ const init = ( params ) => {
             tintImg.style.opacity = 0;
             focusImg.style.opacity = 0;
         } else {
+
         }
         
         slideItem.style.zIndex = zIndexCtr - i;
@@ -101,68 +108,52 @@ const init = ( params ) => {
         slideItemsContainer.appendChild( slideItem );
         slideItemsArray.push( slideItem );
 
-        slideItem.addEventListener( 'click', slideItemClickedHandler );
-        //slideItemsContainer.addEventListener( 'pointerdown', pointerDown );
+        if( isMobile ){
+            slideItemsContainer.addEventListener( 'touchstart', pointerDown );
+            slideItem.addEventListener( 'touchend', slideItemClickedHandler );
+        } else {
+            slideItemsContainer.addEventListener( 'pointerdown', pointerDown );
+            slideItem.addEventListener( 'pointerup', slideItemClickedHandler );
+        }
+
+        
     }
 
     gsap.set( slideItemsContainer, { x: (window.innerWidth - slideWidth ) * 0.5 })
-}
 
-
-const updateItemIndex = ( index ) => {
-    console.log( 'SideScrollManager.updateItemIndex  ' + index )
-
-    if( index > contentLength - 1  ) index = 0;  
-    if( index < 0 ) index = contentLength - 1;
-
-
-    updateSlidePos( index );
-    SideScrollControls.forceClick( index )
+    setTimeout( function() { goToSlideVal( 0.2 ) }, 5000 )
 
 }
 
-
-const slideItemClickedHandler = ( evt ) => {
-    //console.log( 'clicked ' + evt.currentTarget.id );
-    dispatcher.dispatchEvent( 'componentIndexChange', { index: evt.currentTarget.id } );
-    SideScrollControls.forceClick( evt.currentTarget.id )
-
-    updateSlidePos( evt.currentTarget.id );
+const goToSlideVal = ( val ) => {
+    let newSlideIndex = getIndexFromValue( val );
+    console.log( 'newSlideIndex ' + newSlideIndex );
 }
 
-const controlItemClickedHandler = ( evt ) => {
-    console.log( 'itemClicled in Manager ' + evt.id );
 
-    currentScrollFraction = ( evt.id * 2 ) * 0.1;
+const goToSlideIndex = ( index ) => {
 
-    console.log( 'currentScrollFraction ' + currentScrollFraction )
+    let newSlideVal = getValueFromIndex( index );
 
-    dispatcher.dispatchEvent( 'componentIndexChange', { index: evt.id } );
+    dispatcher.dispatchEvent( 'componentIndexChange', { index: index } );
 
-    updateSlidePos( evt.id );
-}
-
-const updateSlidePos = ( index ) => {
-    
-    let newFract = -( index * 0.2 );
-
-    console.log( 'SideScrollManager.updateSlidePos() ' + newFract );
+    console.log( 'SideScrollManager.gotoSlideIndex() > ' + index  + ' val: ' + newSlideVal );
 
     for( let i = 0; i<slideItemsArray.length; i++ ){
         
         let slideItem = slideItemsArray[ i ];
 
-        slideItem.sineFract = slideItem.originFract + newFract;
+        slideItem.sineVal = slideItem.originVal + newSlideVal;
 
         slideItem.transforms = { 
-            rotX: 0 * Math.sin(  slideItem.sineFract ),
-            rotY: ( 15 * contentLength ) * Math.sin(  slideItem.sineFract ),
-            rotZ: ( 5 * contentLength ) * Math.sin(  slideItem.sineFract ),
-            trans: ( slideWidth * contentLength ) * Math.sin(  slideItem.sineFract ),
-            perspective: ( 800 * contentLength ) * Math.sin(  slideItem.sineFract )
+            rotX: 0 * Math.sin(  slideItem.sineVal ),
+            rotY: ( 15 * contentLength ) * Math.sin(  slideItem.sineVal ),
+            rotZ: ( 5 * contentLength ) * Math.sin(  slideItem.sineVal ),
+            trans: ( slideWidth * contentLength ) * Math.sin(  slideItem.sineVal ),
+            perspective: ( 800 * contentLength ) * Math.sin(  slideItem.sineVal )
         }
 
-        gsap.to( slideItem, 0.6, { transform: `rotateX(${ slideItem.transforms.rotX }deg) rotateY(${ slideItem.transforms.rotY }deg) rotateZ(${ slideItem.transforms.rotZ }deg) translateX(${ slideItem.transforms.trans }px)`, perspective: `${ slideItem.transforms.perspective }px`, ease: Power3.easeOut, delay: i * 0.0 });
+        gsap.to( slideItem, 0.6, { transform: `rotateX(${ slideItem.transforms.rotX }deg) rotateY(${ slideItem.transforms.rotY }deg) rotateZ(${ slideItem.transforms.rotZ }deg) translateX(${ slideItem.transforms.trans }px)`, perspective: `${ slideItem.transforms.perspective }px`, ease: Power3.easeOut, delay: i * 0.00 });
 
         if( i == index ){
             zIndexCtr++;
@@ -170,45 +161,53 @@ const updateSlidePos = ( index ) => {
             gsap.to( slideItem.focusImg, 0.6, { opacity: 1, ease: Power3.easeOut, delay: i * 0.025 } );
             gsap.to( slideItem.tintImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.025  } );
         } else { 
-            slideItem.style.zIndex = zIndexCtr - Math.ceil( Math.abs( slideItem.sineFract * 10  )) ;
+            slideItem.style.zIndex = zIndexCtr - Math.ceil( Math.abs( slideItem.sineVal * 10  )) ;
             gsap.to( slideItem.focusImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.025 } );
-            gsap.to( slideItem.tintImg, 0.6, { alpha: Math.abs( slideItem.sineFract ) * 1.5, ease: Power3.easeOut, delay: i * 0.025  } );
+            gsap.to( slideItem.tintImg, 0.6, { alpha: Math.abs( slideItem.sineVal ) * 1.5, ease: Power3.easeOut, delay: i * 0.025  } );
         }
     }
 
-    currentContentItemIndex = index;
+    currentContentIndex = index;
+    currentScrollVal = getValueFromIndex( currentContentIndex );
 }
 
+const getValueFromIndex = ( index ) => {
+    let valFromIndex = parseFloat( ( index * 0.2 ).toFixed( 1 ) );
+    return -valFromIndex;
+}
+
+const getIndexFromValue = ( val ) => {
+    let indexFromVal = val * 5;
+    return indexFromVal;
+}
+
+
 const updateScrollVal = ( val ) => {
-    console.log( 'SideScrollManager.updateScrollVal() ' + val )
 
-    /* if( val > 0 ) val = 0;
-    if( val < -( ( contentLength-1 ) * 2 ) * 0.1 ) val = -( ( contentLength-1 ) * 2 ) * 0.1;
- */
-    let newIndex = ( Math.floor( Math.abs( val  * 10 ) * 0.5 ) );
-    let activeIndex = Math.round( Math.abs( val * 5 ) );
+    let valToIndex = -Math.round( val/2 * 10 ); 
 
-    /* console.log( 'NEW INDEX IS ' + newIndex );
-    console.log( 'ACTIVE INDEX IS ' + activeIndex ); */
+    if( valToIndex < 0 ) valToIndex = 0;
+    if( valToIndex > contentLength-1 ) valToIndex = contentLength-1;
 
+    console.log( 'updateScrollVal() > valToIndex: ' + valToIndex ); 
 
+    let activeIndex = valToIndex;
+
+    SideScrollControls.forceClick( activeIndex )
+   
+    currentContentIndex = activeIndex; 
     
-    if( newIndex > -1 && newIndex < contentLength ) SideScrollControls.forceClick( newIndex );
-    //if( activeIndex)
-
-    //console.log( 'activeIndex ' + activeIndex );
-
     for( let i = 0; i<slideItemsArray.length; i++ ){
         let slideItem = slideItemsArray[ i ];
 
-        slideItem.sineFract = slideItem.originFract + val;
+        slideItem.sineVal = slideItem.originVal + val;
 
         slideItem.transforms = { 
-            rotX: 0 * Math.sin(  slideItem.sineFract ),
-            rotY: ( 15 * contentLength ) * Math.sin(  slideItem.sineFract ),
-            rotZ: ( 5 * contentLength ) * Math.sin(  slideItem.sineFract ),
-            trans: ( slideWidth * contentLength ) * Math.sin(  slideItem.sineFract ),
-            perspective: ( 800 * contentLength ) * Math.sin(  slideItem.sineFract )
+            rotX: 0 * Math.sin(  slideItem.sineVal ),
+            rotY: ( 15 * contentLength ) * Math.sin(  slideItem.sineVal ),
+            rotZ: ( 5 * contentLength ) * Math.sin(  slideItem.sineVal ),
+            trans: ( slideWidth * contentLength ) * Math.sin(  slideItem.sineVal ),
+            perspective: ( 800 * contentLength ) * Math.sin(  slideItem.sineVal )
         }
 
         gsap.to( slideItem, 0.6, { transform: `rotateX(${ slideItem.transforms.rotX }deg) rotateY(${ slideItem.transforms.rotY }deg) rotateZ(${ slideItem.transforms.rotZ }deg) translateX(${ slideItem.transforms.trans }px)`, perspective: `${ slideItem.transforms.perspective }px`, ease: Power3.easeOut, delay: i * 0.0 });
@@ -219,106 +218,130 @@ const updateScrollVal = ( val ) => {
             gsap.to( slideItem.focusImg, 0.6, { opacity: 1, ease: Power3.easeOut, delay: i * 0.0 } );
             gsap.to( slideItem.tintImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.0  } );
         } else { 
-            slideItem.style.zIndex = zIndexCtr - Math.ceil( Math.abs( slideItem.sineFract * 10 )) ;
+            slideItem.style.zIndex = zIndexCtr - Math.ceil( Math.abs( slideItem.sineVal * 10 )) ;
             gsap.to( slideItem.focusImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.0 } );
-            gsap.to( slideItem.tintImg, 0.6, { alpha: Math.abs( slideItem.sineFract ) * 1.5, ease: Power3.easeOut, delay: i * 0.0  } );
+            gsap.to( slideItem.tintImg, 0.6, { alpha: Math.abs( slideItem.sineVal ) * 1.5, ease: Power3.easeOut, delay: i * 0.0  } );
         }
     }
 
-    currentContentItemIndex = activeIndex;
+    
 }
 
 
 const pointerDown = ( evt ) => {
-    //console.log( 'pointerDown ' + evt.clientX );
-    slideStartX = evt.clientX;
-    window.addEventListener( 'mousemove', mousemove );
-    //slideItemsContainer.removeEventListener( 'pointerdown', pointerDown );
-    window.addEventListener( 'pointerup', pointerUp );
+    
+    if( isMobile ){
+        slideStartX = evt.touches[ 0 ].clientX;
+        window.addEventListener( 'touchmove', mousemove );
+        window.addEventListener( 'touchend', pointerUp );
+    } else {
+        slideStartX = evt.clientX;
+        window.addEventListener( 'mousemove', mousemove );
+        window.addEventListener( 'pointerup', pointerUp );
+    }
 
 }
 
 const pointerUp = ( evt ) => {
-    //console.log( 'pointerUp' );
-    window.removeEventListener( 'mousemove', mousemove );
-
-   
-    //newScrollFraction = currentScrollFraction +  -0.4;// ( Math.floor( Math.abs( newScrollFraction  * 10 ) * 0.5 ) );
-    //console.log( 'newScrollFraction ' + Math.round( newScrollFraction * 10 ) - 1  );
-
-    //console.log( 'to nearest ' + Math.round( newScrollFraction / 0.2 ) * 0.2 );
-
-    //console.log( 'fract ' + ( Math.floor(( newScrollFraction * 10 )) - 1 ) )
-
-    let nearest = Math.round( newScrollFraction / 0.2 ) * 0.2;
-    if( nearest > 0 ) nearest = 0;
-    if( nearest < -( ( contentLength-1 ) * 2 ) * 0.1 ) nearest = -( ( contentLength-1 ) * 2 ) * 0.1;
-    //console.log( 'NEAREST is ' + nearest );
-
-    //currentScrollFraction = nearest;
 
 
-    updateScrollVal( currentScrollFraction );
+    if( isMobile ){
+        window.removeEventListener( 'touchmove', mousemove );
+        window.removeEventListener( 'touchend', pointerUp );
+    } else {
+        window.removeEventListener( 'mousemove', mousemove );
+        window.removeEventListener( 'pointerup', pointerUp );
+    }
+    
 
-    let newIndex = Math.floor( ( Math.abs( currentScrollFraction ) * 0.5 ) * 10 )
+    let scrollVal = ( globalScrollDist / ( window.innerWidth * 1 ) );
+    console.log( 'pointerUp() > scrollVal abs ' + Math.abs( scrollVal ) )
 
-    console.log( 'SideScrollManager.pointerUp() ', newIndex );
+    if( Math.abs( scrollVal ) > 0.09 ) {
+        goToSlideIndex( currentContentIndex );
+    }
 
-    //dispatcher.dispatchEvent( 'componentIndexChange', { index: newIndex } );
+    //currentScrollVal = getValueFromIndex( currentContentIndex );
+    console.log( 'currentScrollVal ' + currentScrollVal );
 
-
-
-    //console.log( 'currentScrollFraction ' + currentScrollFraction );
+    newDragScrollVal = 0;
+    globalScrollDist = 0;
 
 
 }
 
 const mousemove = ( evt ) => {
 
-    let dist = evt.clientX - slideStartX;
+    newDragScrollVal = 0;
+    globalScrollDist = 0;
 
-    newScrollFraction = ( currentScrollFraction + dist / (window.innerWidth * 1 ) );
+    if( isMobile ){
+        globalScrollDist = evt.touches[ 0 ].clientX - slideStartX;
+    } else {
+        globalScrollDist = evt.clientX - slideStartX;
+    }
 
-    updateScrollVal( newScrollFraction );
+    
+    newDragScrollVal = currentScrollVal + ( globalScrollDist / ( window.innerWidth * 1 ) );
+    
+    console.log( 'mouseMoving ' + newDragScrollVal )
 
-    console.log( 'pointerMove ' + newScrollFraction );
-    let dragDist;
-}
-
-const roundToNearest = x => Math.round(x/0.2)*0.2;
-
-const updateScroll = ( val ) => {
-    let amt = val > 1 ? 1 : val;
-}
-
-const evalScrollValues = () => {
+    updateScrollVal( newDragScrollVal );
 
 }
 
 
+// CALLED FROM CONTENT CONTROLLER 
+const changeSlideItemIndex = ( index ) => {
+    console.log( 'SideScrollManager.changeSlideItemIndex  ' + index )
+    goToSlideIndex( index );
+    SideScrollControls.forceClick( index )
 
-/* const getDist = ( x1, y1, x2, y2 ) => {
-	
-	let xs = x2 - x1, ys = y2 - y1;		
-	
-	xs *= xs;
-	ys *= ys;
-	 
-	return Math.sqrt( xs + ys );
-}; */
+  /*   if( index > contentLength - 1  ) index = 0;  
+    if( index < 0 ) index = contentLength - 1;
+
+
+    
+ */
+}
+
+
+const slideItemClickedHandler = ( evt ) => {
+    //console.log( 'slideItemClicked ' + evt.currentTarget.id );
+
+    let scrollVal = ( globalScrollDist / ( window.innerWidth * 1 ) );
+    //console.log( 'slideItemClickedHandler() > scrollVal abs ' + Math.abs( scrollVal ) )
+
+    if( Math.abs( scrollVal ) < 0.1 ) {
+        console.log( 'slideItemClickedHandler() > GO TO SLIDE INDEX ' + evt.currentTarget.id )
+        goToSlideIndex( evt.currentTarget.id );
+        currentContentIndex = evt.currentTarget.id;
+        SideScrollControls.forceClick( evt.currentTarget.id );
+    }
+
+    
+
+}
+
+const controlItemClickedHandler = ( evt ) => {
+    console.log( 'controlItemClickedHandler() > id ' + evt.index );
+    goToSlideIndex( evt.index );
+    currentContentIndex = evt.index;
+}
+
 
 const resize = ( width, height ) => {
     console.log( 'SideScrollManager.resize()');
 
     if( width < 600 ){
         slideWidth = 256;
-        updateSlidePos( currentContentItemIndex );
+        goToSlideIndex( currentContentIndex );
     } else if( width > 599 && width < 768 ){
         slideWidth = 360;
-        updateSlidePos( currentContentItemIndex );
+        goToSlideIndex( currentContentIndex );
     } else if( width > 767 ){
         slideWidth = 480;
-        updateSlidePos( currentContentItemIndex );
+        goToSlideIndex( currentContentIndex );
     }
     gsap.set( slideItemsContainer, { x: (window.innerWidth - slideWidth ) * 0.5 })
 }
@@ -328,7 +351,7 @@ const SideScrollManager = {
     controlItemClickedHandler,
     resize,
     dispatcher,
-    updateItemIndex,
+    changeSlideItemIndex,
 }
 
 

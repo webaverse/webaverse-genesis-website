@@ -7,7 +7,7 @@ let controlItemsArray = [];
 let controlItemsLength;
 let colorsArray = [ '#c15ed4', '#d25856', '#54a1e2', '#d761ec', '#5be2a7', '#f5e536', '#9df536', '#36f5b8', '#15feff', '#9751a9', '#de40ac' ];
 let bar;
-
+let isMobile;
 let innerItemSizes = { focus: 20, blur: 9 };
 let outerItemSizes = { focus: 26, blur: 13 };
 
@@ -15,7 +15,7 @@ const dispatcher = new EventDispatcher();
 
 const init = ( params ) => {
     console.log( 'SideScrollControls.init()' );
-    
+    isMobile = params.isMobile;
     container = params.container;
     controlItemsLength = params.numItems;
 
@@ -55,9 +55,13 @@ const init = ( params ) => {
         controlItemsArray.push( controlItem );
 
 
-        controlItem.addEventListener( 'click', itemClicked, false );
-        controlItem.addEventListener( 'mouseover', itemOver, false );
-        controlItem.addEventListener( 'mouseout', itemOut, false );
+        if( isMobile ){
+            controlItem.addEventListener( 'touchend', itemClicked, false );
+        } else {
+            controlItem.addEventListener( 'click', itemClicked, false );
+        }
+        /* controlItem.addEventListener( 'mouseover', itemOver, false );
+        controlItem.addEventListener( 'mouseout', itemOut, false ); */
 
 
     }
@@ -84,7 +88,7 @@ const itemClicked = ( evt ) => {
         }
     }
 
-    dispatcher.dispatchEvent( 'controlItemClicked', { id: evt.target.id } );
+    dispatcher.dispatchEvent( 'controlItemClicked', { index: evt.target.id } );
     
 }
 

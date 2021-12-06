@@ -62,7 +62,9 @@ function init(){
     UI.init( { isMobile: isMobile } );
 
     contentContainer = document.querySelector( '.content-container' );
+
     ContentManager.init( { 
+        isMobile: isMobile,
         container: contentContainer,
     })
 
