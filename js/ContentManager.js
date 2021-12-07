@@ -32,6 +32,8 @@ let contentIcons = [
 
 let isMobile;
 
+const bgImageAlphaVal = 1;
+
 const init = ( params ) => {
     
     isMobile = params.isMobile;
@@ -51,11 +53,11 @@ const init = ( params ) => {
     
     for( let i = 0; i<contentBackgroundImagesArray.length; i++ ){
         let img = contentBackgroundImagesArray[ i ];
-        let path = i < 10 ? ('content-bg-img-0' + i + '.jpg' ) : ('content-bg-img-' + i + '.jpg' );
+        let path = i < 10 ? ('content-bg-img-0' + i + '.jpg' ) : ( 'content-bg-img-' + i + '.jpg' );
         console.log( 'path ' + imgsPath + path )
         img.src = imgsPath + path;
         if( i == 0 ) {
-            img.style.opacity = 0.45;
+            img.style.opacity = bgImageAlphaVal;
             //img.style.mixBlendMode = 'overlay';
         }
     }
@@ -218,7 +220,7 @@ const updateBackgroundImageIndex = ( index ) => {
     for( let i = 0; i<contentBackgroundImagesArray.length; i++ ){
         let img = contentBackgroundImagesArray[ i ];
         if( i == index ){
-            gsap.to( img, 1, { opacity: 0.45, ease:Power3.easeOut } );
+            gsap.to( img, 1, { opacity: bgImageAlphaVal, ease:Power3.easeOut } );
         } else {
             gsap.to( img, 1, { opacity: 0.0, ease:Power3.easeOut } );
         }

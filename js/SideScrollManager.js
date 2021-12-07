@@ -158,10 +158,12 @@ const goToSlideIndex = ( index ) => {
         if( i == index ){
             zIndexCtr++;
             slideItem.style.zIndex = zIndexCtr;
+            gsap.to( slideItem, 0.6, { scaleX: 1.1, scaleY: 1.1, ease: Power3.easeOut, delay: i * 0.025 })
             gsap.to( slideItem.focusImg, 0.6, { opacity: 1, ease: Power3.easeOut, delay: i * 0.025 } );
             gsap.to( slideItem.tintImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.025  } );
         } else { 
             slideItem.style.zIndex = zIndexCtr - Math.ceil( Math.abs( slideItem.sineVal * 10  )) ;
+            gsap.to( slideItem, 0.6, { scaleX: 1, scaleY: 1, ease: Power3.easeOut, delay: i * 0.025 })
             gsap.to( slideItem.focusImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.025 } );
             gsap.to( slideItem.tintImg, 0.6, { alpha: Math.abs( slideItem.sineVal ) * 1.5, ease: Power3.easeOut, delay: i * 0.025  } );
         }
@@ -215,10 +217,12 @@ const updateScrollVal = ( val ) => {
         if( i == activeIndex && activeIndex > -1 && activeIndex < contentLength ){
             zIndexCtr++;
             slideItem.style.zIndex = zIndexCtr;
+            gsap.to( slideItem, 0.6, { scaleX: 1.1, scaleY: 1.1, ease: Power3.easeOut, delay: i * 0.0 })
             gsap.to( slideItem.focusImg, 0.6, { opacity: 1, ease: Power3.easeOut, delay: i * 0.0 } );
             gsap.to( slideItem.tintImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.0  } );
         } else { 
             slideItem.style.zIndex = zIndexCtr - Math.ceil( Math.abs( slideItem.sineVal * 10 )) ;
+            gsap.to( slideItem, 0.6, { scaleX: 1, scaleY: 1, ease: Power3.easeOut, delay: i * 0.0 })
             gsap.to( slideItem.focusImg, 0.6, { opacity: 0, ease: Power3.easeOut, delay: i * 0.0 } );
             gsap.to( slideItem.tintImg, 0.6, { alpha: Math.abs( slideItem.sineVal ) * 1.5, ease: Power3.easeOut, delay: i * 0.0  } );
         }
