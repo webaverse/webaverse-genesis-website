@@ -5,7 +5,7 @@
     background-color: #0e161f;
     display: none;
     bottom: 0;
-    height: calc( 100vh );
+    height: calc(100vh + 90vh);
     //overflow-x: hidden;
 }
 
@@ -38,7 +38,7 @@
     position: absolute; 
     width: 80%;
     height: auto;
-    top: 650px;
+    top: 710px;
     //background-color: crimson;
     //bottom: 250px;
     left: 10%;
@@ -75,7 +75,7 @@
 // body 
 
 .content-scroll-item-body {
-    margin-top: 30px;
+    margin: 30px 0;
     text-align: center;
     opacity: 0;
 }
@@ -116,7 +116,7 @@
     }
 
     .content-container {
-        height: calc( 300px + 100vh );  
+        height: calc( 800px + 100vh );  
     }
     
 }
@@ -128,7 +128,7 @@
     }
 
     .content-container {
-        height: calc( 500px + 100vh );  
+        height: calc( 920px + 100vh );  
     }
 
 }
