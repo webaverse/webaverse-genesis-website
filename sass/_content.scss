@@ -132,3 +132,27 @@
     }
 
 }
+
+@media only screen and (max-height: 550px) {
+
+    .content-container {
+        height: calc( (1000px) + 100vh );  
+    }
+
+}
+
+@media only screen and (max-height: 500px) {
+
+    .content-container {
+        height: calc( (1200px) + 100vh );  
+    }
+
+}
+
+@media only screen and (max-height: 300px) {
+
+    .content-container {
+        height: calc( (1500px) + 100vh );  
+    }
+
+}
