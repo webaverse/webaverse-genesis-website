@@ -1,8 +1,8 @@
 import 'regenerator-runtime/runtime'
 import { gsap, Power1, Power4, Linear } from 'gsap';
-import Stats from '../../examples/jsm/libs/stats.module';
+import Stats from '../examples/jsm/libs/stats.module';
 import WebaWorld from './WebaWorld';
-import { GUI } from '../../examples/jsm/libs/dat.gui.module.js';
+import { GUI } from '../examples/jsm/libs/dat.gui.module.js';
 import userAgent from './userAgent';
 import UI from './UI';
 import ContentManager from './ContentManager';
