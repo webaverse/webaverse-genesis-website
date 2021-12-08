@@ -179,7 +179,7 @@ function flyTo2DPoint( point, delay ){
     
     fireflyTimeout = setTimeout( function(){
         
-        let newMousePoint = translate2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 } );
+        let newMousePoint = translate2DPoint( { x: window.innerWidth * 0.5 - 150, y: window.innerHeight - 30 } );
         let currentMousePoint = new THREE.Vector2( dynamicMouse.x, dynamicMouse.y );
 
         let lerpPoint = new THREE.Vector2().lerpVectors( newMousePoint, currentMousePoint, 0.5 );

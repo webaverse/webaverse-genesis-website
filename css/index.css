@@ -5,8 +5,12 @@
 
 html, body {
   width: 100%;
-  height: auto;
+  height: 100%;
   background-color: #0e161f;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 .app-container {
@@ -16,10 +20,13 @@ html, body {
 }
 
 .content-container {
+  position: relative;
   width: 100%;
-  height: 2000px;
+  height: auto;
   background-color: #0e161f;
   display: none;
+  bottom: 0;
+  height: 190vh;
 }
 
 .content-section {
@@ -43,16 +50,276 @@ html, body {
   max-width: 760px;
 }
 
+.content-scroll-container {
+  position: absolute;
+  width: 80%;
+  height: auto;
+  top: 710px;
+  left: 10%;
+  z-index: 2;
+}
+
+.content-scroll-item {
+  position: absolute;
+  left: 10%;
+  width: 80%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.content-scroll-item-icon {
+  width: 80px;
+  height: 80px;
+  opacity: 0;
+}
+
+.content-scroll-item-headline {
+  opacity: 0;
+}
+
+.content-scroll-item-body {
+  margin: 30px 0;
+  text-align: center;
+  opacity: 0;
+}
+
+.content-scroll-span {
+  padding-bottom: 10px;
+}
+
+.content-scroll-prev-arrow {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 20%;
+  top: 25px;
+  cursor: pointer;
+}
+
+.content-scroll-next-arrow {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: 20%;
+  top: 25px;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 600px) {
+  .content-scroll-container {
+    top: 850px;
+  }
+
+  .content-container {
+    height: calc(800px + 100vh);
+  }
+}
+@media only screen and (min-width: 768px) {
+  .content-scroll-container {
+    top: 1050px;
+  }
+
+  .content-container {
+    height: calc(920px + 100vh);
+  }
+}
+@media only screen and (max-height: 550px) {
+  .content-container {
+    height: calc(1000px + 100vh);
+  }
+}
+@media only screen and (max-height: 500px) {
+  .content-container {
+    height: calc(1200px + 100vh);
+  }
+}
+@media only screen and (max-height: 300px) {
+  .content-container {
+    height: calc(1500px + 100vh);
+  }
+}
 .slide-scroll-component {
-  margin-top: 50px;
+  position: absolute;
+  margin-top: 0px;
   width: 100%;
-  height: 500px;
-  background-color: rgba(44, 61, 79, 0.5);
+  height: 290px;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.slide-scroll-items-container {
+  width: 100%;
+  height: 90%;
+  opacity: 1;
+  align-self: center;
+  left: 50%;
+}
+
+.slide-scroll-item {
+  max-width: 256px;
+  max-height: 192px;
+  border-radius: 5px;
+  position: relative;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.slide-scroll-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 256px;
+  max-height: 192px;
+  -webkit-border-radius: 3%;
+  -moz-border-radius: 3%;
+  border-radius: 3%;
+  cursor: pointer;
+}
+
+.slide-shadow {
+  -webkit-box-shadow: 0px 5px 25px 10px #0e161f;
+  -moz-box-shadow: 0px 5px 25px 10px #0e161f;
+  box-shadow: 0px 5px 25px 10px #0e161f;
+}
+
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+@media only screen and (min-width: 600px) {
+  .slide-scroll-item {
+    max-width: 360px;
+    max-height: 270px;
+  }
+
+  .slide-scroll-img {
+    max-width: 360px;
+    max-height: 270px;
+  }
+
+  .slide-scroll-component {
+    margin-top: 25px;
+    height: 380px;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .slide-scroll-item {
+    max-width: 480px;
+    max-height: 360px;
+  }
+
+  .slide-scroll-img {
+    max-width: 480px;
+    max-height: 360px;
+  }
+
+  .slide-scroll-component {
+    margin-top: 50px;
+    height: 1000px;
+  }
+}
+.slide-scroll-controls-container {
+  width: 300px;
+  height: 30px;
+  position: relative;
+  align-self: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: -450px;
+}
+
+@media only screen and (max-width: 480px) {
+  .slide-scroll-controls-container {
+    margin-top: 0px;
+  }
+}
+.side-scroll-controls-bar {
+  width: 275px;
+  height: 1px;
+  background-color: #617b99;
+  position: absolute;
+  top: 16px;
+  left: 10px;
+  z-index: 0;
+}
+
+.slide-scroll-control-item {
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  pointer-events: all;
 }
 
+.side-scroll-controls-item-outer {
+  width: 17px;
+  height: 17px;
+  background-color: #617b99;
+  position: absolute;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.side-scroll-controls-item-inner {
+  width: 11px;
+  height: 11px;
+  background-color: red;
+  position: absolute;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.round {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+
+.content-bg-imgs-container {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent, black 10%, transparent 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 295px;
+  display: none;
+  margin-top: -200px;
+  z-index: 1;
+  padding-bottom: 370px;
+  mix-blend-mode: overlay;
+}
+
+.content-bg-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+}
+
+@media only screen and (min-width: 600px) {
+  .content-bg-imgs-container {
+    margin-top: -200px;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .content-bg-imgs-container {
+    margin-top: 0px;
+  }
+}
 .foreground-div {
   position: absolute;
   bottom: 0;
@@ -95,7 +362,7 @@ html, body {
   cursor: pointer;
   pointer-events: none;
   position: fixed;
-  left: calc( 50% - 159px );
+  left: calc(50% - 159px);
   margin: 0 auto;
 }
 
@@ -212,7 +479,7 @@ html, body {
   width: 250px;
   height: 80px;
   pointer-events: none;
-  left: calc( 50% - 125px);
+  left: calc(50% - 125px);
 }
 
 .ui-genesis-container {
@@ -291,14 +558,12 @@ html, body {
   font-family: "Bowlby One SC", cursive;
   font-size: 2.2rem;
   line-height: 2.2rem;
-  margin: 0 auto;
 }
 
 .subheader-text {
   color: white;
   font-family: "Bowlby One SC", cursive;
   font-size: 1.5rem;
-  margin: 0 auto;
 }
 
 .body-text {
@@ -307,16 +572,25 @@ html, body {
   font-weight: 300;
   font-size: 0.9rem;
   line-height: 1.2rem;
+}
+
+.intro-header-text {
+  margin-bottom: 1rem;
   margin: 0 auto;
 }
 
 .intro-sub-text {
   margin-bottom: 0.7rem;
   color: #7a1566;
+  margin: 0 auto;
 }
 
-.intro-header-text {
-  margin-bottom: 1rem;
+.intro-body-text {
+  margin: 0 auto;
+}
+
+.content-scroll-item-headline-text {
+  margin-top: 30px;
 }
 
 @media only screen and (min-width: 600px) {

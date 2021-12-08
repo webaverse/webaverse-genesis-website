@@ -1,8 +1,12 @@
 .content-container {
+    position: relative;
     width: 100%;
-    height: 2000px;
+    height: auto;
     background-color: #0e161f;
     display: none;
+    bottom: 0;
+    height: calc(100vh + 90vh);
+    //overflow-x: hidden;
 }
 
 .content-section {
@@ -26,4 +30,129 @@
     margin-top: 100px;
     margin-bottom: 100px;
     max-width: 760px;
+}
+
+// content body 
+
+.content-scroll-container {
+    position: absolute; 
+    width: 80%;
+    height: auto;
+    top: 710px;
+    //background-color: crimson;
+    //bottom: 250px;
+    left: 10%;
+    z-index: 2;
+}
+
+.content-scroll-item {
+    position: absolute;
+    //top: 570px;
+    left: 10%;
+    width: 80%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+    //background-color: darkkhaki;
+    
+}
+
+// icon 
+.content-scroll-item-icon {
+    width: 80px;
+    height: 80px;
+    //background-color: #333333;
+    opacity: 0;
+}
+
+.content-scroll-item-headline {
+    opacity: 0;
+}
+
+// body 
+
+.content-scroll-item-body {
+    margin: 30px 0;
+    text-align: center;
+    opacity: 0;
+}
+
+.content-scroll-span {
+    padding-bottom: 10px;
+}
+
+// paginate 
+
+.content-scroll-prev-arrow {
+    width: 50px;
+    height: 50px;
+    //background-color: blue;
+    position: absolute;
+    left: 20%;
+    //top: calc( 50% - 30px );
+    top: 25px;
+    cursor: pointer;
+
+}
+
+.content-scroll-next-arrow {
+    width: 50px;
+    height: 50px;
+    //background-color: blue;
+    position: absolute;
+    right: 20%;
+    top: 25px;
+    cursor: pointer;
+}
+
+
+@media only screen and (min-width: 600px) {
+    
+    .content-scroll-container {
+        top: 850px;
+    }
+
+    .content-container {
+        height: calc( 800px + 100vh );  
+    }
+    
+}
+
+@media only screen and (min-width: 768px) {
+    .content-scroll-container {
+        top: 1050px;
+
+    }
+
+    .content-container {
+        height: calc( 920px + 100vh );  
+    }
+
+}
+
+@media only screen and (max-height: 550px) {
+
+    .content-container {
+        height: calc( (1000px) + 100vh );  
+    }
+
+}
+
+@media only screen and (max-height: 500px) {
+
+    .content-container {
+        height: calc( (1200px) + 100vh );  
+    }
+
+}
+
+@media only screen and (max-height: 300px) {
+
+    .content-container {
+        height: calc( (1500px) + 100vh );  
+    }
+
 }
