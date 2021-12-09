@@ -114,31 +114,39 @@ const init = ( params ) => {
     
 }
 
-const nextArrowClickHandler = () => {
+var clicked = false;
 
-    currentContentItemIndex++;
-    if( currentContentItemIndex > contentItemsLength-1 ) currentContentItemIndex = 0;
-    console.log( 'NEXT CLICKED ', currentContentItemIndex )
-    //console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
-    //SideScrollManager.updateItemIndex( currentContentItemIndex  );
-    SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
-    changeContentFromIndex( currentContentItemIndex );
-    
-    //updateBackgroundImageIndex( currentContentItemIndex + 1 )
+const nextArrowClickHandler = async () => {
+
+    if(!clicked) {
+        clicked = true;
+        currentContentItemIndex++;
+        if( currentContentItemIndex > contentItemsLength-1 ) currentContentItemIndex = 0;
+        console.log( 'NEXT CLICKED ', currentContentItemIndex )
+        //console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
+        //SideScrollManager.updateItemIndex( currentContentItemIndex  );
+        SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
+        changeContentFromIndex( currentContentItemIndex );
+        
+        //updateBackgroundImageIndex( currentContentItemIndex + 1 )
+    }
 
 }
 
 const prevArrowClickHandler = () => {
 
-    currentContentItemIndex--;
-    
-    //
-    if( currentContentItemIndex < 0 ) currentContentItemIndex = contentItemsLength-1;
-    
-    console.log( 'PREV CLICKED ', currentContentItemIndex );
-    SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
+    if(!clicked) {
+        clicked = true;
+        currentContentItemIndex--;
+        
+        //
+        if( currentContentItemIndex < 0 ) currentContentItemIndex = contentItemsLength-1;
+        
+        console.log( 'PREV CLICKED ', currentContentItemIndex );
+        SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
 
-    changeContentFromIndex( currentContentItemIndex );
+        changeContentFromIndex( currentContentItemIndex );
+    }
     
 }
 
@@ -170,7 +178,7 @@ const changeContentFromIndex = ( index ) => {
 
         gsap.to( nextItem.icon, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
         gsap.to( nextItem.headline, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
-        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1 } );
+        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1});
 
     } else {
         gsap.set( nextItem.icon, { x: -animationOffsetX } )
@@ -183,7 +191,9 @@ const changeContentFromIndex = ( index ) => {
 
         gsap.to( nextItem.icon, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
         gsap.to( nextItem.headline, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
-        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1 } );
+        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1, onComplete:function(){
+            clicked = false;
+         }});
     }
 
     currentItem = nextItem;

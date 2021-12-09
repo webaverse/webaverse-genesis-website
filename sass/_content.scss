@@ -28,10 +28,17 @@
 
 .header-content-container {
     margin-top: 100px;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     max-width: 760px;
 }
 
+@media only screen and (max-width: 480px) {
+    
+    .header-content-container {
+        margin-bottom: 100px;
+    }
+    
+}
 // content body 
 
 .content-scroll-container {
@@ -48,8 +55,8 @@
 .content-scroll-item {
     position: absolute;
     //top: 570px;
-    left: 10%;
-    width: 80%;
+    // left: 10%;
+    width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -90,10 +97,10 @@
     width: 50px;
     height: 50px;
     //background-color: blue;
-    position: absolute;
+    position: relative;
     left: 20%;
     //top: calc( 50% - 30px );
-    top: 25px;
+    top: 50px;
     cursor: pointer;
 
 }
@@ -102,12 +109,19 @@
     width: 50px;
     height: 50px;
     //background-color: blue;
-    position: absolute;
-    right: 20%;
-    top: 25px;
+    position: relative;
+    right: -75%;
+    // top: 0px;
     cursor: pointer;
 }
 
+@media only screen and (max-width: 480px) {
+    
+    .content-scroll-next-arrow {
+        right: -65%;
+    }
+    
+}
 
 @media only screen and (min-width: 600px) {
     

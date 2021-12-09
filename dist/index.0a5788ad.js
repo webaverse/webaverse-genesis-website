@@ -42738,7 +42738,7 @@ function buildNodeHierarchy(nodeId, parentObject, json, parser) {
     return newGeometry;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl","../../../build/three.module.js":"cD1Og"}],"g2JRE":[function(require,module,exports) {
+},{"../../../build/three.module.js":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"g2JRE":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DRACOLoader", ()=>DRACOLoader
@@ -43108,7 +43108,7 @@ class DRACOLoader extends _threeModuleJs.Loader {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl","../../../build/three.module.js":"cD1Og"}],"gIwbI":[function(require,module,exports) {
+},{"../../../build/three.module.js":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"gIwbI":[function(require,module,exports) {
 /*! three.modifiers-v2.5.7 */ !function(t, e) {
     if ("object" == typeof exports && "object" == typeof module) module.exports = e();
     else if ("function" == typeof define && define.amd) define([], e);
@@ -45803,7 +45803,7 @@ class MapControls extends OrbitControls {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl","../../../build/three.module.js":"cD1Og"}],"lpfek":[function(require,module,exports) {
+},{"../../../build/three.module.js":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"lpfek":[function(require,module,exports) {
 var userAgent = navigator.userAgent;
 exports.userAgent = userAgent;
 exports.getUserAgent = function() {
@@ -45919,23 +45919,30 @@ const init = (params)=>{
         prevArrow.addEventListener('click', prevArrowClickHandler);
     }
 };
-const nextArrowClickHandler = ()=>{
-    currentContentItemIndex++;
-    if (currentContentItemIndex > contentItemsLength - 1) currentContentItemIndex = 0;
-    console.log('NEXT CLICKED ', currentContentItemIndex);
-    //console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
-    //SideScrollManager.updateItemIndex( currentContentItemIndex  );
-    _sideScrollManagerDefault.default.changeSlideItemIndex(currentContentItemIndex);
-    changeContentFromIndex(currentContentItemIndex);
-//updateBackgroundImageIndex( currentContentItemIndex + 1 )
+var clicked = false;
+const nextArrowClickHandler = async ()=>{
+    if (!clicked) {
+        clicked = true;
+        currentContentItemIndex++;
+        if (currentContentItemIndex > contentItemsLength - 1) currentContentItemIndex = 0;
+        console.log('NEXT CLICKED ', currentContentItemIndex);
+        //console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
+        //SideScrollManager.updateItemIndex( currentContentItemIndex  );
+        _sideScrollManagerDefault.default.changeSlideItemIndex(currentContentItemIndex);
+        changeContentFromIndex(currentContentItemIndex);
+    //updateBackgroundImageIndex( currentContentItemIndex + 1 )
+    }
 };
 const prevArrowClickHandler = ()=>{
-    currentContentItemIndex--;
-    //
-    if (currentContentItemIndex < 0) currentContentItemIndex = contentItemsLength - 1;
-    console.log('PREV CLICKED ', currentContentItemIndex);
-    _sideScrollManagerDefault.default.changeSlideItemIndex(currentContentItemIndex);
-    changeContentFromIndex(currentContentItemIndex);
+    if (!clicked) {
+        clicked = true;
+        currentContentItemIndex--;
+        //
+        if (currentContentItemIndex < 0) currentContentItemIndex = contentItemsLength - 1;
+        console.log('PREV CLICKED ', currentContentItemIndex);
+        _sideScrollManagerDefault.default.changeSlideItemIndex(currentContentItemIndex);
+        changeContentFromIndex(currentContentItemIndex);
+    }
 };
 // *********** NEEDS WORK 
 const changeContentFromIndex = (index)=>{
@@ -46032,7 +46039,11 @@ const changeContentFromIndex = (index)=>{
             x: 0,
             opacity: 1,
             ease: _gsap.Power3.easeOut,
-            delay: nextDelayVal + 0.1
+            delay: nextDelayVal + 0.1,
+            onComplete: function() {
+                // console.log('completedddddd');
+                clicked = false;
+            }
         });
     }
     currentItem = nextItem;
@@ -46047,7 +46058,7 @@ const sideScrollComponentIndexChangeHandler = (evt)=>{
     changeContentFromIndex(evt.index);
 //updateBackgroundImageIndex( evt.index );
 };
-const updateBackgroundImageIndex = (index)=>{
+const updateBackgroundImageIndex = async (index)=>{
     /* if( index > contentItemsLength ){
         index = 0
     } else if( index < 0 ){
@@ -46086,7 +46097,7 @@ const Content = {
 };
 exports.default = Content;
 
-},{"./SideScrollManager":"axfwX","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl","gsap":"3ZIKo"}],"axfwX":[function(require,module,exports) {
+},{"./SideScrollManager":"axfwX","gsap":"3ZIKo","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"axfwX":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _gsap = require("gsap");
@@ -46433,7 +46444,7 @@ const SideScrollManager = {
 };
 exports.default = SideScrollManager;
 
-},{"gsap":"3ZIKo","./SideScrollControls":"5gtCT","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl","./EventDispatcher":"i7RiA"}],"5gtCT":[function(require,module,exports) {
+},{"gsap":"3ZIKo","./SideScrollControls":"5gtCT","./EventDispatcher":"i7RiA","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"5gtCT":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _gsap = require("gsap");
