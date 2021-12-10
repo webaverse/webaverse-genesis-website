@@ -12,6 +12,14 @@ $comp-color: #617b99;
     //justify-self: center;
 }
 
+
+// @media only screen and (min-width: 600px) and (min-height: 1000px) {
+//     .slide-scroll-controls-container {
+//         margin-top: -355px;
+//     }  
+// }
+
+
 @media only screen and (max-width: 480px) {
     .slide-scroll-controls-container {
         margin-top: 240px;

@@ -46041,7 +46041,6 @@ const changeContentFromIndex = (index)=>{
             ease: _gsap.Power3.easeOut,
             delay: nextDelayVal + 0.1,
             onComplete: function() {
-                // console.log('completedddddd');
                 clicked = false;
             }
         });
@@ -46058,7 +46057,7 @@ const sideScrollComponentIndexChangeHandler = (evt)=>{
     changeContentFromIndex(evt.index);
 //updateBackgroundImageIndex( evt.index );
 };
-const updateBackgroundImageIndex = async (index)=>{
+const updateBackgroundImageIndex = (index)=>{
     /* if( index > contentItemsLength ){
         index = 0
     } else if( index < 0 ){

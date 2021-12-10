@@ -68,24 +68,74 @@ img {
 
 
 
+@media only screen and (min-width: 500px) {
+    
+    .slide-scroll-component {
+        margin-top: 0px;
+        height: 800px;
+        
+    }
+
+    // .content-container {
+    //     height: calc( 600px + 100vh );  
+    // }
+    
+}
+
+// @media only screen and (min-width: 600px) and (max-height: 800px) {
+    
+//     // .slide-scroll-item {
+//     //     max-width: 360px;
+//     //     max-height: 270px;    
+//     // }
+    
+//     // .slide-scroll-img {
+//     //     max-width: 360px;
+//     //     max-height: 270px;
+//     // }
+
+//     .slide-scroll-component {
+//         margin-top: 0px;
+//         height: 830px;        
+//     }
+    
+// }
+
+// @media only screen and (min-width: 600px) {
+    
+//     .slide-scroll-item {
+//         max-width: 300px;
+//         max-height: 270px;    
+//     }
+    
+//     .slide-scroll-img {
+//         max-width: 300px;
+//         max-height: 270px;
+//     }
+
+//     // .slide-scroll-component {
+//     //     margin-top: 25px;
+//     //     height: 380px;        
+//     // }
+    
+// }
 
 @media only screen and (min-width: 600px) {
-    
     .slide-scroll-item {
-        max-width: 360px;
-        max-height: 270px;    
+        max-width: 320px;
+        max-height: 360px;    
     }
     
     .slide-scroll-img {
-        max-width: 360px;
-        max-height: 270px;
+        max-width: 320px;
+        max-height: 360px;
     }
 
-    .slide-scroll-component {
-        margin-top: 25px;
-        height: 380px;        
-    }
-    
+    // .slide-scroll-component {
+    //     margin-top: 50px;
+    //     height: 1000px;        
+    // }
+
 }
 
 @media only screen and (min-width: 768px) {
