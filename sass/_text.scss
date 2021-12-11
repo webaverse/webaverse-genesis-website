@@ -13,6 +13,7 @@ $body-family: 'Neutra', sans-serif;
 
 // Globals
 .header-text {
+    font-weight: normal;
     color: white;
     font-family: $header-family;
     font-size: 3rem;
@@ -50,6 +51,7 @@ $body-family: 'Neutra', sans-serif;
 // }
 
 .subheader-text {
+    font-weight: normal;
     color: white;
     font-family: $header-family;
     font-size: 2.5rem;

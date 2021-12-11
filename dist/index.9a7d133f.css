@@ -177,37 +177,43 @@ body {
 
 @media only screen and (min-width: 1440px) {
   .content-container {
-    height: calc(700px + 100vh);
+    height: calc(900px + 100vh);
   }
 }
 
 @media only screen and (min-width: 1600px) {
   .content-container {
-    height: calc(600px + 100vh);
+    height: calc(700px + 100vh);
   }
 }
 
 @media only screen and (min-width: 1680px) {
   .content-container {
-    height: calc(500px + 100vh);
+    height: calc(700px + 100vh);
   }
 }
 
 @media only screen and (min-width: 1920px) {
   .content-container {
-    height: calc(400px + 100vh);
+    height: calc(700px + 100vh);
   }
 }
 
 @media only screen and (min-width: 2160px) {
   .content-container {
-    height: 80vh;
+    height: calc(600px + 100vh);
+  }
+}
+
+@media only screen and (min-width: 2880px) {
+  .content-container {
+    height: calc(100px + 100vh);
   }
 }
 
 @media only screen and (min-width: 7000px) {
   .content-container {
-    height: 40vh;
+    height: 100px;
   }
 }
 
@@ -560,8 +566,7 @@ img {
 .ui-logo-container {
   position: relative;
   padding-top: 15px;
-  width: 250px;
-  height: 80px;
+  width: 200px;
   pointer-events: none;
   left: calc(50vw - 50px);
 }
@@ -649,6 +654,7 @@ img {
 }
 
 .header-text {
+  font-weight: normal;
   color: white;
   font-family: "Winchester", cursive;
   font-size: 3rem;
@@ -676,6 +682,7 @@ img {
 }
 
 .subheader-text {
+  font-weight: normal;
   color: white;
   font-family: "Winchester", cursive;
   font-size: 2.5rem;

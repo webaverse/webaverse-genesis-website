@@ -220,7 +220,7 @@
 @media only screen and (min-width: 1440px) {
 
     .content-container {
-        height: calc( 700px + 100vh );  
+        height: calc( 900px + 100vh );  
     }
 
 }
@@ -228,7 +228,7 @@
 @media only screen and (min-width: 1600px) {
 
     .content-container {
-        height: calc( 600px + 100vh );  
+        height: calc( 700px + 100vh );  
     }
 
 }
@@ -236,7 +236,7 @@
 @media only screen and (min-width: 1680px) {
 
     .content-container {
-        height: calc( 500px + 100vh );  
+        height: calc( 700px + 100vh );  
     }
 
 }
@@ -244,7 +244,7 @@
 @media only screen and (min-width: 1920px) {
 
     .content-container {
-        height: calc( 400px + 100vh );  
+        height: calc( 700px + 100vh );  
     }
 
 }
@@ -252,7 +252,16 @@
 @media only screen and (min-width: 2160px) {
 
     .content-container {
-        height: calc( 80vh );  
+        height: calc( 600px + 100vh );  
+    }
+
+}
+
+
+@media only screen and (min-width: 2880px) {
+
+    .content-container {
+        height: calc( 100px + 100vh );  
     }
 
 }
@@ -260,7 +269,7 @@
 @media only screen and (min-width: 7000px) {
 
     .content-container {
-        height: calc( 40vh );  
+        height: calc( 100px );  
     }
 
 }
