@@ -112,14 +112,22 @@ function init(){
 
     if( showStats ) document.body.appendChild( stats.dom );
 
+    var width = document.body.offsetWidth;
+    var height = document.body.offsetHeight;
+
     window.addEventListener("scroll", updateScroll );
-    
+
+    window.addEventListener( 'resize', ()=>{
+        if(document.body.offsetWidth != width || document.body.offsetHeight != height) {
+            resize();
+        }
+    }, false );
+
     if( isMobile ){
         window.addEventListener('touchstart', WebaWorld.touchMove, false );
         window.addEventListener( 'touchmove', WebaWorld.touchMove, false )
     } else {
         window.addEventListener( 'mousemove', WebaWorld.mouseMove, false );
-        window.addEventListener( 'resize', resize, false );
     }
     
     resize();
