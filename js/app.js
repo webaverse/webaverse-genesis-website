@@ -112,14 +112,14 @@ function init(){
 
     if( showStats ) document.body.appendChild( stats.dom );
 
-    window.addEventListener( 'resize', resize, false );
     window.addEventListener("scroll", updateScroll );
     
     if( isMobile ){
         window.addEventListener('touchstart', WebaWorld.touchMove, false );
         window.addEventListener( 'touchmove', WebaWorld.touchMove, false )
     } else {
-        window.addEventListener( 'mousemove', WebaWorld.mouseMove, false )
+        window.addEventListener( 'mousemove', WebaWorld.mouseMove, false );
+        window.addEventListener( 'resize', resize, false );
     }
     
     resize();

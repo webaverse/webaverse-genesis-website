@@ -573,12 +573,14 @@ function init() {
     } );
     
     gui.open(); */ if (showStats) document.body.appendChild(stats.dom);
-    window.addEventListener('resize', resize, false);
     window.addEventListener("scroll", updateScroll);
     if (isMobile) {
         window.addEventListener('touchstart', _webaWorldDefault.default.touchMove, false);
         window.addEventListener('touchmove', _webaWorldDefault.default.touchMove, false);
-    } else window.addEventListener('mousemove', _webaWorldDefault.default.mouseMove, false);
+    } else {
+        window.addEventListener('mousemove', _webaWorldDefault.default.mouseMove, false);
+        window.addEventListener('resize', resize, false);
+    }
     resize();
     update();
 }
