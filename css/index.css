@@ -204,7 +204,7 @@ body {
   flex-direction: column;
   z-index: 9999;
   overflow: hidden;
-  margin-top: -40px;
+  margin-top: -80px;
 }
 
 .slide-scroll-items-container {
@@ -250,6 +250,11 @@ img {
   user-drag: none;
 }
 
+@media only screen and (max-width: 320px) {
+  .slide-scroll-component {
+    margin-top: -100px;
+  }
+}
 @media only screen and (min-width: 500px) {
   .slide-scroll-component {
     margin-top: 0px;
@@ -346,7 +351,8 @@ img {
   -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 80%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent, black 10%, transparent 100%);
   position: absolute;
-  top: 0;
+  top: unset !important;
+  bottom: 0;
   left: 0;
   width: 100%;
   height: 295px;
@@ -375,6 +381,10 @@ img {
     margin-top: 0px;
   }
 }
+@font-face {
+  font-family: Neutra;
+  src: url("../fonts/neutra/NeutraText-Book.otf");
+}
 .foreground-div {
   position: absolute;
   bottom: 0;
@@ -396,16 +406,12 @@ img {
 
 .ui-logo {
   position: absolute;
-  width: 210px;
-  height: 30px;
+  width: 100px;
 }
 
 .ui-logo-m {
   position: absolute;
-  width: 210px;
-  height: 30px;
-  margin: 0 auto;
-  right: 50%;
+  width: 100px;
 }
 
 .ui-nav {
@@ -422,7 +428,7 @@ img {
 }
 
 .ui-nav-item {
-  font-family: "Jost", sans-serif;
+  font-family: "Neutra", sans-serif;
   font-weight: 400;
   color: white;
   display: inline-block;
@@ -432,7 +438,7 @@ img {
 }
 
 .ui-nav-item-m {
-  font-family: "Jost", sans-serif;
+  font-family: "Neutra", sans-serif;
   font-weight: 400;
   color: white;
   display: inline-block;
@@ -498,7 +504,7 @@ img {
   width: 300px;
   height: auto;
   color: white;
-  font-family: "Jost", sans-serif;
+  font-family: "Neutra", sans-serif;
   font-weight: 300;
   text-align: center;
   margin-bottom: 20px;
@@ -510,7 +516,7 @@ img {
   height: auto;
   color: white;
   font-size: 18px;
-  font-family: "Jost", sans-serif;
+  font-family: "Neutra", sans-serif;
   font-weight: 400;
   text-align: center;
   margin-bottom: 12px;
@@ -520,7 +526,7 @@ img {
   margin-top: 10px;
   width: 150px;
   height: 60px;
-  font-family: "Jost", sans-serif;
+  font-family: "Neutra", sans-serif;
   text-align: center;
   color: white;
   font-size: 22px;
@@ -530,14 +536,14 @@ img {
 .ui-logo-container {
   position: relative;
   padding-top: 15px;
-  padding-left: 15px;
   width: 250px;
   height: 80px;
   pointer-events: none;
-  left: calc(50% - 125px);
+  left: calc(50vw - 50px);
 }
 
 .ui-genesis-container {
+  display: none;
   width: 100px;
   height: 30px;
   right: 42px;
@@ -590,7 +596,7 @@ img {
 }
 
 .ui-alpha-text {
-  font-family: "Jost", sans-serif;
+  font-family: "Neutra", sans-serif;
   text-align: center;
   color: white;
   font-size: 6px;
@@ -608,22 +614,49 @@ img {
   background-color: white;
 }
 
+@font-face {
+  font-family: Neutra;
+  src: url("../fonts/neutra/NeutraText-Book.otf");
+}
+@font-face {
+  font-family: Winchester;
+  src: url("../fonts/winchester/WinchesterCaps.ttf");
+}
 .header-text {
   color: white;
-  font-family: "Bowlby One SC", cursive;
-  font-size: 2.2rem;
-  line-height: 2.2rem;
+  font-family: "Winchester", cursive;
+  font-size: 3rem;
+  line-height: 3rem;
+  letter-spacing: 0.03em;
 }
 
+.mmo-logo {
+  width: 10rem;
+  margin-bottom: 1.5rem;
+}
+
+@media only screen and (max-width: 480px) {
+  .mmo-logo {
+    width: 10rem;
+    margin-bottom: 1rem;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .mmo-logo {
+    width: 15rem;
+    margin-bottom: 2rem;
+  }
+}
 .subheader-text {
   color: white;
-  font-family: "Bowlby One SC", cursive;
-  font-size: 1.5rem;
+  font-family: "Winchester", cursive;
+  font-size: 2.5rem;
+  letter-spacing: 0.03em;
 }
 
 .body-text {
   color: white;
-  font-family: "Jost", sans-serif;
+  font-family: "Neutra", sans-serif;
   font-weight: 300;
   font-size: 1.2rem;
   line-height: 1.8rem;
@@ -650,13 +683,14 @@ img {
 
 @media only screen and (min-width: 640px) {
   .header-text {
-    font-size: 3rem;
-    line-height: 3rem;
+    font-size: 4rem;
+    line-height: 4rem;
+    letter-spacing: 0.03em;
   }
 
   .subheader-text {
-    font-family: "Bowlby One SC", cursive;
-    font-size: 2rem;
+    font-family: "Winchester", cursive;
+    font-size: 3rem;
   }
 
   .body-text {
@@ -674,13 +708,15 @@ img {
 }
 @media only screen and (min-width: 768px) {
   .header-text {
-    font-size: 4rem;
-    line-height: 4rem;
+    font-size: 5rem;
+    line-height: 5rem;
+    letter-spacing: 0.03em;
   }
 
   .subheader-text {
-    font-family: "Bowlby One SC", cursive;
-    font-size: 2rem;
+    font-family: "Winchester", cursive;
+    font-size: 3rem;
+    letter-spacing: 0.03em;
   }
 
   .body-text {

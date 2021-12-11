@@ -40112,7 +40112,7 @@ const init = (params)=>{
     uiDiv = document.createElement('div');
     uiDiv.className = 'ui-cont';
     logoImg = document.createElement('img');
-    logoImg.src = './imgs/logo.png';
+    logoImg.src = './imgs/logo-new.png';
     logoImg.className = isMobile ? 'ui-logo-m' : 'ui-logo';
     genesisContainer = document.createElement('div');
     genesisContainer.className = "ui-genesis-container";

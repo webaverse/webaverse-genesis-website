@@ -65,7 +65,7 @@ const init = ( params ) =>{
     uiDiv.className = 'ui-cont';
 
     logoImg = document.createElement( 'img' );
-    logoImg.src = './imgs/logo.png';
+    logoImg.src = './imgs/logo-new.png';
     logoImg.className = isMobile ? 'ui-logo-m' : 'ui-logo';
 
     genesisContainer = document.createElement( 'div' );

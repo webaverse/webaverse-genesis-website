@@ -13,7 +13,7 @@ $slide-tyint-col: #0e161f;
     //margin-bottom: -1200px;
     z-index: 9999;
     overflow: hidden;
-    margin-top: -40px;
+    margin-top: -80px;
     
 }
 
@@ -67,6 +67,20 @@ img {
 }
 
 
+
+@media only screen and (max-width: 320px) {
+    
+    .slide-scroll-component {
+        margin-top: -100px;
+        // height: 800px;
+        
+    }
+
+    // .content-container {
+    //     height: calc( 600px + 100vh );  
+    // }
+    
+}
 
 @media only screen and (min-width: 500px) {
     

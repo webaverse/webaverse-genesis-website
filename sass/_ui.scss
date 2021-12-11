@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Neutra;
+    src: url('../fonts/neutra/NeutraText-Book.otf');
+}
+
 .foreground-div {
     position: absolute;
     bottom: 0;
@@ -20,16 +25,16 @@
 
 .ui-logo {
     position: absolute;
-    width: 210px;
-    height: 30px;
+    width: 100px;
+    // height: 30px;
 }
 
 .ui-logo-m {
     position: absolute;
-    width: 210px;
-    height: 30px;
-    margin: 0 auto;
-    right: 50%;
+    width: 100px;
+    // height: 30px;
+    // margin: 0 auto;
+    // right: 50%;
 }
 
 .ui-nav {
@@ -47,7 +52,7 @@
 }
 
 .ui-nav-item {
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     font-weight: 400;
     color: white;
     display: inline-block;
@@ -58,7 +63,7 @@
 }
 
 .ui-nav-item-m {
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     font-weight: 400;
     color: white;
     display: inline-block;
@@ -126,7 +131,7 @@
     width: 300px;
     height: auto;
     color: white;
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     font-weight: 300;
     text-align: center;
     margin-bottom: 20px;
@@ -138,7 +143,7 @@
     height: auto;
     color: white;
     font-size: 18px;
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     font-weight: 400;
     text-align: center;
     margin-bottom: 12px;
@@ -148,7 +153,7 @@
     margin-top: 10px;
     width: 150px;
     height: 60px;
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     text-align: center;
     color: white;
     font-size: 22px;
@@ -158,14 +163,15 @@
 .ui-logo-container {
     position: relative;
     padding-top: 15px;
-    padding-left: 15px;
+    // padding-left: 15px;
     width: 250px;
     height: 80px;
     pointer-events: none;
-    left: calc( 50% - 125px);
+    left: calc( 50vw - 50px);
 }
 
 .ui-genesis-container {
+    display: none;
     width: 100px;
     height: 30px;
     right: 42px;
@@ -218,7 +224,7 @@
 }
 
 .ui-alpha-text {
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     text-align: center;
     color: white;
     font-size: 6px;

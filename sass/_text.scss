@@ -1,19 +1,59 @@
-$header-family: 'Bowlby One SC', cursive;
-$body-family: 'Jost', sans-serif;
+@font-face {
+    font-family: Neutra;
+    src: url('../fonts/neutra/NeutraText-Book.otf');
+}
+
+@font-face {
+    font-family: Winchester;
+    src: url('../fonts/winchester/WinchesterCaps.ttf');
+}
+
+$header-family: 'Winchester', cursive;
+$body-family: 'Neutra', sans-serif;
 
 // Globals
 .header-text {
     color: white;
     font-family: $header-family;
-    font-size: 2.2rem;
-    line-height: 2.2rem;
+    font-size: 3rem;
+    line-height: 3rem;
+    letter-spacing: 0.03em;
 
 }
+
+.mmo-logo {
+    width: 10rem;
+    margin-bottom: 1.5rem;
+}
+
+@media only screen and (max-width: 480px) {
+    .mmo-logo {
+        width: 10rem;
+        margin-bottom: 1rem;
+    }
+}
+
+
+
+@media only screen and (min-width: 768px) {
+    .mmo-logo {
+        width: 15rem;
+        margin-bottom: 2rem;
+    }
+}
+
+// @media only screen and (min-width: 600px) {
+//     .mmo-logo {
+//         width: 10rem;
+//         margin-bottom: 1rem;
+//     }
+// }
 
 .subheader-text {
     color: white;
     font-family: $header-family;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
+    letter-spacing: 0.03em;
     
     //line-height: 1.5rem;
 }
@@ -55,14 +95,15 @@ $body-family: 'Jost', sans-serif;
 
 @media only screen and (min-width: 640px) {
     .header-text {
-        font-size: 3rem;
-        line-height: 3rem;
+        font-size: 4rem;
+        line-height: 4rem;
+        letter-spacing: 0.03em;
 
     }
     
     .subheader-text {
         font-family: $header-family;
-        font-size: 2rem;
+        font-size: 3rem;
     }
     
     .body-text {
@@ -83,14 +124,16 @@ $body-family: 'Jost', sans-serif;
 @media only screen and (min-width: 768px) {
     
     .header-text {
-        font-size: 4rem;
-        line-height: 4rem;
+        font-size: 5rem;
+        line-height: 5rem;
+        letter-spacing: 0.03em;
     }
     
     .subheader-text {
         
         font-family: $header-family;
-        font-size: 2rem;
+        font-size: 3rem;
+        letter-spacing: 0.03em;
     }
     
     .body-text {
