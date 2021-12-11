@@ -100,7 +100,7 @@ body {
   height: 50px;
   position: relative;
   left: 20%;
-  top: 50px;
+  top: -10px;
   cursor: pointer;
 }
 
@@ -109,6 +109,7 @@ body {
   height: 50px;
   position: relative;
   right: -75%;
+  top: -60px;
   cursor: pointer;
 }
 
@@ -128,8 +129,13 @@ body {
   }
 }
 @media only screen and (max-width: 480px) {
+  .content-scroll-prev-arrow {
+    top: 50px;
+  }
+
   .content-scroll-next-arrow {
     right: -65%;
+    top: 0px;
   }
 
   .content-container {
@@ -158,6 +164,11 @@ body {
 @media only screen and (min-width: 800px) {
   .content-container {
     height: calc(920px + 100vh);
+  }
+}
+@media only screen and (min-width: 800px) and (max-width: 1100px) {
+  .content-container {
+    height: 100vh;
   }
 }
 @media only screen and (min-width: 1280px) {
@@ -192,7 +203,7 @@ body {
 }
 @media only screen and (min-width: 2880px) {
   .content-container {
-    height: calc(100px + 100vh);
+    height: 60vh;
   }
 }
 @media only screen and (min-width: 7000px) {
@@ -275,6 +286,11 @@ img {
   .slide-scroll-img {
     max-width: 320px;
     max-height: 360px;
+  }
+
+  .slide-scroll-component {
+    margin-top: 0px;
+    height: 850px;
   }
 }
 @media only screen and (min-width: 768px) {
@@ -684,7 +700,7 @@ img {
 }
 
 .content-scroll-item-headline-text {
-  margin-top: 30px;
+  padding-top: 30px;
 }
 
 @media only screen and (min-width: 640px) {

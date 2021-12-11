@@ -100,7 +100,7 @@
     position: relative;
     left: 20%;
     //top: calc( 50% - 30px );
-    top: 50px;
+    top: -10px;
     cursor: pointer;
 
 }
@@ -111,7 +111,7 @@
     //background-color: blue;
     position: relative;
     right: -75%;
-    // top: 0px;
+    top: -60px;
     cursor: pointer;
 }
 
@@ -154,8 +154,14 @@
 
 @media only screen and (max-width: 480px) {
     
+
+    .content-scroll-prev-arrow {
+        top: 50px
+    }
+
     .content-scroll-next-arrow {
         right: -65%;
+        top: 0px
     }
     
     .content-container {
@@ -200,12 +206,20 @@
 }
 
 
+
+
 @media only screen and (min-width: 800px) {
 
     .content-container {
         height: calc( 920px + 100vh );  
     }
 
+}
+
+@media only screen and (min-width: 800px) and (max-width: 1100px) {
+    .content-container {
+        height: calc(100vh );  
+    }
 }
 
 @media only screen and (min-width: 1280px) {
@@ -261,7 +275,7 @@
 @media only screen and (min-width: 2880px) {
 
     .content-container {
-        height: calc( 100px + 100vh );  
+        height: calc( 60vh );  
     }
 
 }
