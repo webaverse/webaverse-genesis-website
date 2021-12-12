@@ -146,7 +146,7 @@ const update = () => {
 const updateScroll = ( e ) => {
     var yVal = window.scrollY / window.innerHeight;
     gsap.set( contentContainer, { y: -( yVal * ( window.innerHeight * 0.25 ) ) })
-    WebaWorld.updateCameraPosition( yVal );
+    WebaWorld.updateCameraPosition( yVal * 1.5 );
     ContentManager.updateScroll( yVal );
 }
 

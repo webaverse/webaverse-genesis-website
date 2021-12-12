@@ -573,14 +573,16 @@ function init() {
     } );
     
     gui.open(); */ if (showStats) document.body.appendChild(stats.dom);
+    var width = document.body.offsetWidth;
+    var height = document.body.offsetHeight;
     window.addEventListener("scroll", updateScroll);
+    window.addEventListener('resize', ()=>{
+        if (document.body.offsetWidth != width || document.body.offsetHeight != height) resize();
+    }, false);
     if (isMobile) {
         window.addEventListener('touchstart', _webaWorldDefault.default.touchMove, false);
         window.addEventListener('touchmove', _webaWorldDefault.default.touchMove, false);
-    } else {
-        window.addEventListener('mousemove', _webaWorldDefault.default.mouseMove, false);
-        window.addEventListener('resize', resize, false);
-    }
+    } else window.addEventListener('mousemove', _webaWorldDefault.default.mouseMove, false);
     resize();
     update();
 }
@@ -597,7 +599,7 @@ const updateScroll = (e)=>{
     _gsap.gsap.set(contentContainer, {
         y: -(yVal * (window.innerHeight * 0.25))
     });
-    _webaWorldDefault.default.updateCameraPosition(yVal);
+    _webaWorldDefault.default.updateCameraPosition(yVal * 1.5);
     _contentManagerDefault.default.updateScroll(yVal);
 };
 const render = ()=>{

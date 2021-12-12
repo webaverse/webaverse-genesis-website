@@ -3,12 +3,7 @@
     src: url('../fonts/neutra/NeutraText-Book.otf');
 }
 
-@font-face {
-    font-family: Winchester;
-    src: url('../fonts/winchester/WinchesterCaps.ttf');
-}
-
-$header-family: 'Winchester', cursive;
+$header-family: 'Bowlby One SC', cursive;
 $body-family: 'Neutra', sans-serif;
 
 // Globals
@@ -16,21 +11,21 @@ $body-family: 'Neutra', sans-serif;
     font-weight: normal;
     color: white;
     font-family: $header-family;
-    font-size: 3rem;
-    line-height: 3rem;
-    letter-spacing: 0.03em;
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+    // letter-spacing: 0.03em;
 
 }
 
 .mmo-logo {
     width: 10rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: .5rem;
 }
 
 @media only screen and (max-width: 480px) {
     .mmo-logo {
         width: 10rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.3rem;
     }
 }
 
@@ -39,7 +34,7 @@ $body-family: 'Neutra', sans-serif;
 @media only screen and (min-width: 768px) {
     .mmo-logo {
         width: 15rem;
-        margin-bottom: 2rem;
+        margin-bottom: 0.5rem;
     }
 }
 
@@ -97,9 +92,9 @@ $body-family: 'Neutra', sans-serif;
 
 @media only screen and (min-width: 640px) {
     .header-text {
-        font-size: 4rem;
-        line-height: 4rem;
-        letter-spacing: 0.03em;
+        font-size: 3rem;
+        line-height: 3rem;
+        // letter-spacing: 0.03em;
 
     }
     
@@ -126,9 +121,9 @@ $body-family: 'Neutra', sans-serif;
 @media only screen and (min-width: 768px) {
     
     .header-text {
-        font-size: 5rem;
-        line-height: 5rem;
-        letter-spacing: 0.03em;
+        font-size: 4rem;
+        line-height: 4rem;
+        // letter-spacing: 0.03em;
     }
     
     .subheader-text {

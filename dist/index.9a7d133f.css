@@ -665,43 +665,37 @@ img {
   src: url("NeutraText-Book.cb3a89d5.otf");
 }
 
-@font-face {
-  font-family: Winchester;
-  src: url("WinchesterCaps.4dcb0bd5.ttf");
-}
-
 .header-text {
   font-weight: normal;
   color: white;
-  font-family: "Winchester", cursive;
-  font-size: 3rem;
-  line-height: 3rem;
-  letter-spacing: 0.03em;
+  font-family: "Bowlby One SC", cursive;
+  font-size: 2.2rem;
+  line-height: 2.2rem;
 }
 
 .mmo-logo {
   width: 10rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 @media only screen and (max-width: 480px) {
   .mmo-logo {
     width: 10rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.3rem;
   }
 }
 
 @media only screen and (min-width: 768px) {
   .mmo-logo {
     width: 15rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
   }
 }
 
 .subheader-text {
   font-weight: normal;
   color: white;
-  font-family: "Winchester", cursive;
+  font-family: "Bowlby One SC", cursive;
   font-size: 2.5rem;
   letter-spacing: 0.03em;
 }
@@ -735,13 +729,12 @@ img {
 
 @media only screen and (min-width: 640px) {
   .header-text {
-    font-size: 4rem;
-    line-height: 4rem;
-    letter-spacing: 0.03em;
+    font-size: 3rem;
+    line-height: 3rem;
   }
 
   .subheader-text {
-    font-family: "Winchester", cursive;
+    font-family: "Bowlby One SC", cursive;
     font-size: 3rem;
   }
 
@@ -761,13 +754,12 @@ img {
 
 @media only screen and (min-width: 768px) {
   .header-text {
-    font-size: 5rem;
-    line-height: 5rem;
-    letter-spacing: 0.03em;
+    font-size: 4rem;
+    line-height: 4rem;
   }
 
   .subheader-text {
-    font-family: "Winchester", cursive;
+    font-family: "Bowlby One SC", cursive;
     font-size: 3rem;
     letter-spacing: 0.03em;
   }
