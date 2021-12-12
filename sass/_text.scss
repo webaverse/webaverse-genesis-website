@@ -49,8 +49,8 @@ $body-family: 'Neutra', sans-serif;
     font-weight: normal;
     color: white;
     font-family: $header-family;
-    font-size: 2.5rem;
-    letter-spacing: 0.03em;
+    font-size: 2rem;
+    // letter-spacing: 0.03em;
     
     //line-height: 1.5rem;
 }
@@ -100,7 +100,7 @@ $body-family: 'Neutra', sans-serif;
     
     .subheader-text {
         font-family: $header-family;
-        font-size: 3rem;
+        font-size: 2rem;
     }
     
     .body-text {
@@ -129,8 +129,8 @@ $body-family: 'Neutra', sans-serif;
     .subheader-text {
         
         font-family: $header-family;
-        font-size: 3rem;
-        letter-spacing: 0.03em;
+        font-size: 2rem;
+        // letter-spacing: 0.03em;
     }
     
     .body-text {

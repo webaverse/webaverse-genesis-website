@@ -667,8 +667,7 @@ img {
   font-weight: normal;
   color: white;
   font-family: "Bowlby One SC", cursive;
-  font-size: 2.5rem;
-  letter-spacing: 0.03em;
+  font-size: 2rem;
 }
 
 .body-text {
@@ -706,7 +705,7 @@ img {
 
   .subheader-text {
     font-family: "Bowlby One SC", cursive;
-    font-size: 3rem;
+    font-size: 2rem;
   }
 
   .body-text {
@@ -730,8 +729,7 @@ img {
 
   .subheader-text {
     font-family: "Bowlby One SC", cursive;
-    font-size: 3rem;
-    letter-spacing: 0.03em;
+    font-size: 2rem;
   }
 
   .body-text {
