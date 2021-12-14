@@ -1,5 +1,5 @@
 import 'regenerator-runtime/runtime'
-import { gsap, Power1, Power4, Linear } from 'gsap';
+import { gsap, Power1, Power4, Power3 } from 'gsap';
 import Stats from '../examples/jsm/libs/stats.module';
 import WebaWorld from './WebaWorld';
 import { GUI } from '../examples/jsm/libs/dat.gui.module.js';
@@ -18,9 +18,11 @@ let isMobile;
 let contentContainer;
 let stats;
 let showStats = false;
+let navGrad;
+let nav = document.querySelector('.nav');
 //import "./css/index.css";
 
-//console.log = function(){};
+console.log = function(){};
 
 
 window.onload = init;
@@ -28,18 +30,21 @@ window.onload = init;
 function init(){
     console.log( 'app.init');
 
+    
     if( showStats ) stats = new Stats();
-        
+    
     isMobile = userAgent.getUserAgent();
     console.log( 'isMobile ' + isMobile );
-
+    
     windowWidth = window.innerWidth;
     windowHeight = window.innerHeight;
-
+    
     WebaWorld.dispatcher.once( 'modelLoaded', function() { 
         console.log( 'app.modelLoaded()')
         document.querySelector( '.content-container' ).style.display = 'block';
-
+        
+        gsap.set( nav, { y: 10 } );
+        gsap.to( nav, 0.6, { y: 0, opacity: 1, ease: Power3.easeOut, delay: 2 } );
         WebaWorld.getAudioManager().dispatcher.addEventListener( 'audioInitByInteraction', UI.toggleAudioIconOn )
 
     } )
@@ -95,6 +100,8 @@ function init(){
         container: document.querySelector( '.app-container' ),
     } );
 
+    navGrad = document.querySelector( '.nav-grad' );
+
    /*  guiParams = {
         drag: 0.0,
     };
@@ -144,10 +151,13 @@ const update = () => {
 };
 
 const updateScroll = ( e ) => {
+    
     var yVal = window.scrollY / window.innerHeight;
     gsap.set( contentContainer, { y: -( yVal * ( window.innerHeight * 0.25 ) ) })
     WebaWorld.updateCameraPosition( yVal * 1.5 );
     ContentManager.updateScroll( yVal );
+    let gradVal = Math.min( yVal * 10, 1 );
+    navGrad.style.opacity = gradVal;
 }
 
 

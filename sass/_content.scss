@@ -37,18 +37,23 @@
     .header-content-container {
         margin-bottom: 100px;
     }
+    .content-scroll-container {
+        width: 80%;
+        left: 10%;
+
+    }
     
 }
 // content body 
 
 .content-scroll-container {
     position: absolute; 
-    width: 80%;
+    width: 60%;
     height: auto;
     top: 710px;
     //background-color: crimson;
     //bottom: 250px;
-    left: 10%;
+    left: 20%;
     z-index: 2;
 }
 
@@ -115,6 +120,19 @@
     cursor: pointer;
 }
 
+.nav-grad {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    //background-color: red;
+    background-image: linear-gradient(to bottom, rgba(14,22,31,0) 20%, rgba(14,22,31,1) 90%);
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
 // @media only screen and (max-height: 670px) {
 
 //     .content-container {
@@ -129,6 +147,12 @@
         height: calc( (1000px) + 100vh );  
     }
 
+    .content-scroll-container {
+        width: 80%;
+        left: 10%;
+
+    }
+
 }
 
 @media only screen and (max-height: 500px) {
@@ -137,12 +161,24 @@
         height: calc( (1200px) + 100vh );  
     }
 
+    .content-scroll-container {
+        width: 80%;
+        left: 10%;
+
+    }
+
 }
 
 @media only screen and (max-height: 300px) {
 
     .content-container {
         height: calc( (1500px) + 100vh );  
+    }
+
+    .content-scroll-container {
+        width: 80%;
+        left: 10%;
+
     }
 
 }
@@ -167,6 +203,12 @@
     .content-container {
         min-height: calc( 800px + 100vh );  
     }
+
+    .content-scroll-container {
+        width: 80%;
+        left: 10%;
+
+    }
 }
 
 @media only screen and (min-width: 500px) {
@@ -177,6 +219,12 @@
 
     .content-container {
         height: calc( 550px + 100vh );  
+    }
+
+    .content-scroll-container {
+        width: 80%;
+        left: 10%;
+
     }
     
 }
@@ -203,6 +251,12 @@
         height: calc( 920px + 100vh );  
     }
 
+    .content-scroll-container {
+        width: 80%;
+        left: 10%;
+
+    }
+
 }
 
 
@@ -214,11 +268,23 @@
         height: calc( 920px + 100vh );  
     }
 
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
+    }
+
 }
 
 @media only screen and (min-width: 800px) and (max-width: 1100px) {
     .content-container {
         height: calc(100vh );  
+    }
+
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
     }
 }
 
@@ -226,6 +292,12 @@
 
     .content-container {
         height: calc( 800px + 100vh );  
+    }
+
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
     }
 
 }
@@ -237,12 +309,24 @@
         height: calc( 900px + 100vh );  
     }
 
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
+    }
+
 }
 
 @media only screen and (min-width: 1600px) {
 
     .content-container {
         height: calc( 700px + 100vh );  
+    }
+
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
     }
 
 }
@@ -253,6 +337,12 @@
         height: calc( 700px + 100vh );  
     }
 
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
+    }
+
 }
 
 @media only screen and (min-width: 1920px) {
@@ -261,12 +351,24 @@
         height: calc( 700px + 100vh );  
     }
 
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
+    }
+
 }
 
 @media only screen and (min-width: 2160px) {
 
     .content-container {
         height: calc( 600px + 100vh );  
+    }
+
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
     }
 
 }
@@ -278,12 +380,24 @@
         height: calc( 60vh );  
     }
 
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
+    }
+
 }
 
 @media only screen and (min-width: 7000px) {
 
     .content-container {
         height: calc( 100px );  
+    }
+
+    .content-scroll-container {
+        width: 60%;
+        left: 20%;
+
     }
 
 }

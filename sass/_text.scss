@@ -3,6 +3,11 @@
     src: url('../fonts/neutra/NeutraText-Book.otf');
 }
 
+@font-face {
+    font-family: NeutraBold;
+    src: url('../fonts/neutra/NeutraText-Bold.otf');
+}
+
 $header-family: 'Bowlby One SC', cursive;
 $body-family: 'Neutra', sans-serif;
 

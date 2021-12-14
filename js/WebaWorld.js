@@ -660,6 +660,8 @@ const resize = () => {
     camera.aspect = windowWidth / windowHeight;
     camera.updateProjectionMatrix();
 
+    FireflyManager.resize( windowWidth, windowHeight );
+
     renderer.setSize( windowWidth, windowHeight );
 }
 

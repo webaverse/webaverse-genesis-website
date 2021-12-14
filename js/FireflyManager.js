@@ -122,10 +122,13 @@ let dynamicMouse;
 let fireflyTimeout;
 let currentMouseSpeed = 0.2;
 let nativScale = 0.5;
-
+let flyToPos;
 //const ambientSoundObj = { vol: 1.0, perc: 0.0 };
 const bugSoundObj = { vol: 0.5, perc: 0.0 };
 const sparkSoundObj = { vol: 1.0, perc: 0.0 };
+let flyToNavItem
+let flyAtNav = false;
+
 
 const init = ( params ) => {
     gsap.registerPlugin( MotionPathPlugin );
@@ -146,6 +149,7 @@ const init = ( params ) => {
     glowText = new THREE.TextureLoader().load( './assets/textures/firefly/firefly-1.png' );
 
     scene.add( flyGroup );
+    flyToNavItem = document.querySelector( '.nav-alpha-item' );
 
 
     loadModel().then(
@@ -159,27 +163,57 @@ const init = ( params ) => {
             
         }
     );
+
+
+    
     
 }
 
+const offset = ( el ) => {
+    var rect = el.getBoundingClientRect(),
+    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+}
+
 const startFlyBehavior = () => {
-    flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 10 );
+
+    let flyToVec;
+
+    if( window.innerWidth < 640 ){
+
+    } else if( window.innerWidth < 640 && window.innerWidth > 640 ){
+
+    } else if( window.innerWidth < 640 && window.innerWidth > 640 ){
+
+    } else if( window.innerWidth < 640 && window.innerWidth > 640 ){
+
+    }
+
+
+    /* flyTo2DPoint( { x: 0, y: window.innerHeight - 30 }, 9 );
     returnToMouse( 17 );
-    flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 25 );
+    flyTo2DPoint( { x: flyToPos.left, y: window.innerHeight - 30 }, 25 );
     returnToMouse( 32 );
-    flyTo3DPoint( new THREE.Vector3( -1, 2, -1 ), 40 );
-    returnToMouse( 47 );
-    flyTo2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 }, 53 );
-    returnToMouse( 60 );
+    flyTo2DPoint( { x: flyToPos.left, y: window.innerHeight - 30 }, 53 );
+    returnToMouse( 47 ); */
+
+    setTimeout( flyTo2DPoint, 10000 );
+
 }
 
 function flyTo2DPoint( point, delay ){
 
     //console.log( 'flyTo2DPoint()' );
-    
-    fireflyTimeout = setTimeout( function(){
+        flyAtNav = true;
+/*     fireflyTimeout = setTimeout( function(){ */
+
+        flyToPos = offset( flyToNavItem );
+        //console.log( 'FLY OFFSET POSITION TO ', flyToPos.left, flyToPos.top);
+
+        console.log( '******* FLY TO THIS POINT ' + flyToPos.left )
         
-        let newMousePoint = translate2DPoint( { x: window.innerWidth * 0.5 - 150, y: window.innerHeight - 30 } );
+        let newMousePoint = translate2DPoint( { x: flyToPos.left, y: window.innerHeight - 35 } );
         let currentMousePoint = new THREE.Vector2( dynamicMouse.x, dynamicMouse.y );
 
         let lerpPoint = new THREE.Vector2().lerpVectors( newMousePoint, currentMousePoint, 0.5 );
@@ -204,13 +238,16 @@ function flyTo2DPoint( point, delay ){
 
         TweenLite.to( currentMousePoint, 0.6, { onStart: function(){ newMousePoint = translate2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 } ) }.bind( this ), motionPath: [ { x: lerpPoint.x + ( bezierAmount - ( Math.random() * bezierAmount * 2 ) ), y: lerpPoint.y + ( bezierAmount - ( Math.random() * bezierAmount * 2 ) ) }, { x: newMousePoint.x, y: newMousePoint.y } ], ease: Power1.easeInOut, onUpdate: function(){
             dynamicMouse = new THREE.Vector2( currentMousePoint.x, currentMousePoint.y );
-        } });
-    }, delay * 1000 );
+        }, onComplete: function(){ 
+            setTimeout( returnToMouse, 5000 );
+        }.bind( this ) });
+   // }, delay * 1000 );
 }
 
 function returnToMouse( delay ){
     //console.log( 'returnToMouse()' );
-    fireflyTimeout = setTimeout( function(){
+    //fireflyTimeout = setTimeout( function(){
+        flyAtNav = false;
         allowFollow = true;
         let newMousePoint = mouse;
         let currentMousePoint = new THREE.Vector2( dynamicMouse.x, dynamicMouse.y );
@@ -225,7 +262,9 @@ function returnToMouse( delay ){
 
         TweenLite.to( sparkSoundObj, 0.6, { perc: 0.0, ease: Power1.easeInOut, delay: 0, onUpdate: function(){
             AudioManager.fadeVolume( 'spark', sparkSoundObj.vol * sparkSoundObj.perc );
-        }});
+        }, onComplete: function(){
+            setTimeout( flyTo2DPoint, 10000 );
+        }.bind( this )});
         
         /* TweenLite.to( currentMousePoint, 1, { x: newMousePoint.x, y: newMousePoint.y, ease: Power1.easeInOut, onUpdate: function(){
             currentMousePoint = new THREE.Vector2( dynamicMouse.x, dynamicMouse.y );
@@ -234,7 +273,7 @@ function returnToMouse( delay ){
             dynamicMouse = mouse;
         } });
          */
-    }, delay * 1000 ); 
+    //}, delay * 1000 ); 
 }
 
 function flyTo3DPoint( point, delay ){
@@ -505,11 +544,44 @@ const getModelLoaded = () => {
     return modelLoaded;
 }
 
+const resize = ( windowWidth, windowHeight ) => {
+    
+    if( flyAtNav ){
+        
+        flyToPos = offset( flyToNavItem );
+
+        
+        let newMousePoint = translate2DPoint( { x: flyToPos.left, y: window.innerHeight - 35 } );
+        let currentMousePoint = new THREE.Vector2( dynamicMouse.x, dynamicMouse.y );
+
+        let lerpPoint = new THREE.Vector2().lerpVectors( newMousePoint, currentMousePoint, 0.5 );
+        let bezierAmount = 0.15 + Math.random() * 0.15;
+        
+        TweenLite.to( glowSpeedAni, 0.0, { perc: 5, ease: Power1.easeIn, onUpdate: function(){
+            glowSpeed = glowSpeedAni.perc * glowSpeedAni.base;
+        }, onComplete: function(){
+            //currentMouseSpeed = 1;
+        } })
+
+        TweenLite.to( sparkSoundObj, 0, { perc: 0.1, ease: Power1.easeInOut, delay: 0, onUpdate: function(){
+            AudioManager.fadeVolume( 'spark', sparkSoundObj.vol * sparkSoundObj.perc );
+        }});
+        
+
+        TweenLite.to( currentMousePoint, 0.0, { onStart: function(){ newMousePoint = translate2DPoint( { x: window.innerWidth - 320, y: window.innerHeight - 30 } ) }.bind( this ), ease: Power1.easeInOut, onUpdate: function(){
+            dynamicMouse = new THREE.Vector2( currentMousePoint.x, currentMousePoint.y );
+        }, onComplete: function(){ 
+          
+        }.bind( this ) });
+    }
+}
+
 const FireflyManager = {
     init,
     update,
     getModelLoaded,
-    startFlyBehavior
+    startFlyBehavior,
+    resize
 };
 
 export default FireflyManager;

@@ -77,10 +77,15 @@ const init = ( params ) =>{
     logoContainer.appendChild( logoImg );
     logoContainer.appendChild( genesisContainer );
 
-    nav = document.createElement( 'div' );
-    nav.className = 'ui-nav';
     
-    let navArr = [ 'App', 'Docs', 'Discord', 'Twitter', 'Blog' ];
+
+
+    /* nav = document.createElement( 'div' );
+    nav.className = 'ui-nav'; */
+
+
+    
+    /* let navArr = [ 'App', 'Docs', 'Discord', 'Twitter', 'Blog' ];
     let linksArr = [ 
         'https://app.webaverse.com/',
         'https://webaverse.notion.site/Webaverse-3a36b223e39b4f94b3d1f6921a4c297a',
@@ -113,7 +118,7 @@ const init = ( params ) =>{
                 TweenLite.to( navItem, 0.6, { color: '#ffffff', ease:Power3.easeOut })
             })
         }   
-    }
+    } 
 
     
     let alphaCont = document.createElement( 'div' );
@@ -123,7 +128,7 @@ const init = ( params ) =>{
     let alphaTxt = document.createElement( 'p' );
     alphaTxt.className = "ui-alpha-text";
     alphaTxt.innerText = 'ALPHA';
-    alphaCont.appendChild( alphaTxt );
+    alphaCont.appendChild( alphaTxt );*/
 
     ctaContainer = document.createElement( 'div' );
     ctaContainer.className = 'ui-cta-container';
@@ -197,7 +202,7 @@ const init = ( params ) =>{
     uiDiv.appendChild( ctaContainer );
     ctaContainer.appendChild( ctaInnerCont )
     uiTopContainer.appendChild(logoContainer )
-    uiTopContainer.appendChild( nav );
+    //uiTopContainer.appendChild( nav );
     uiTopContainer.appendChild( audioIconContainer );
     document.querySelector( ".app-container" ).appendChild( uiDiv );
 
