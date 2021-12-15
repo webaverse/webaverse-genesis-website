@@ -13,12 +13,17 @@ $comp-color: #617b99;
 }
 
 
-// @media only screen and (min-width: 600px) and (min-height: 1000px) {
-//     .slide-scroll-controls-container {
-//         margin-top: -355px;
-//     }  
-// }
+@media only screen and (max-height: 480px) {
+    .slide-scroll-controls-container {
+        margin-top: -495px;
+    }
+}
 
+@media only screen and (max-height: 480px) and (min-width: 800px)  {
+    .slide-scroll-controls-container {
+        margin-top: -450px;
+    }
+}
 
 @media only screen and (max-width: 480px) {
     .slide-scroll-controls-container {

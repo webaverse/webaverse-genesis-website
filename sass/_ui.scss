@@ -25,16 +25,23 @@
 
 .ui-logo {
     position: absolute;
-    width: 100px;
+    width: 100%;
     // height: 30px;
 }
 
 .ui-logo-m {
     position: absolute;
-    width: 100px;
+    width: 100%;
     // height: 30px;
     // margin: 0 auto;
     // right: 50%;
+}
+
+@media only screen and (max-height: 480px) {
+    .ui-logo-container {
+        width: 70px !important;
+        left: calc( 50vw - 35px) !important;
+    }
 }
 
 .ui-nav {
@@ -164,7 +171,7 @@
     position: relative;
     padding-top: 15px;
     // padding-left: 15px;
-    width: 200px;
+    width: 100px;
     // height: 80px;
     pointer-events: none;
     left: calc( 50vw - 50px);
