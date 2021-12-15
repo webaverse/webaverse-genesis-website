@@ -72,6 +72,20 @@
     
 }
 
+@media only screen and (max-height: 480px) {
+
+    .content-scroll-item {
+        margin-top: calc(100vh * -0.2);       
+    }
+
+}
+@media only screen and (max-height: 480px) and (min-width: 800px) {
+
+    .content-scroll-item {
+        margin-top: -330px;        
+    }
+
+}
 // icon 
 .content-scroll-item-icon {
     width: 80px;
@@ -195,7 +209,7 @@
     .content-container {
         $height: 100%;
         height: $height;
-        height: ($height * 4.3) !important;
+        height: ($height * 3.4) !important;
     }
 }
 

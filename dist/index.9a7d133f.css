@@ -81,6 +81,18 @@ body {
   text-align: center;
 }
 
+@media only screen and (max-height: 480px) {
+  .content-scroll-item {
+    margin-top: -20vh;
+  }
+}
+
+@media only screen and (max-height: 480px) and (min-width: 800px) {
+  .content-scroll-item {
+    margin-top: -330px;
+  }
+}
+
 .content-scroll-item-icon {
   width: 80px;
   height: 80px;
@@ -174,7 +186,7 @@ body {
 @media only screen and (max-height: 480px) and (min-width: 800px) {
   .content-container {
     height: 100%;
-    height: 430% !important;
+    height: 340% !important;
   }
 }
 
@@ -408,6 +420,16 @@ img {
   }
 }
 
+@media only screen and (max-height: 480px) {
+  .slide-scroll-item {
+    max-width: 220px !important;
+  }
+
+  .slide-scroll-img {
+    max-width: 220px !important;
+  }
+}
+
 @media only screen and (min-width: 600px) {
   .slide-scroll-item {
     max-width: 320px;
@@ -442,6 +464,24 @@ img {
   }
 }
 
+@media only screen and (max-height: 480px) {
+  .slide-scroll-component {
+    height: 190vh;
+  }
+}
+
+@media only screen and (max-height: 400px) {
+  .slide-scroll-component {
+    height: 200vh;
+  }
+}
+
+@media only screen and (max-height: 320px) {
+  .slide-scroll-component {
+    height: 230vh;
+  }
+}
+
 .slide-scroll-controls-container {
   width: 300px;
   height: 90px;
@@ -460,7 +500,7 @@ img {
 
 @media only screen and (max-height: 480px) and (min-width: 800px) {
   .slide-scroll-controls-container {
-    margin-top: -350px;
+    margin-top: -420px;
   }
 }
 

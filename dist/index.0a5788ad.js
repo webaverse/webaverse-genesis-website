@@ -46504,6 +46504,10 @@ const resize = (width, height)=>{
         slideWidth = 480;
         goToSlideIndex(currentContentIndex);
     }
+    if (height < 480) {
+        slideWidth = 220;
+        goToSlideIndex(currentContentIndex);
+    }
     _gsap.gsap.set(slideItemsContainer, {
         x: (window.innerWidth - slideWidth) * 0.5
     });
