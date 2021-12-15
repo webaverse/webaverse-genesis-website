@@ -60,6 +60,18 @@ $body-family: 'Neutra', sans-serif;
     //line-height: 1.5rem;
 }
 
+@media only screen and (max-height: 480px) {
+    .subheader-text {
+        font-size: 1.5rem !important;
+    }
+}
+
+// @media only screen and (max-height: 480px) and (min-width: 800px)  {
+//     .subheader-text {
+//         font-size: 1.5rem;
+//     }
+// }
+
 .body-text {
     color: white;
     font-family: $body-family;
@@ -69,11 +81,28 @@ $body-family: 'Neutra', sans-serif;
     //
 }
 
+
+
 // Locals
 
 .intro-header-text {
     margin-bottom: 1rem;
     margin: 0 auto;
+}
+
+@media only screen and (max-height: 480px) {
+    .subheader-text {
+        font-size: 1.5rem !important;
+    }
+    .body-text {
+        font-size: 1.2rem !important;
+        line-height: 1.5rem !important;
+        //
+    }
+    .intro-header-text {
+        font-size: 2rem !important;
+        line-height: 2.5rem !important;
+    }
 }
 
 .intro-sub-text {
