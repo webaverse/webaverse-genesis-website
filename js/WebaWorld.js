@@ -654,8 +654,8 @@ const update = ( t ) => {
 
 const resize = () => {
 
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
+    windowWidth = document.documentElement.clientWidth;
+    windowHeight = document.documentElement.clientHeight;
 
     camera.aspect = windowWidth / windowHeight;
     camera.updateProjectionMatrix();

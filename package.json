@@ -32,6 +32,7 @@
     "xhr-progress": "^0.0.0"
   },
   "devDependencies": {
-    "parcel": "^2.0.1"
+    "parcel": "^2.0.1",
+    "sass": "^1.45.0"
   }
 }

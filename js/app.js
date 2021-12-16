@@ -167,10 +167,13 @@ const render = () => {
   ) */
 }
 
+window.WebaWorld = WebaWorld;
+window.ContentManager = ContentManager;
+
 const resize = () => {
 
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
+    windowWidth = document.documentElement.clientWidth;
+    windowHeight = document.documentElement.clientHeight;
     
     WebaWorld.resize( windowWidth, windowHeight );
     ContentManager.resize( windowWidth, windowHeight );
