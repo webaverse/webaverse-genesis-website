@@ -19,9 +19,15 @@ $comp-color: #617b99;
     }
 }
 
-@media only screen and (max-height: 480px) and (min-width: 800px)  {
+@media only screen and (max-height: 480px) and (min-width: 768px)  {
     .slide-scroll-controls-container {
-        margin-top: -420px;
+        margin-top: -550px;
+    }
+}
+
+@media only screen and (max-height: 420px) and (min-width: 768px)  {
+    .slide-scroll-controls-container {
+        margin-top: -430px;
     }
 }
 

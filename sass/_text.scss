@@ -113,6 +113,14 @@ $body-family: 'Neutra', sans-serif;
 
 .intro-body-text {
     margin: 0 auto;
+    width: 80%;
+}
+
+@media only screen and (min-width: 800px) {
+    
+    .intro-body-text {
+        width: 60%;
+    }
 }
 
 // content 

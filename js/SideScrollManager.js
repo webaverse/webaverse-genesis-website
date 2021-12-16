@@ -235,6 +235,7 @@ const updateScrollVal = ( val ) => {
 const pointerDown = ( evt ) => {
     
     if( isMobile ){
+        disableScroll(evt);
         slideStartX = evt.touches[ 0 ].clientX;
         window.addEventListener( 'touchmove', mousemove );
         window.addEventListener( 'touchend', pointerUp );
@@ -271,7 +272,28 @@ const pointerUp = ( evt ) => {
     newDragScrollVal = 0;
     globalScrollDist = 0;
 
+    enableScroll(evt);
 
+}
+
+function disableScroll(e) {
+    noscroll = true;
+    if (window.addEventListener)
+        window.addEventListener("DOMMouseScroll", e.preventDefault(), false);
+    window.onwheel = e.preventDefault(); // modern standard
+    window.onmousewheel = document.onmousewheel = e.preventDefault(); // older browsers, IE
+    window.ontouchmove = e.preventDefault(); // mobile
+    document.onkeydown = e.preventDefault();
+}
+  
+function enableScroll(e) {
+    noscroll = false;
+    if (window.removeEventListener)
+        window.removeEventListener("DOMMouseScroll", e.preventDefault(), false);
+    window.onmousewheel = document.onmousewheel = null;
+    window.onwheel = null;
+    window.ontouchmove = null;
+    document.onkeydown = null;
 }
 
 const mousemove = ( evt ) => {
@@ -293,7 +315,6 @@ const mousemove = ( evt ) => {
     updateScrollVal( newDragScrollVal );
 
 }
-
 
 // CALLED FROM CONTENT CONTROLLER 
 const changeSlideItemIndex = ( index ) => {

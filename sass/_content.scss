@@ -79,7 +79,7 @@
     }
 
 }
-@media only screen and (max-height: 480px) and (min-width: 800px) {
+@media only screen and (max-height: 480px) and (min-width: 768px) {
 
     .content-scroll-item {
         margin-top: -330px;        
@@ -205,7 +205,7 @@
     }
 }
 
-@media only screen and (max-height: 480px) and (min-width: 800px)  {
+@media only screen and (max-height: 480px) and (min-width: 768px)  {
     .content-container {
         $height: 100%;
         height: $height;
