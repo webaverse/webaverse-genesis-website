@@ -618,23 +618,22 @@ const updateScroll = (e)=>{
     let gradVal = Math.min(yVal * 10, 1);
     navGrad.style.opacity = gradVal;
 };
+getLargestChildHeight = ()=>{
+    let largestHeight = 0;
+    for (const iterator of document.querySelector('.content-scroll-container').children)if (iterator.getBoundingClientRect().height > largestHeight) largestHeight = iterator.getBoundingClientRect().height;
+    return largestHeight;
+};
 const render = ()=>{
 /* return (
     <div ref={ ref => ( this.mount = ref ) } />
   ) */ };
-window.WebaWorld = _webaWorldDefault.default;
-window.ContentManager = _contentManagerDefault.default;
 const resize = ()=>{
     windowWidth = document.documentElement.clientWidth;
     windowHeight = document.documentElement.clientHeight;
-    //set it to 0 so calculation can be made easily
-    //contentContainer.style.height = '100vh';
-    // alert(document.body.scrollHeight);
-    if (originalContentHeight == null && document.querySelector('.content-container').getBoundingClientRect().height > 0) originalContentHeight = document.querySelector('.content-container').getBoundingClientRect().height;
-    if (originalContentHeight != null) {
-        if (screen.width < 500) contentContainer.style.height = originalContentHeight + 'px';
-        else document.querySelector('.content-container').style.height = originalContentHeight + 0.5 * document.querySelector('.slide-scroll-component').getBoundingClientRect().height + 'px';
-    }
+    document.querySelector('.content-container').style.height = '0px';
+    setTimeout(()=>{
+        document.querySelector('.content-container').style.height = document.body.scrollHeight - 0.6 * getLargestChildHeight() + "px";
+    }, 1000);
     _webaWorldDefault.default.resize(windowWidth, windowHeight);
     _contentManagerDefault.default.resize(windowWidth, windowHeight);
 };
