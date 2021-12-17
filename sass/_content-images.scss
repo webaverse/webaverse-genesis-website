@@ -1,24 +1,26 @@
 .content-bg-imgs-container {
     -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 1.0) 10%, rgba(0, 0, 0, 1.0) 80%, transparent 100% );
     mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 1.0) 10%, transparent 100% );
-    position: absolute;
-    top: unset !important;
-    bottom: 0;
+    // position: absolute;
     left: 0;
     width: 100%;
-    height: 295px;
+    height: 100vh;
+
     //background-color: rgba( 255, 0, 0, 0.2 );
     display: none;
-    margin-top: -200px;
+    // margin-top: -200px;
     z-index: 1;
-    padding-bottom: 370px;
+    // padding-bottom: 370px;
     mix-blend-mode: overlay;
+
+    position: relative;
+    bottom:-25%;
 }
 
 .content-bg-img {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     object-fit: cover; 
     opacity: 0;
     
@@ -29,13 +31,13 @@
 
 @media only screen and (min-width: 600px) {
     .content-bg-imgs-container {
-        margin-top: -200px;
+        //margin-top: -200px;
     }  
 }
 
 @media only screen and (min-width: 768px) {
     .content-bg-imgs-container {
-        margin-top: -0px;
+        //margin-top: -0px;
     }
 }
 

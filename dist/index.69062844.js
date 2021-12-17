@@ -140,12 +140,12 @@
       this[globalName] = mainExports;
     }
   }
-})({"iSgPd":[function(require,module,exports) {
+})({"lVHAe":[function(require,module,exports) {
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
-var HMR_ENV_HASH = "1293bae57ac04db4";
-module.bundle.HMR_BUNDLE_ID = "70634a050a5788ad";
+var HMR_ENV_HASH = "4a236f9275d0a351";
+module.bundle.HMR_BUNDLE_ID = "b884aa5669062844";
 "use strict";
 function _createForOfIteratorHelper(o, allowArrayLike) {
     var it;
@@ -458,7 +458,7 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"2dX4u":[function(require,module,exports) {
+},{}],"hOJOi":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _runtime = require("regenerator-runtime/runtime");
 var _gsap = require("gsap");
@@ -486,6 +486,7 @@ let stats;
 let showStats = false;
 let navGrad;
 let nav = document.querySelector('.nav');
+let originalContentHeight = null;
 //import "./css/index.css";
 console.log = function() {
 };
@@ -590,7 +591,7 @@ function init() {
     var height = document.body.offsetHeight;
     window.addEventListener("scroll", updateScroll);
     window.addEventListener('resize', ()=>{
-        if (document.body.offsetWidth != width || document.body.offsetHeight != height) resize();
+        resize();
     }, false);
     if (isMobile) {
         window.addEventListener('touchstart', _webaWorldDefault.default.touchMove, false);
@@ -626,11 +627,19 @@ window.ContentManager = _contentManagerDefault.default;
 const resize = ()=>{
     windowWidth = document.documentElement.clientWidth;
     windowHeight = document.documentElement.clientHeight;
+    //set it to 0 so calculation can be made easily
+    //contentContainer.style.height = '100vh';
+    // alert(document.body.scrollHeight);
+    if (originalContentHeight == null && document.querySelector('.content-container').getBoundingClientRect().height > 0) originalContentHeight = document.querySelector('.content-container').getBoundingClientRect().height;
+    if (originalContentHeight != null) {
+        if (screen.width < 500) contentContainer.style.height = originalContentHeight + 'px';
+        else document.querySelector('.content-container').style.height = originalContentHeight + 0.5 * document.querySelector('.slide-scroll-component').getBoundingClientRect().height + 'px';
+    }
     _webaWorldDefault.default.resize(windowWidth, windowHeight);
     _contentManagerDefault.default.resize(windowWidth, windowHeight);
 };
 
-},{"regenerator-runtime/runtime":"5qc87","gsap":"3ZIKo","../examples/jsm/libs/stats.module":"bhGvB","./WebaWorld":"4nnER","../examples/jsm/libs/dat.gui.module.js":"1dgD0","./userAgent":"lpfek","./UI":"dUnf8","./ContentManager":"hgBeC","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"5qc87":[function(require,module,exports) {
+},{"regenerator-runtime/runtime":"1EBPE","gsap":"2aTR0","../examples/jsm/libs/stats.module":"7AZ54","./WebaWorld":"7zI2I","../examples/jsm/libs/dat.gui.module.js":"kOUe0","./userAgent":"oK2e0","./UI":"lsITd","./ContentManager":"3DGqd","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"1EBPE":[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -1210,7 +1219,7 @@ try {
     else Function("r", "regeneratorRuntime = r")(runtime);
 }
 
-},{}],"3ZIKo":[function(require,module,exports) {
+},{}],"2aTR0":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "gsap", ()=>gsapWithCSS
@@ -1268,7 +1277,7 @@ var _csspluginJs = require("./CSSPlugin.js");
 var gsapWithCSS = _gsapCoreJs.gsap.registerPlugin(_csspluginJs.CSSPlugin) || _gsapCoreJs.gsap, // to protect from tree shaking
 TweenMaxWithCSS = gsapWithCSS.core.Tween;
 
-},{"./gsap-core.js":"3HSju","./CSSPlugin.js":"hfBNL","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"3HSju":[function(require,module,exports) {
+},{"./gsap-core.js":"dbpJR","./CSSPlugin.js":"fM91I","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"dbpJR":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "GSCache", ()=>GSCache
@@ -4004,7 +4013,7 @@ _coreReady = 1;
 _windowExists() && _wake();
 var Power0 = _easeMap.Power0, Power1 = _easeMap.Power1, Power2 = _easeMap.Power2, Power3 = _easeMap.Power3, Power4 = _easeMap.Power4, Linear = _easeMap.Linear, Quad = _easeMap.Quad, Cubic = _easeMap.Cubic, Quart = _easeMap.Quart, Quint = _easeMap.Quint, Strong = _easeMap.Strong, Elastic = _easeMap.Elastic, Back = _easeMap.Back, SteppedEase = _easeMap.SteppedEase, Bounce = _easeMap.Bounce, Sine = _easeMap.Sine, Expo = _easeMap.Expo, Circ = _easeMap.Circ;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"8FsVl":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"ciiiV":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -4034,7 +4043,7 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"hfBNL":[function(require,module,exports) {
+},{}],"fM91I":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "CSSPlugin", ()=>CSSPlugin
@@ -4906,7 +4915,7 @@ _gsapCoreJs._forEachName("x,y,z,top,right,bottom,left,width,height,fontSize,padd
 });
 _gsapCoreJs.gsap.registerPlugin(CSSPlugin);
 
-},{"./gsap-core.js":"3HSju","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"bhGvB":[function(require,module,exports) {
+},{"./gsap-core.js":"dbpJR","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"7AZ54":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var Stats = function() {
@@ -5002,7 +5011,7 @@ Stats.Panel = function(name, fg, bg) {
 };
 exports.default = Stats;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"4nnER":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"7zI2I":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _runtime = require("regenerator-runtime/runtime");
@@ -5178,6 +5187,7 @@ function init(sceneParams) {
             mouse: mouse,
             camera: camera
         });
+        window.dispatchEvent(new Event('resize'));
     });
     window.addEventListener("beforeunload", function() {
         if (_audioManagerDefault.default) _audioManagerDefault.default.stopAll();
@@ -5571,6 +5581,7 @@ const resize = ()=>{
     _fireflyManagerDefault.default.resize(windowWidth, windowHeight);
     renderer.setSize(windowWidth, windowHeight);
 };
+window.WebaWorldResize = resize;
 const mouseMove = (e)=>{
     if (!modelLoaded) return;
     mouseX = (e.clientX - windowWidth / 2) * 3;
@@ -5679,7 +5690,7 @@ const WebaWorld = {
 };
 exports.default = WebaWorld;
 
-},{"regenerator-runtime/runtime":"5qc87","../build/three.module":"cD1Og","../examples/jsm/controls/OrbitControls":"gCz4U","../examples/jsm/loaders/GLTFLoader":"jHZWE","../examples/jsm/loaders/DRACOLoader":"g2JRE","gsap":"3ZIKo","./shaders/StarryNightShader":"1brpW","./FireFlies":"a5Zvn","./TreesManager":"4wndq","./shaders/MistShader":"8dWiq","simplex-noise":"kFw5t","./FireflyManager":"gE7sV","./EventDispatcher":"i7RiA","./AudioManager":"eaKY2","./UI":"dUnf8","./modifiers.min":"gIwbI","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"cD1Og":[function(require,module,exports) {
+},{"regenerator-runtime/runtime":"1EBPE","../build/three.module":"5T8FK","../examples/jsm/controls/OrbitControls":"4gBF2","../examples/jsm/loaders/GLTFLoader":"aRyIW","../examples/jsm/loaders/DRACOLoader":"cJKxB","gsap":"2aTR0","./shaders/StarryNightShader":"6JMfi","./FireFlies":"gwcAu","./TreesManager":"vQYSN","./shaders/MistShader":"bEmbk","simplex-noise":"jB0ac","./FireflyManager":"13V9k","./EventDispatcher":"czwKm","./AudioManager":"7sFeC","./UI":"lsITd","./modifiers.min":"2uVfE","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"5T8FK":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ACESFilmicToneMapping", ()=>ACESFilmicToneMapping
@@ -35596,7 +35607,7 @@ if (typeof window !== 'undefined') {
     else window.__THREE__ = REVISION;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"gCz4U":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"4gBF2":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "OrbitControls", ()=>OrbitControls
@@ -36304,7 +36315,7 @@ class MapControls extends OrbitControls {
     }
 }
 
-},{"../../../build/three.module.js":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"jHZWE":[function(require,module,exports) {
+},{"../../../build/three.module.js":"5T8FK","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"aRyIW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "GLTFLoader", ()=>GLTFLoader
@@ -38593,7 +38604,7 @@ function buildNodeHierarchy(nodeId, parentObject, json, parser) {
     return newGeometry;
 }
 
-},{"../../../build/three.module.js":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"g2JRE":[function(require,module,exports) {
+},{"../../../build/three.module.js":"5T8FK","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"cJKxB":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DRACOLoader", ()=>DRACOLoader
@@ -38963,7 +38974,7 @@ class DRACOLoader extends _threeModuleJs.Loader {
     }
 }
 
-},{"../../../build/three.module.js":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"1brpW":[function(require,module,exports) {
+},{"../../../build/three.module.js":"5T8FK","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"6JMfi":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 const StarrySkyShader = {
@@ -39090,7 +39101,7 @@ const StarrySkyShader = {
 };
 exports.default = StarrySkyShader;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"a5Zvn":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"gwcAu":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _threeModule = require("../build/three.module");
@@ -39152,7 +39163,7 @@ class Fireflies extends _threeModule.Group {
 }
 exports.default = Fireflies;
 
-},{"../build/three.module":"cD1Og","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"4wndq":[function(require,module,exports) {
+},{"../build/three.module":"5T8FK","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"vQYSN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _curlNoise = require("./curlNoise");
@@ -39186,7 +39197,7 @@ const TreeManager = {
 };
 exports.default = TreeManager;
 
-},{"./curlNoise":"hEEFR","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"hEEFR":[function(require,module,exports) {
+},{"./curlNoise":"6nGZ3","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"6nGZ3":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _simplexNoise = require("simplex-noise");
@@ -39228,7 +39239,7 @@ exports.default = (x, y, z)=>{
     return curl;
 };
 
-},{"simplex-noise":"kFw5t","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"kFw5t":[function(require,module,exports) {
+},{"simplex-noise":"jB0ac","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"jB0ac":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 /** Deterministic simplex noise generator suitable for 2D, 3D and 4D spaces. */ parcelHelpers.export(exports, "SimplexNoise", ()=>SimplexNoise
@@ -39828,7 +39839,7 @@ function masher() {
     };
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"8dWiq":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"bEmbk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 const MistShader = {
@@ -39969,7 +39980,7 @@ const MistShader = {
 };
 exports.default = MistShader;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"gE7sV":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"13V9k":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _threeModule = require("../build/three.module");
@@ -40522,7 +40533,7 @@ const FireflyManager = {
 };
 exports.default = FireflyManager;
 
-},{"../build/three.module":"cD1Og","../examples/jsm/loaders/GLTFLoader":"jHZWE","../examples/jsm/loaders/DRACOLoader":"g2JRE","gsap":"3ZIKo","gsap/dist/MotionPathPlugin":"ekmDM","./AudioManager":"eaKY2","./UI":"dUnf8","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"ekmDM":[function(require,module,exports) {
+},{"../build/three.module":"5T8FK","../examples/jsm/loaders/GLTFLoader":"aRyIW","../examples/jsm/loaders/DRACOLoader":"cJKxB","gsap":"2aTR0","gsap/dist/MotionPathPlugin":"g9FRi","./AudioManager":"7sFeC","./UI":"lsITd","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"g9FRi":[function(require,module,exports) {
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define([
         'exports'
@@ -41651,7 +41662,7 @@ exports.default = FireflyManager;
     });
 });
 
-},{}],"eaKY2":[function(require,module,exports) {
+},{}],"7sFeC":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _eventDispatcher = require("./EventDispatcher");
 var _eventDispatcherDefault = parcelHelpers.interopDefault(_eventDispatcher);
@@ -41750,7 +41761,7 @@ exports.fadeVolume = function(id, volume) {
     player.volume = volume;
 };
 
-},{"./EventDispatcher":"i7RiA","./audioPlayer":"3k97X","web-audio-analyser":"izmRC","ios-safe-audio-context":"lOsk8","detect-media-element-source":"9XTqY","analyser-frequency-average":"4Botu","tap-event":"e8ecg","./UI":"dUnf8","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"i7RiA":[function(require,module,exports) {
+},{"./EventDispatcher":"czwKm","./audioPlayer":"4CmKW","web-audio-analyser":"h786j","ios-safe-audio-context":"h5qkc","detect-media-element-source":"fDFbs","analyser-frequency-average":"99ran","tap-event":"bMls6","./UI":"lsITd","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"czwKm":[function(require,module,exports) {
 class EventDispatcher {
     constructor(){
         this.events = {
@@ -41785,7 +41796,7 @@ class EventDispatcher {
 }
 module.exports = EventDispatcher;
 
-},{}],"3k97X":[function(require,module,exports) {
+},{}],"4CmKW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _bufferSource = require("./audiolibs/buffer-source");
 var _bufferSourceDefault = parcelHelpers.interopDefault(_bufferSource);
@@ -41800,7 +41811,7 @@ function webAudioPlayer(src, opt) {
     else return _mediaSourceDefault.default(src, opt);
 }
 
-},{"./audiolibs/buffer-source":"hmeaL","./audiolibs/media-source":"7mh4h","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"hmeaL":[function(require,module,exports) {
+},{"./audiolibs/buffer-source":"5aPlU","./audiolibs/media-source":"ewoSg","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"5aPlU":[function(require,module,exports) {
 var process = require("process");
 var canPlaySrc = require('./can-play-src');
 var createAudioContext = require('./audio-context');
@@ -41948,7 +41959,7 @@ function createBufferSource(src1, opt) {
     return emitter;
 }
 
-},{"process":"djbKH","./can-play-src":"ij7WX","./audio-context":"5jJTL","./xhr-audio":"gpJiL","events":"2e7OU","right-now":"4FY2R","./resume-context":"eR4mO"}],"djbKH":[function(require,module,exports) {
+},{"process":"lDnB8","./can-play-src":"6xcS5","./audio-context":"BMvO2","./xhr-audio":"95JIj","events":"bHM3D","right-now":"1lXNk","./resume-context":"5pPlI"}],"lDnB8":[function(require,module,exports) {
 // shim for using process in browser
 var process = module.exports = {
 };
@@ -42097,7 +42108,7 @@ process.umask = function() {
     return 0;
 };
 
-},{}],"ij7WX":[function(require,module,exports) {
+},{}],"6xcS5":[function(require,module,exports) {
 var lookup = require('browser-media-mime-type');
 var audio;
 module.exports = isSrcPlayable;
@@ -42135,7 +42146,7 @@ function extension(data) {
     return data.substring(extIdx + 1);
 }
 
-},{"browser-media-mime-type":"70UIF"}],"70UIF":[function(require,module,exports) {
+},{"browser-media-mime-type":"1MtBJ"}],"1MtBJ":[function(require,module,exports) {
 // sourced from:
 // http://www.leanbackplayer.com/test/h5mt.html
 // https://github.com/broofa/node-mime/blob/master/types.json
@@ -42154,17 +42165,17 @@ module.exports = function lookup(ext) {
     return mimeLookup[ext.toLowerCase()];
 };
 
-},{"./mime-types.json":"kDEdm"}],"kDEdm":[function(require,module,exports) {
+},{"./mime-types.json":"1nzio"}],"1nzio":[function(require,module,exports) {
 module.exports = JSON.parse("{\"audio/midi\":[\"mid\",\"midi\",\"kar\",\"rmi\"],\"audio/mp4\":[\"mp4a\",\"m4a\"],\"audio/mpeg\":[\"mpga\",\"mp2\",\"mp2a\",\"mp3\",\"m2a\",\"m3a\"],\"audio/ogg\":[\"oga\",\"ogg\",\"spx\"],\"audio/webm\":[\"weba\"],\"audio/x-matroska\":[\"mka\"],\"audio/x-mpegurl\":[\"m3u\"],\"audio/wav\":[\"wav\"],\"video/3gpp\":[\"3gp\"],\"video/3gpp2\":[\"3g2\"],\"video/mp4\":[\"mp4\",\"mp4v\",\"mpg4\"],\"video/mpeg\":[\"mpeg\",\"mpg\",\"mpe\",\"m1v\",\"m2v\"],\"video/ogg\":[\"ogv\"],\"video/quicktime\":[\"qt\",\"mov\"],\"video/webm\":[\"webm\"],\"video/x-f4v\":[\"f4v\"],\"video/x-fli\":[\"fli\"],\"video/x-flv\":[\"flv\"],\"video/x-m4v\":[\"m4v\"],\"video/x-matroska\":[\"mkv\",\"mk3d\",\"mks\"]}");
 
-},{}],"5jJTL":[function(require,module,exports) {
+},{}],"BMvO2":[function(require,module,exports) {
 module.exports = createAudioContext;
 function createAudioContext() {
     var AudioCtor = window.AudioContext || window.webkitAudioContext;
     return new AudioCtor();
 }
 
-},{}],"gpJiL":[function(require,module,exports) {
+},{}],"95JIj":[function(require,module,exports) {
 var xhr = require('xhr');
 var xhrProgress = require('xhr-progress');
 module.exports = xhrAudio;
@@ -42192,7 +42203,7 @@ function xhrAudio(audioContext, src, cb, progress, decoding) {
     }
 }
 
-},{"xhr":"03eiU","xhr-progress":"6w1kx"}],"03eiU":[function(require,module,exports) {
+},{"xhr":"ktCwp","xhr-progress":"li6so"}],"ktCwp":[function(require,module,exports) {
 "use strict";
 var window = require("global/window");
 var isFunction = require("is-function");
@@ -42381,7 +42392,7 @@ function getXml(xhr) {
 function noop() {
 }
 
-},{"global/window":"jv66m","is-function":"0FGtu","parse-headers":"4XDb2","xtend":"caf8p"}],"jv66m":[function(require,module,exports) {
+},{"global/window":"6cJ3b","is-function":"VXFX2","parse-headers":"a9AhT","xtend":"2GMXX"}],"6cJ3b":[function(require,module,exports) {
 var global = arguments[3];
 var win;
 if (typeof window !== "undefined") win = window;
@@ -42391,7 +42402,7 @@ else win = {
 };
 module.exports = win;
 
-},{}],"0FGtu":[function(require,module,exports) {
+},{}],"VXFX2":[function(require,module,exports) {
 module.exports = isFunction;
 var toString = Object.prototype.toString;
 function isFunction(fn) {
@@ -42400,7 +42411,7 @@ function isFunction(fn) {
     return string === '[object Function]' || typeof fn === 'function' && string !== '[object RegExp]' || typeof window !== 'undefined' && (fn === window.setTimeout || fn === window.alert || fn === window.confirm || fn === window.prompt);
 }
 
-},{}],"4XDb2":[function(require,module,exports) {
+},{}],"a9AhT":[function(require,module,exports) {
 var trim = function(string) {
     return string.replace(/^\s+|\s+$/g, '');
 }, isArray = function(arg) {
@@ -42425,7 +42436,7 @@ module.exports = function(headers) {
     return result;
 };
 
-},{}],"caf8p":[function(require,module,exports) {
+},{}],"2GMXX":[function(require,module,exports) {
 module.exports = extend;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 function extend() {
@@ -42438,7 +42449,7 @@ function extend() {
     return target;
 }
 
-},{}],"6w1kx":[function(require,module,exports) {
+},{}],"li6so":[function(require,module,exports) {
 var EventEmitter = require('events').EventEmitter;
 module.exports = progress1;
 function progress1(xhr) {
@@ -42469,7 +42480,7 @@ function progress1(xhr) {
     return emitter;
 }
 
-},{"events":"2e7OU"}],"2e7OU":[function(require,module,exports) {
+},{"events":"bHM3D"}],"bHM3D":[function(require,module,exports) {
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -42824,7 +42835,7 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
     else throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
 }
 
-},{}],"4FY2R":[function(require,module,exports) {
+},{}],"1lXNk":[function(require,module,exports) {
 var global = arguments[3];
 module.exports = global.performance && global.performance.now ? function now() {
     return performance.now();
@@ -42832,12 +42843,12 @@ module.exports = global.performance && global.performance.now ? function now() {
     return +new Date;
 };
 
-},{}],"eR4mO":[function(require,module,exports) {
+},{}],"5pPlI":[function(require,module,exports) {
 module.exports = function(audioContext) {
     if (audioContext.state === 'suspended' && typeof audioContext.resume === 'function') audioContext.resume();
 };
 
-},{}],"7mh4h":[function(require,module,exports) {
+},{}],"ewoSg":[function(require,module,exports) {
 var process = require("process");
 var EventEmitter = require('events').EventEmitter;
 var createAudio = require('simple-media-element').audio;
@@ -43005,7 +43016,7 @@ function createMediaSource(src, opt) {
     return emitter;
 }
 
-},{"process":"djbKH","events":"2e7OU","simple-media-element":"ejlrG","object-assign":"dDdxj","./resume-context":"eR4mO","./audio-context":"5jJTL","./can-play-src":"ij7WX","./event-add-once":"8Xzxc"}],"ejlrG":[function(require,module,exports) {
+},{"process":"lDnB8","events":"bHM3D","simple-media-element":"9NBUO","object-assign":"iUUFa","./resume-context":"5pPlI","./audio-context":"BMvO2","./can-play-src":"6xcS5","./event-add-once":"bNVOX"}],"9NBUO":[function(require,module,exports) {
 var isDom = require('is-dom');
 var lookup = require('browser-media-mime-type');
 module.exports.video = simpleMediaElement.bind(null, 'video');
@@ -43053,7 +43064,7 @@ function extension(data) {
     return data.substring(extIdx + 1);
 }
 
-},{"is-dom":"b51Nb","browser-media-mime-type":"70UIF"}],"b51Nb":[function(require,module,exports) {
+},{"is-dom":"ilCxr","browser-media-mime-type":"1MtBJ"}],"ilCxr":[function(require,module,exports) {
 var isObject = require('is-object');
 var isWindow = require('is-window');
 function isNode(val) {
@@ -43062,13 +43073,13 @@ function isNode(val) {
 }
 module.exports = isNode;
 
-},{"is-object":"htXyO","is-window":"hQNbV"}],"htXyO":[function(require,module,exports) {
+},{"is-object":"68P57","is-window":"fOGkw"}],"68P57":[function(require,module,exports) {
 'use strict';
 module.exports = function isObject(x) {
     return typeof x === 'object' && x !== null;
 };
 
-},{}],"hQNbV":[function(require,module,exports) {
+},{}],"fOGkw":[function(require,module,exports) {
 'use strict';
 module.exports = function(obj) {
     if (obj == null) return false;
@@ -43076,7 +43087,7 @@ module.exports = function(obj) {
     return o === o.window;
 };
 
-},{}],"dDdxj":[function(require,module,exports) {
+},{}],"iUUFa":[function(require,module,exports) {
 /*
 object-assign
 (c) Sindre Sorhus
@@ -43134,7 +43145,7 @@ module.exports = shouldUseNative() ? Object.assign : function(target, source) {
     return to;
 };
 
-},{}],"8Xzxc":[function(require,module,exports) {
+},{}],"bNVOX":[function(require,module,exports) {
 module.exports = addOnce;
 function addOnce(element, event, fn) {
     function tmp(ev) {
@@ -43144,7 +43155,7 @@ function addOnce(element, event, fn) {
     element.addEventListener(event, tmp, false);
 }
 
-},{}],"izmRC":[function(require,module,exports) {
+},{}],"h786j":[function(require,module,exports) {
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 module.exports = WebAudioAnalyser;
 function WebAudioAnalyser(audio, ctx, opts) {
@@ -43195,7 +43206,7 @@ WebAudioAnalyser.prototype.frequencies = function(output, channel) {
     return output;
 };
 
-},{}],"lOsk8":[function(require,module,exports) {
+},{}],"h5qkc":[function(require,module,exports) {
 module.exports = createAudioContext;
 function createAudioContext(desiredSampleRate) {
     var AudioCtor = window.AudioContext || window.webkitAudioContext;
@@ -43218,7 +43229,7 @@ function createAudioContext(desiredSampleRate) {
     return context;
 }
 
-},{}],"9XTqY":[function(require,module,exports) {
+},{}],"fDFbs":[function(require,module,exports) {
 var process = require("process");
 var once = require('once');
 var bufferToWav = require('audiobuffer-to-wav');
@@ -43319,7 +43330,7 @@ function detectMediaElementSource(cb, audioContext, timeoutDelay, ignoreCache) {
     }
 }
 
-},{"process":"djbKH","once":"6jtFN","audiobuffer-to-wav":"bWl3K"}],"6jtFN":[function(require,module,exports) {
+},{"process":"lDnB8","once":"irmmC","audiobuffer-to-wav":"fnEMV"}],"irmmC":[function(require,module,exports) {
 var wrappy = require('wrappy');
 module.exports = wrappy(once);
 module.exports.strict = wrappy(onceStrict);
@@ -43358,7 +43369,7 @@ function onceStrict(fn) {
     return f;
 }
 
-},{"wrappy":"lEHAN"}],"lEHAN":[function(require,module,exports) {
+},{"wrappy":"9NM6B"}],"9NM6B":[function(require,module,exports) {
 // Returns a wrapper function that returns a wrapped callback
 // The wrapper function should do some stuff, and return a
 // presumably different callback function.
@@ -43388,7 +43399,7 @@ function wrappy(fn, cb1) {
     return wrapper;
 }
 
-},{}],"bWl3K":[function(require,module,exports) {
+},{}],"fnEMV":[function(require,module,exports) {
 module.exports = audioBufferToWav;
 function audioBufferToWav(buffer, opt) {
     opt = opt || {
@@ -43449,7 +43460,7 @@ function writeString(view, offset, string) {
     for(var i = 0; i < string.length; i++)view.setUint8(offset + i, string.charCodeAt(i));
 }
 
-},{}],"4Botu":[function(require,module,exports) {
+},{}],"99ran":[function(require,module,exports) {
 var frequencyToIndex = require('audio-frequency-to-index');
 module.exports = analyserFrequencyAverage.bind(null, 255);
 module.exports.floatData = analyserFrequencyAverage.bind(null, 1);
@@ -43464,7 +43475,7 @@ function analyserFrequencyAverage(div, analyser, frequencies, minHz, maxHz) {
     return count === 0 ? 0 : sum / count;
 }
 
-},{"audio-frequency-to-index":"7XKYv"}],"7XKYv":[function(require,module,exports) {
+},{"audio-frequency-to-index":"37I5B"}],"37I5B":[function(require,module,exports) {
 var clamp = require('clamp');
 module.exports = frequencyToIndex;
 function frequencyToIndex(frequency, sampleRate, frequencyBinCount) {
@@ -43473,13 +43484,13 @@ function frequencyToIndex(frequency, sampleRate, frequencyBinCount) {
     return clamp(index, 0, frequencyBinCount);
 }
 
-},{"clamp":"dDm0c"}],"dDm0c":[function(require,module,exports) {
+},{"clamp":"gHusK"}],"gHusK":[function(require,module,exports) {
 module.exports = clamp;
 function clamp(value, min, max) {
     return min < max ? value < min ? min : value > max ? max : value : value < max ? max : value > min ? min : value;
 }
 
-},{}],"e8ecg":[function(require,module,exports) {
+},{}],"bMls6":[function(require,module,exports) {
 var cancelEvents = [
     'touchmove',
     'touchcancel',
@@ -43555,7 +43566,7 @@ function Tap(callback, options) {
     return listener;
 }
 
-},{}],"dUnf8":[function(require,module,exports) {
+},{}],"lsITd":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _gsap = require("gsap");
@@ -43988,7 +43999,7 @@ const UI = {
 };
 exports.default = UI;
 
-},{"gsap":"3ZIKo","./EventDispatcher":"i7RiA","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"gIwbI":[function(require,module,exports) {
+},{"gsap":"2aTR0","./EventDispatcher":"czwKm","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"2uVfE":[function(require,module,exports) {
 /*! three.modifiers-v2.5.7 */ !function(t, e) {
     if ("object" == typeof exports && "object" == typeof module) module.exports = e();
     else if ("function" == typeof define && define.amd) define([], e);
@@ -45975,7 +45986,7 @@ exports.default = UI;
     ]);
 });
 
-},{}],"1dgD0":[function(require,module,exports) {
+},{}],"kOUe0":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "color", ()=>color1
@@ -48288,7 +48299,7 @@ var index1 = {
 };
 exports.default = index1;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"lpfek":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"oK2e0":[function(require,module,exports) {
 var userAgent = navigator.userAgent;
 exports.userAgent = userAgent;
 exports.getUserAgent = function() {
@@ -48296,7 +48307,7 @@ exports.getUserAgent = function() {
     return exports.isMobile;
 };
 
-},{}],"hgBeC":[function(require,module,exports) {
+},{}],"3DGqd":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _sideScrollManager = require("./SideScrollManager");
@@ -48308,6 +48319,8 @@ let sideScrollComponentContainer;
 let contentBackgroundImagesContainer;
 let contentBackgroundImagesArray;
 let contentBodiesArray;
+let contentUpdateInProgress = false;
+let lastIndexToUpdateContent = -1;
 let imgsPath = './imgs/content-bg-imgs/';
 let currentContentItemIndex = 0;
 let prevContentItemIndex = 0;
@@ -48348,7 +48361,7 @@ const init = (params)=>{
     // Scroll compoment
     sideScrollComponentContainer = document.querySelector('.slide-scroll-component');
     contentBackgroundImagesContainer = document.querySelector('.content-bg-imgs-container');
-    contentBackgroundImagesContainer.style.top = '800px';
+    // contentBackgroundImagesContainer.style.top = '800px';
     contentBackgroundImagesArray = document.querySelectorAll('.content-bg-img');
     console.log('ContentManager contentBackgroundImagesArray() ' + contentBackgroundImagesArray.length);
     for(let i = 0; i < contentBackgroundImagesArray.length; i++){
@@ -48431,9 +48444,23 @@ const prevArrowClickHandler = ()=>{
 };
 // *********** NEEDS WORK 
 const changeContentFromIndex = (index)=>{
-    console.log('ContentManager.changeContentFromIndex() ' + index);
+    if (index < 0) {
+        console.log('*****************************  index < 1');
+        return;
+    }
+    //implementhere
+    if (!contentUpdateInProgress) {
+        contentUpdateInProgress = true;
+        console.log('*****************************  setting in profress');
+    } else {
+        console.log('*****************************  Flushing', index);
+        lastIndexToUpdateContent = index;
+        return;
+    }
+    console.log('*****************************  ContentManager.changeContentFromIndex() ' + index);
     let nextItem = contentBodiesArray[index];
     let nextDelayVal = 0.3;
+    let totalDelay = nextDelayVal * 3;
     console.log('*****************************  prev/next index ' + prevContentItemIndex + ' ' + currentContentItemIndex);
     //return;
     if (index > prevContentItemIndex) {
@@ -48479,7 +48506,23 @@ const changeContentFromIndex = (index)=>{
             x: 0,
             opacity: 1,
             ease: _gsap.Power3.easeOut,
-            delay: nextDelayVal + 0.1
+            delay: nextDelayVal + 0.1,
+            onComplete: function() {
+                setTimeout(()=>{
+                    console.log('*****************************  Popping out', lastIndexToUpdateContent);
+                    currentItem = nextItem;
+                    prevContentItemIndex = index;
+                    //
+                    updateBackgroundImageIndex(currentContentItemIndex);
+                    clicked = false;
+                    contentUpdateInProgress = false;
+                    if (lastIndexToUpdateContent > -1) {
+                        let tempIdx = lastIndexToUpdateContent;
+                        lastIndexToUpdateContent = -1;
+                        changeContentFromIndex(tempIdx);
+                    }
+                }, totalDelay);
+            }
         });
     } else {
         _gsap.gsap.set(nextItem.icon, {
@@ -48526,14 +48569,23 @@ const changeContentFromIndex = (index)=>{
             ease: _gsap.Power3.easeOut,
             delay: nextDelayVal + 0.1,
             onComplete: function() {
-                clicked = false;
+                setTimeout(()=>{
+                    console.log('*****************************  Popping out', lastIndexToUpdateContent);
+                    currentItem = nextItem;
+                    prevContentItemIndex = index;
+                    //
+                    updateBackgroundImageIndex(currentContentItemIndex);
+                    clicked = false;
+                    contentUpdateInProgress = false;
+                    if (lastIndexToUpdateContent > -1) {
+                        let tempIdx = lastIndexToUpdateContent;
+                        lastIndexToUpdateContent = -1;
+                        changeContentFromIndex(tempIdx);
+                    }
+                }, totalDelay);
             }
         });
     }
-    currentItem = nextItem;
-    prevContentItemIndex = index;
-    //
-    updateBackgroundImageIndex(currentContentItemIndex);
 };
 const sideScrollComponentIndexChangeHandler = (evt)=>{
     console.log('ContentManager.sideScrollComponentIndexChangeHandler() ' + evt.index);
@@ -48581,7 +48633,7 @@ const Content = {
 };
 exports.default = Content;
 
-},{"./SideScrollManager":"axfwX","gsap":"3ZIKo","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"axfwX":[function(require,module,exports) {
+},{"./SideScrollManager":"8iJrG","gsap":"2aTR0","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"8iJrG":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _gsap = require("gsap");
@@ -48627,6 +48679,8 @@ let currentContentIndex = 0;
 let newDragScrollVal = 0;
 let globalScrollDist = 0;
 let isMobile;
+let gotoSlideAlreadyInProgress = false;
+let gotoSlideLatestValue = -1;
 const dispatcher = new _eventDispatcherDefault.default();
 const init = (params)=>{
     console.log('SideScrollManager.init()');
@@ -48705,6 +48759,11 @@ const goToSlideVal = (val)=>{
     console.log('newSlideIndex ' + newSlideIndex);
 };
 const goToSlideIndex = (index)=>{
+    if (!gotoSlideAlreadyInProgress) gotoSlideAlreadyInProgress = true;
+    else {
+        gotoSlideLatestValue = index;
+        return;
+    }
     let newSlideVal = getValueFromIndex(index);
     dispatcher.dispatchEvent('componentIndexChange', {
         index: index
@@ -48767,6 +48826,11 @@ const goToSlideIndex = (index)=>{
     }
     currentContentIndex = index;
     currentScrollVal = getValueFromIndex(currentContentIndex);
+    gotoSlideAlreadyInProgress = false;
+    if (gotoSlideLatestValue > -1) {
+        gotoSlideLatestValue = -1;
+        goToSlideIndex(gotoSlideLatestValue);
+    }
 };
 const getValueFromIndex = (index)=>{
     let valFromIndex = parseFloat((index * 0.2).toFixed(1));
@@ -48842,7 +48906,7 @@ const updateScrollVal = (val)=>{
 };
 const pointerDown = (evt)=>{
     if (isMobile) {
-        disableScroll(evt);
+        // disableScroll(evt);
         slideStartX = evt.touches[0].clientX;
         window.addEventListener('touchmove', mousemove);
         window.addEventListener('touchend', pointerUp);
@@ -48867,10 +48931,10 @@ const pointerUp = (evt)=>{
     console.log('currentScrollVal ' + currentScrollVal);
     newDragScrollVal = 0;
     globalScrollDist = 0;
-    enableScroll(evt);
+// enableScroll(evt);
 };
 function disableScroll(e) {
-    noscroll = true;
+    // noscroll = ;
     if (window.addEventListener) window.addEventListener("DOMMouseScroll", e.preventDefault(), false);
     window.onwheel = e.preventDefault(); // modern standard
     window.onmousewheel = document.onmousewheel = e.preventDefault(); // older browsers, IE
@@ -48878,7 +48942,7 @@ function disableScroll(e) {
     document.onkeydown = e.preventDefault();
 }
 function enableScroll(e) {
-    noscroll = false;
+    // noscroll = false;
     if (window.removeEventListener) window.removeEventListener("DOMMouseScroll", e.preventDefault(), false);
     window.onmousewheel = document.onmousewheel = null;
     window.onwheel = null;
@@ -48941,6 +49005,7 @@ const resize = (width, height)=>{
         x: (window.innerWidth - slideWidth) * 0.5
     });
 };
+window.slideScrollResize = resize;
 const SideScrollManager = {
     init,
     controlItemClickedHandler,
@@ -48950,7 +49015,7 @@ const SideScrollManager = {
 };
 exports.default = SideScrollManager;
 
-},{"gsap":"3ZIKo","./SideScrollControls":"5gtCT","./EventDispatcher":"i7RiA","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}],"5gtCT":[function(require,module,exports) {
+},{"gsap":"2aTR0","./SideScrollControls":"dTahR","./EventDispatcher":"czwKm","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"dTahR":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _gsap = require("gsap");
@@ -49131,5 +49196,6 @@ const SideScrollControls = {
 };
 exports.default = SideScrollControls;
 
-},{"gsap":"3ZIKo","./EventDispatcher":"i7RiA","@parcel/transformer-js/src/esmodule-helpers.js":"8FsVl"}]},["iSgPd","2dX4u"], "2dX4u", "parcelRequirecb31")
+},{"gsap":"2aTR0","./EventDispatcher":"czwKm","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}]},["lVHAe","hOJOi"], "hOJOi", "parcelRequirecb31")
 
+//# sourceMappingURL=index.69062844.js.map

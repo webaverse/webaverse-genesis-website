@@ -28,7 +28,8 @@ let currentContentIndex = 0;
 let newDragScrollVal = 0;
 let globalScrollDist = 0;
 let isMobile;
-
+let gotoSlideAlreadyInProgress = false;
+let gotoSlideLatestValue = -1;
 
 const dispatcher = new EventDispatcher();
 
@@ -133,6 +134,13 @@ const goToSlideVal = ( val ) => {
 
 const goToSlideIndex = ( index ) => {
 
+    if(!gotoSlideAlreadyInProgress)
+        gotoSlideAlreadyInProgress = true;
+    else{
+        gotoSlideLatestValue = index;
+        return;
+    }
+
     let newSlideVal = getValueFromIndex( index );
 
     dispatcher.dispatchEvent( 'componentIndexChange', { index: index } );
@@ -171,6 +179,11 @@ const goToSlideIndex = ( index ) => {
 
     currentContentIndex = index;
     currentScrollVal = getValueFromIndex( currentContentIndex );
+    gotoSlideAlreadyInProgress = false;
+    if(gotoSlideLatestValue > -1){
+        gotoSlideLatestValue = -1;
+        goToSlideIndex(gotoSlideLatestValue);
+    }
 }
 
 const getValueFromIndex = ( index ) => {
@@ -235,7 +248,7 @@ const updateScrollVal = ( val ) => {
 const pointerDown = ( evt ) => {
     
     if( isMobile ){
-        disableScroll(evt);
+        // disableScroll(evt);
         slideStartX = evt.touches[ 0 ].clientX;
         window.addEventListener( 'touchmove', mousemove );
         window.addEventListener( 'touchend', pointerUp );
@@ -272,12 +285,12 @@ const pointerUp = ( evt ) => {
     newDragScrollVal = 0;
     globalScrollDist = 0;
 
-    enableScroll(evt);
+    // enableScroll(evt);
 
 }
 
 function disableScroll(e) {
-    noscroll = true;
+    // noscroll = ;
     if (window.addEventListener)
         window.addEventListener("DOMMouseScroll", e.preventDefault(), false);
     window.onwheel = e.preventDefault(); // modern standard
@@ -287,7 +300,7 @@ function disableScroll(e) {
 }
   
 function enableScroll(e) {
-    noscroll = false;
+    // noscroll = false;
     if (window.removeEventListener)
         window.removeEventListener("DOMMouseScroll", e.preventDefault(), false);
     window.onmousewheel = document.onmousewheel = null;
@@ -376,6 +389,8 @@ const resize = ( width, height ) => {
 
     gsap.set( slideItemsContainer, { x: (window.innerWidth - slideWidth ) * 0.5 })
 }
+
+window.slideScrollResize = resize;
 
 const SideScrollManager = {
     init,

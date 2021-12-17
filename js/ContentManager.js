@@ -8,6 +8,8 @@ let contentBackgroundImagesContainer;
 let contentBackgroundImagesArray;
 
 let contentBodiesArray;
+let contentUpdateInProgress = false;
+let lastIndexToUpdateContent = -1;
 
 let imgsPath = './imgs/content-bg-imgs/';
 
@@ -46,7 +48,7 @@ const init = ( params ) => {
     sideScrollComponentContainer = document.querySelector( '.slide-scroll-component' );
     
     contentBackgroundImagesContainer = document.querySelector( '.content-bg-imgs-container' );
-    contentBackgroundImagesContainer.style.top = '800px';
+    // contentBackgroundImagesContainer.style.top = '800px';
     contentBackgroundImagesArray = document.querySelectorAll( '.content-bg-img' );
     
     console.log( 'ContentManager contentBackgroundImagesArray() ' + contentBackgroundImagesArray.length )
@@ -155,12 +157,26 @@ const prevArrowClickHandler = () => {
 
 const changeContentFromIndex = ( index ) => {
 
-   
+    if(index<0){
+        console.log('*****************************  index < 1')
+        return;
+    }
 
-    console.log( 'ContentManager.changeContentFromIndex() ' + index )
+    //implementhere
+    if(!contentUpdateInProgress){
+        contentUpdateInProgress = true;
+        console.log('*****************************  setting in profress')
+    }else{
+        console.log('*****************************  Flushing',index)
+        lastIndexToUpdateContent = index;
+        return;
+    }
+
+    console.log( '*****************************  ContentManager.changeContentFromIndex() ' + index )
 
     let nextItem = contentBodiesArray[ index ];
     let nextDelayVal = 0.3;
+    let totalDelay = nextDelayVal * 3;
 
     console.log( '*****************************  prev/next index ' + prevContentItemIndex  + ' ' + currentContentItemIndex);
 
@@ -178,7 +194,28 @@ const changeContentFromIndex = ( index ) => {
 
         gsap.to( nextItem.icon, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
         gsap.to( nextItem.headline, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
-        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1});
+        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1, onComplete:function(){
+            
+            setTimeout(() => {
+                console.log('*****************************  Popping out',lastIndexToUpdateContent)
+
+
+                currentItem = nextItem;
+                prevContentItemIndex = index;
+                //
+                updateBackgroundImageIndex( currentContentItemIndex );
+
+
+                clicked = false;
+                contentUpdateInProgress = false;
+                if(lastIndexToUpdateContent > -1){
+                    let tempIdx = lastIndexToUpdateContent;
+                    lastIndexToUpdateContent = -1;
+                    changeContentFromIndex(tempIdx);
+                }                    
+            }, totalDelay);
+
+         }});
 
     } else {
         gsap.set( nextItem.icon, { x: -animationOffsetX } )
@@ -192,17 +229,26 @@ const changeContentFromIndex = ( index ) => {
         gsap.to( nextItem.icon, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
         gsap.to( nextItem.headline, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
         gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1, onComplete:function(){
-            clicked = false;
+
+            setTimeout(() => {
+                console.log('*****************************  Popping out',lastIndexToUpdateContent)
+
+                currentItem = nextItem;
+                prevContentItemIndex = index;
+                //
+                updateBackgroundImageIndex( currentContentItemIndex );
+            
+                clicked = false;
+                contentUpdateInProgress = false;
+                if(lastIndexToUpdateContent > -1){
+                    let tempIdx = lastIndexToUpdateContent;
+                    lastIndexToUpdateContent = -1;
+                    changeContentFromIndex(tempIdx);
+                }                    
+            }, totalDelay);
+
          }});
     }
-
-    currentItem = nextItem;
-
-    prevContentItemIndex = index;
-
-    //
-    updateBackgroundImageIndex( currentContentItemIndex );
-
 }
 
 const sideScrollComponentIndexChangeHandler = ( evt ) => {

@@ -159,6 +159,8 @@ function init( sceneParams ){
                 camera: camera
               });
 
+            window.dispatchEvent(new Event('resize'));
+
         }
     );
 
@@ -664,6 +666,9 @@ const resize = () => {
 
     renderer.setSize( windowWidth, windowHeight );
 }
+
+
+window.WebaWorldResize = resize;
 
 
 const mouseMove = ( e ) => {

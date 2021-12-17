@@ -20,6 +20,7 @@ let stats;
 let showStats = false;
 let navGrad;
 let nav = document.querySelector('.nav');
+let originalContentHeight = null;
 //import "./css/index.css";
 
 console.log = function(){};
@@ -125,9 +126,7 @@ function init(){
     window.addEventListener("scroll", updateScroll );
 
     window.addEventListener( 'resize', ()=>{
-        if(document.body.offsetWidth != width || document.body.offsetHeight != height) {
             resize();
-        }
     }, false );
 
     if( isMobile ){
@@ -167,6 +166,7 @@ const render = () => {
   ) */
 }
 
+
 window.WebaWorld = WebaWorld;
 window.ContentManager = ContentManager;
 
@@ -174,7 +174,22 @@ const resize = () => {
 
     windowWidth = document.documentElement.clientWidth;
     windowHeight = document.documentElement.clientHeight;
-    
+    //set it to 0 so calculation can be made easily
+    //contentContainer.style.height = '100vh';
+    // alert(document.body.scrollHeight);
+    if(originalContentHeight == null && document.querySelector( '.content-container' ).getBoundingClientRect().height > 0){
+        originalContentHeight = document.querySelector( '.content-container' ).getBoundingClientRect().height;
+    }
+    if(originalContentHeight != null){
+        if(screen.width < 500){
+            contentContainer.style.height = originalContentHeight + 'px';
+        }
+        else{
+            document.querySelector( '.content-container' ).style.height =  (originalContentHeight
+                + 0.5 * document.querySelector( '.slide-scroll-component' ).getBoundingClientRect().height) + 'px';    
+    }
+
+    }
     WebaWorld.resize( windowWidth, windowHeight );
     ContentManager.resize( windowWidth, windowHeight );
 

@@ -1,5 +1,5 @@
 {
-    "minifySvg": false,
+  "compress": {
     "drop_console": false
-
+  }
 }
