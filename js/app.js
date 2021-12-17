@@ -159,19 +159,6 @@ const updateScroll = ( e ) => {
     navGrad.style.opacity = gradVal;
 }
 
-const getLargestChildHeight = () => {
-
-    let largestHeight = 0; 
-
-    for (const iterator of document.querySelector('.content-scroll-container').children) {
-        if(iterator.getBoundingClientRect().height > largestHeight){
-            largestHeight = iterator.getBoundingClientRect().height;
-        }
-    }
-
-    return largestHeight;
-
-}
 
 const render = () => {
   /* return (
@@ -180,6 +167,20 @@ const render = () => {
 }
 
 const resize = () => {
+
+    const getLargestChildHeight = () => {
+
+        let largestHeight = 0; 
+    
+        for (const iterator of document.querySelector('.content-scroll-container').children) {
+            if(iterator.getBoundingClientRect().height > largestHeight){
+                largestHeight = iterator.getBoundingClientRect().height;
+            }
+        }
+    
+        return largestHeight;
+    
+    }
 
     windowWidth = document.documentElement.clientWidth;
     windowHeight = document.documentElement.clientHeight;
