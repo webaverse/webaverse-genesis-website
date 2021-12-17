@@ -159,7 +159,7 @@ const updateScroll = ( e ) => {
     navGrad.style.opacity = gradVal;
 }
 
-getLargestChildHeight = () => {
+const getLargestChildHeight = () => {
 
     let largestHeight = 0; 
 
