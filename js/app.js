@@ -129,6 +129,10 @@ function init(){
             resize();
     }, false );
 
+    window.addEventListener( 'orientationchange', ()=>{
+        resize();
+    }, false );
+
     if( isMobile ){
         window.addEventListener('touchstart', WebaWorld.touchMove, false );
         window.addEventListener( 'touchmove', WebaWorld.touchMove, false )
@@ -150,9 +154,9 @@ const update = () => {
 };
 
 const updateScroll = ( e ) => {
-    
+    // return;
     var yVal = window.scrollY / window.innerHeight;
-    gsap.set( contentContainer, { y: -( yVal * ( window.innerHeight * 0.25 ) ) })
+    //gsap.set( contentContainer, { y: -( yVal * ( window.innerHeight * 0.25 ) ) })
     WebaWorld.updateCameraPosition( yVal * 1.5 );
     ContentManager.updateScroll( yVal );
     let gradVal = Math.min( yVal * 10, 1 );
@@ -168,27 +172,17 @@ const render = () => {
 
 const resize = () => {
 
-    const getLargestChildHeight = () => {
-
-        let largestHeight = 0; 
-    
-        for (const iterator of document.querySelector('.content-scroll-container').children) {
-            if(iterator.getBoundingClientRect().height > largestHeight){
-                largestHeight = iterator.getBoundingClientRect().height;
-            }
-        }
-    
-        return largestHeight;
-    
-    }
-
     windowWidth = document.documentElement.clientWidth;
     windowHeight = document.documentElement.clientHeight;
-
-    document.querySelector( '.content-container' ).style.height = '0px';
-    setTimeout(() => {
-        document.querySelector( '.content-container' ).style.height = (document.body.scrollHeight - 0.60* getLargestChildHeight())+ "px"
-    }, 1000);
+    if(window.innerWidth < 600){
+        document.querySelector( '.content-container' ).style.height = 'auto';        
+    }
+    else{
+        document.querySelector( '.content-container' ).style.height = '0px';
+        setTimeout(() => {
+            document.querySelector( '.content-container' ).style.height = (document.body.scrollHeight - window.innerHeight)+ "px"
+        }, 500);
+    }
     WebaWorld.resize( windowWidth, windowHeight );
     ContentManager.resize( windowWidth, windowHeight );
 

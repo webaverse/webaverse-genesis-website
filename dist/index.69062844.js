@@ -593,6 +593,9 @@ function init() {
     window.addEventListener('resize', ()=>{
         resize();
     }, false);
+    window.addEventListener('orientationchange', ()=>{
+        resize();
+    }, false);
     if (isMobile) {
         window.addEventListener('touchstart', _webaWorldDefault.default.touchMove, false);
         window.addEventListener('touchmove', _webaWorldDefault.default.touchMove, false);
@@ -609,19 +612,13 @@ const update = ()=>{
     });
 };
 const updateScroll = (e)=>{
+    // return;
     var yVal = window.scrollY / window.innerHeight;
-    _gsap.gsap.set(contentContainer, {
-        y: -(yVal * (window.innerHeight * 0.25))
-    });
+    //gsap.set( contentContainer, { y: -( yVal * ( window.innerHeight * 0.25 ) ) })
     _webaWorldDefault.default.updateCameraPosition(yVal * 1.5);
     _contentManagerDefault.default.updateScroll(yVal);
     let gradVal = Math.min(yVal * 10, 1);
     navGrad.style.opacity = gradVal;
-};
-getLargestChildHeight = ()=>{
-    let largestHeight = 0;
-    for (const iterator of document.querySelector('.content-scroll-container').children)if (iterator.getBoundingClientRect().height > largestHeight) largestHeight = iterator.getBoundingClientRect().height;
-    return largestHeight;
 };
 const render = ()=>{
 /* return (
@@ -630,10 +627,13 @@ const render = ()=>{
 const resize = ()=>{
     windowWidth = document.documentElement.clientWidth;
     windowHeight = document.documentElement.clientHeight;
-    document.querySelector('.content-container').style.height = '0px';
-    setTimeout(()=>{
-        document.querySelector('.content-container').style.height = document.body.scrollHeight - 0.6 * getLargestChildHeight() + "px";
-    }, 1000);
+    if (window.innerWidth < 600) document.querySelector('.content-container').style.height = 'auto';
+    else {
+        document.querySelector('.content-container').style.height = '0px';
+        setTimeout(()=>{
+            document.querySelector('.content-container').style.height = document.body.scrollHeight - window.innerHeight + "px";
+        }, 500);
+    }
     _webaWorldDefault.default.resize(windowWidth, windowHeight);
     _contentManagerDefault.default.resize(windowWidth, windowHeight);
 };
@@ -48417,7 +48417,7 @@ const init = (params)=>{
     }
 };
 var clicked = false;
-const nextArrowClickHandler = async ()=>{
+const nextArrowClickHandler = ()=>{
     if (!clicked) {
         clicked = true;
         currentContentItemIndex++;
@@ -48426,7 +48426,8 @@ const nextArrowClickHandler = async ()=>{
         //console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
         //SideScrollManager.updateItemIndex( currentContentItemIndex  );
         _sideScrollManagerDefault.default.changeSlideItemIndex(currentContentItemIndex);
-        changeContentFromIndex(currentContentItemIndex);
+    //console.log('*****************************  next clicked')
+    //changeContentFromIndex( currentContentItemIndex );
     //updateBackgroundImageIndex( currentContentItemIndex + 1 )
     }
 };
@@ -48438,7 +48439,7 @@ const prevArrowClickHandler = ()=>{
         if (currentContentItemIndex < 0) currentContentItemIndex = contentItemsLength - 1;
         console.log('PREV CLICKED ', currentContentItemIndex);
         _sideScrollManagerDefault.default.changeSlideItemIndex(currentContentItemIndex);
-        changeContentFromIndex(currentContentItemIndex);
+    // changeContentFromIndex( currentContentItemIndex );
     }
 };
 // *********** NEEDS WORK 
@@ -48447,10 +48448,15 @@ const changeContentFromIndex = (index)=>{
         console.log('*****************************  index < 1');
         return;
     }
+    try {
+        throw new Error('Gaga');
+    } catch (e) {
+        console.warn('*****************************   ', e);
+    }
     //implementhere
     if (!contentUpdateInProgress) {
         contentUpdateInProgress = true;
-        console.log('*****************************  setting in profress');
+        console.log('*****************************  setting in progress');
     } else {
         console.log('*****************************  Flushing', index);
         lastIndexToUpdateContent = index;

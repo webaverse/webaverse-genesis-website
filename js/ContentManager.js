@@ -118,8 +118,7 @@ const init = ( params ) => {
 
 var clicked = false;
 
-const nextArrowClickHandler = async () => {
-
+const nextArrowClickHandler = () => {
     if(!clicked) {
         clicked = true;
         currentContentItemIndex++;
@@ -128,7 +127,8 @@ const nextArrowClickHandler = async () => {
         //console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
         //SideScrollManager.updateItemIndex( currentContentItemIndex  );
         SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
-        changeContentFromIndex( currentContentItemIndex );
+        //console.log('*****************************  next clicked')
+        //changeContentFromIndex( currentContentItemIndex );
         
         //updateBackgroundImageIndex( currentContentItemIndex + 1 )
     }
@@ -146,8 +146,7 @@ const prevArrowClickHandler = () => {
         
         console.log( 'PREV CLICKED ', currentContentItemIndex );
         SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
-
-        changeContentFromIndex( currentContentItemIndex );
+        // changeContentFromIndex( currentContentItemIndex );
     }
     
 }
@@ -161,11 +160,18 @@ const changeContentFromIndex = ( index ) => {
         console.log('*****************************  index < 1')
         return;
     }
+    if(true){
+        try{
+            throw new Error('Gaga');
+        }catch(e){
+            console.warn('*****************************   ',e);
+        }
+    }
 
     //implementhere
     if(!contentUpdateInProgress){
         contentUpdateInProgress = true;
-        console.log('*****************************  setting in profress')
+        console.log('*****************************  setting in progress')
     }else{
         console.log('*****************************  Flushing',index)
         lastIndexToUpdateContent = index;
@@ -256,7 +262,6 @@ const sideScrollComponentIndexChangeHandler = ( evt ) => {
     currentContentItemIndex = evt.index;
 
     //if( evt.index == currentContentItemIndex ) return;
-
     changeContentFromIndex( evt.index )
     
 
