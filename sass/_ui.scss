@@ -12,14 +12,13 @@
     pointer-events: none;
 }
 
-
 .ui-cont {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index:101;
+    z-index: 101;
     pointer-events: none;
 }
 
@@ -40,12 +39,11 @@
 @media only screen and (max-height: 480px) {
     .ui-logo-container {
         width: 70px !important;
-        left: calc( 50vw - 35px) !important;
+        left: calc( 0vw + 17.5px) !important;
     }
 }
 
 .ui-nav {
-
     width: auto;
     height: 40px;
     position: absolute;
@@ -54,7 +52,7 @@
     cursor: pointer;
     pointer-events: none;
     position: fixed;
-    left: calc( 50% - 159px );
+    left: calc( 50% - 159px);
     margin: 0 auto;
 }
 
@@ -66,7 +64,6 @@
     margin-right: 30px;
     font-size: 13px;
     pointer-events: all;
-
 }
 
 .ui-nav-item-m {
@@ -87,9 +84,8 @@
     height: 100%;
     background-color: black;
     z-index: 0;
-
     pointer-events: none;
-}   
+}
 
 .ui-top-cont {
     position: absolute;
@@ -130,7 +126,6 @@
     background-color: black;
     opacity: 0;
     cursor: pointer;
-
     pointer-events: all;
 }
 
@@ -174,7 +169,7 @@
     width: 100px;
     // height: 80px;
     pointer-events: none;
-    left: calc( 50vw - 50px);
+    left: calc( 0vw + 25px);
 }
 
 .ui-genesis-container {
@@ -217,7 +212,7 @@
     padding-top: 2px;
     width: 30px;
     height: 10px;
-    background-color: rgba( 129, 27, 239, 0.4 );
+    background-color: rgba( 129, 27, 239, 0.4);
 }
 
 .ui-alpha-m {
@@ -227,7 +222,7 @@
     right: 262px;
     width: 25px;
     height: 10px;
-    background-color: rgba( 129, 27, 239, 0.4 );
+    background-color: rgba( 129, 27, 239, 0.4);
 }
 
 .ui-alpha-text {
@@ -240,7 +235,7 @@
 .ui-loadbar-cont {
     width: 100px;
     height: 1px;
-    background-color: rgba( 129, 27, 239, 0.4 );
+    background-color: rgba( 129, 27, 239, 0.4);
 }
 
 .ui-load-bar {
@@ -248,4 +243,3 @@
     height: 1px;
     background-color: white;
 }
-

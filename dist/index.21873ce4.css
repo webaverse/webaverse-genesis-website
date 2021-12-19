@@ -610,7 +610,7 @@ img {
 @media only screen and (max-height: 480px) {
   .ui-logo-container {
     width: 70px !important;
-    left: calc(50vw - 35px) !important;
+    left: calc(0vw + 17.5px) !important;
   }
 }
 
@@ -738,7 +738,7 @@ img {
   padding-top: 15px;
   width: 100px;
   pointer-events: none;
-  left: calc(50vw - 50px);
+  left: calc(0vw + 25px);
 }
 
 .ui-genesis-container {
@@ -940,7 +940,7 @@ img {
 
 @media only screen and (min-width: 768px) {
   .header-text {
-    font-size: 4rem;
+    font-size: 2rem;
     line-height: 4rem;
   }
 

@@ -8,9 +8,10 @@
     src: url('../fonts/neutra/NeutraText-Bold.otf');
 }
 
-$header-family: 'Bowlby One SC', cursive;
-$body-family: 'Neutra', sans-serif;
-
+$header-family: 'Bowlby One SC',
+cursive;
+$body-family: 'Neutra',
+sans-serif;
 // Globals
 .header-text {
     font-weight: normal;
@@ -19,7 +20,6 @@ $body-family: 'Neutra', sans-serif;
     font-size: 2.2rem;
     line-height: 2.2rem;
     // letter-spacing: 0.03em;
-
 }
 
 .mmo-logo {
@@ -34,8 +34,6 @@ $body-family: 'Neutra', sans-serif;
     }
 }
 
-
-
 @media only screen and (min-width: 768px) {
     .mmo-logo {
         width: 15rem;
@@ -49,14 +47,12 @@ $body-family: 'Neutra', sans-serif;
 //         margin-bottom: 1rem;
 //     }
 // }
-
 .subheader-text {
     font-weight: normal;
     color: white;
     font-family: $header-family;
     font-size: 2rem;
     // letter-spacing: 0.03em;
-    
     //line-height: 1.5rem;
 }
 
@@ -71,7 +67,6 @@ $body-family: 'Neutra', sans-serif;
 //         font-size: 1.5rem;
 //     }
 // }
-
 .body-text {
     color: white;
     font-family: $body-family;
@@ -81,10 +76,7 @@ $body-family: 'Neutra', sans-serif;
     //
 }
 
-
-
 // Locals
-
 .intro-header-text {
     margin-bottom: 1rem;
     margin: 0 auto;
@@ -117,94 +109,76 @@ $body-family: 'Neutra', sans-serif;
 }
 
 @media only screen and (min-width: 800px) {
-    
     .intro-body-text {
         width: 60%;
     }
 }
 
 // content 
-
 .content-scroll-item-headline-text {
     padding-top: 30px;
     //max-width: 600px;
     //margin: 0 auto;
 }
 
-
 @media only screen and (min-width: 640px) {
     .header-text {
         font-size: 3rem;
         line-height: 3rem;
         // letter-spacing: 0.03em;
-
     }
-    
     .subheader-text {
         font-family: $header-family;
         font-size: 2rem;
     }
-    
     .body-text {
         font-size: 1.5rem;
         line-height: 2rem;
     }
-
     .intro-sub-text {
         margin-bottom: 0.5rem;
     }
-    
     .intro-header-text {
         margin-bottom: 1rem;
     }
-
 }
 
 @media only screen and (min-width: 768px) {
-    
     .header-text {
-        font-size: 4rem;
+        font-size: 2rem;
         line-height: 4rem;
         // letter-spacing: 0.03em;
     }
-    
     .subheader-text {
-        
         font-family: $header-family;
         font-size: 2rem;
         // letter-spacing: 0.03em;
     }
-    
     .body-text {
         font-size: 1.5rem;
         line-height: 2rem;
     }
-
-     .intro-sub-text {
+    .intro-sub-text {
         margin-bottom: 1rem;
     }
-    
     .intro-header-text {
         margin-bottom: 1rem;
     }
 }
 
 @media only screen and (min-width: 2000px) {
-    
     .body-text {
         max-width: 50vw;
     }
 }
 
 @media only screen and (min-width: 3000px) {
-    
     .body-text {
         max-width: 30vw;
     }
 }
 
 @media only screen and (min-width: 7000px) {
-    
     .body-text {
         max-width: 20vw;
     }
