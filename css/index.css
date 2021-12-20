@@ -574,7 +574,8 @@ img {
 
 @media only screen and (max-height: 480px) {
   .ui-logo-container {
-    width: 70px !important;
+    width: 90px !important;
+    height: 124px !important;
     left: calc(0vw + 17.5px) !important;
   }
 }
@@ -700,9 +701,18 @@ img {
 .ui-logo-container {
   position: relative;
   padding-top: 15px;
-  width: 100px;
+  width: 90px !important;
+  height: 124px !important;
   pointer-events: none;
   left: calc(0vw + 25px);
+}
+
+.weba-logo-container {
+  position: absolute;
+  top: 40px;
+  width: 100px;
+  pointer-events: none;
+  left: calc(100vw - 190px);
 }
 
 .ui-genesis-container {

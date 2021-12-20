@@ -41724,8 +41724,42 @@ function canplay() {
     }, audioContext);
 }
 function start(audioContext, shouldBuffer) {
-    var amount, err;
-    return;
+    for(let i = 0; i < manifest.length; i++){
+        let src = manifest[i].src;
+        let player = _audioPlayerDefault.default(src, {
+            context: audioContext,
+            buffer: true,
+            loop: manifest[i].loops,
+            id: manifest[i].id
+        });
+        player.id = manifest[i].id;
+        let audioUtil = _webAudioAnalyserDefault.default(player.node, player.context, {
+            stereo: false
+        });
+        let analyser = audioUtil.analyser;
+        player.once('decoding', function(amount) {
+        });
+        player.on('end', function() {
+            allowplay = true;
+        //player.volume = 1.0;
+        });
+        player.on('error', function(err) {
+            console.error(err.message);
+        });
+        player.on('load', function() {
+            /* console.log('Source:', player.element ? 'MediaElement' : 'Buffer')
+            console.log('Playing', Math.round( player.duration ) + 's of audio...')
+            console.log( 'LOADED AUDIO ID : ',  player.id ) */ player.play();
+            player.volume = 0;
+            exports.dispatcher.dispatchEvent('audioLoaded', {
+                id: player.id
+            });
+        });
+        audioObjectsArr.push({
+            player: player,
+            id: manifest[i].id
+        });
+    }
 }
 exports.stopAll = function() {
     //console.log( 'AudioManager.stopAll()')
@@ -41742,15 +41776,35 @@ exports.stopAll = function() {
     } */ });
 };
 exports.playAll = function() {
-    var player;
     //console.log( 'AudioManager.playAll()')
-    return;
+    audioObjectsArr.forEach((player)=>{
+        //console.log( 'player ', player.player )
+        player.player.play();
+    /* console.log( 'Audio ' + player.id );
+    player.pause();
+
+   
+    if (player.playing) {
+      console.log( 'is Playing ' + player.id )
+      player.pause();
+    } */ });
 };
 function click(id, volume = 1) {
-    return;
+    if (!allowplay) return;
+    allowplay = false;
+    let playerObj = audioObjectsArr.find((p)=>p.id === id
+    );
+    if (playerObj == undefined) return;
+    let player = playerObj.player;
+    player.volume = volume;
+    player.loop = loop;
+    if (player.playing) {
+        player.stop();
+        player.play();
+    } else player.play();
 }
 exports.play = function(id, volume = 1) {
-    return;
+    if (click) click(id, volume);
 };
 exports.fadeVolume = function(id, volume) {
     let playerObj = audioObjectsArr.find((p)=>p.id === id
@@ -43571,6 +43625,7 @@ parcelHelpers.defineInteropFlag(exports);
 var _gsap = require("gsap");
 var _eventDispatcher = require("./EventDispatcher");
 var _eventDispatcherDefault = parcelHelpers.interopDefault(_eventDispatcher);
+var _logoTypePng = require("../assets/logo_type.png");
 let logo, logoImg;
 let nav;
 let uiDiv;
@@ -43667,7 +43722,7 @@ const init = (params)=>{
     uiDiv = document.createElement('div');
     uiDiv.className = 'ui-cont';
     logoImg = document.createElement('img');
-    logoImg.src = './imgs/logo-new.png';
+    logoImg.src = './imgs/logo.gif';
     logoImg.className = isMobile ? 'ui-logo-m' : 'ui-logo';
     genesisContainer = document.createElement('div');
     genesisContainer.className = "ui-genesis-container";
@@ -43675,6 +43730,12 @@ const init = (params)=>{
     logoContainer.className = "ui-logo-container";
     logoContainer.appendChild(logoImg);
     logoContainer.appendChild(genesisContainer);
+    let webaImage = document.createElement('img');
+    webaImage.src = _logoTypePng;
+    webaImage.className = isMobile ? 'weba-logo-m' : 'weba-logo';
+    let webaImageContainer = document.createElement('div');
+    webaImageContainer.className = "weba-logo-container";
+    webaImageContainer.appendChild(webaImage);
     /* nav = document.createElement( 'div' );
     nav.className = 'ui-nav'; */ /* let navArr = [ 'App', 'Docs', 'Discord', 'Twitter', 'Blog' ];
     let linksArr = [ 
@@ -43777,6 +43838,7 @@ const init = (params)=>{
     uiDiv.appendChild(ctaContainer);
     ctaContainer.appendChild(ctaInnerCont);
     uiTopContainer.appendChild(logoContainer);
+    uiTopContainer.appendChild(webaImageContainer);
     //uiTopContainer.appendChild( nav );
     uiTopContainer.appendChild(audioIconContainer);
     document.querySelector(".app-container").appendChild(uiDiv);
@@ -43844,7 +43906,7 @@ const hideSplash = ()=>{
     //return;
     clearTimeout(loadGenesisInterval);
     /* TweenLite.to( cycleContainer, 0.5, { alpha: 0, y:10, ease: Power3.easeOut} )
-    TweenLite.to( currentLoaderSprite, 0.5, { alpha: 0, y:10, ease: Power3.easeOut} ); */ //return;
+        TweenLite.to( currentLoaderSprite, 0.5, { alpha: 0, y:10, ease: Power3.easeOut} ); */ //return;
     _gsap.TweenLite.to(loadbarCont, 0.5, {
         opacity: 0,
         y: 10,
@@ -43884,24 +43946,24 @@ const hideSplash = ()=>{
     });
 };
 /* 
-const showUI = () => {
+    const showUI = () => {
 
-    uiTopContainer.style.display = 'block'; 
-    
-    TweenLite.to(uiBackground, 1, { opacity: 0, ease: Power3.easeOut, delay: 0.5, onComplete: function(){
-        uiBackground.style.display = 'none'; 
-    } } );
-    TweenLite.to(uiTopContainer, 1, { opacity:1, ease: Power3.easeOut, delay: 1, onComplete: function() {
-        //uiDiv.removeChild( ctaContainer )
-        //uiDiv.removeChild( uiBackground )
-        setTimeout( cycleGenesis, 5000  );
-        dispatcher.dispatchEvent( 'uiComplete' );
-    }  } );
+        uiTopContainer.style.display = 'block'; 
+        
+        TweenLite.to(uiBackground, 1, { opacity: 0, ease: Power3.easeOut, delay: 0.5, onComplete: function(){
+            uiBackground.style.display = 'none'; 
+        } } );
+        TweenLite.to(uiTopContainer, 1, { opacity:1, ease: Power3.easeOut, delay: 1, onComplete: function() {
+            //uiDiv.removeChild( ctaContainer )
+            //uiDiv.removeChild( uiBackground )
+            setTimeout( cycleGenesis, 5000  );
+            dispatcher.dispatchEvent( 'uiComplete' );
+        }  } );
 
-    
-}
+        
+    }
 
- */ const forceComplete = ()=>{
+     */ const forceComplete = ()=>{
 //showUI();
 };
 const createGenesis = ()=>{
@@ -43998,7 +44060,45 @@ const UI = {
 };
 exports.default = UI;
 
-},{"gsap":"2aTR0","./EventDispatcher":"czwKm","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"2uVfE":[function(require,module,exports) {
+},{"gsap":"2aTR0","./EventDispatcher":"czwKm","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","../assets/logo_type.png":"cOv56"}],"cOv56":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('fQbxF') + "logo_type.45c1e80c.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"chiK4"}],"chiK4":[function(require,module,exports) {
+"use strict";
+var bundleURL = {
+};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return '/';
+}
+function getBaseURL(url) {
+    return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ('' + url).match(/(https?|file|ftp):\/\/[^/]+/);
+    if (!matches) throw new Error('Origin not found');
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}],"2uVfE":[function(require,module,exports) {
 /*! three.modifiers-v2.5.7 */ !function(t, e) {
     if ("object" == typeof exports && "object" == typeof module) module.exports = e();
     else if ("function" == typeof define && define.amd) define([], e);
