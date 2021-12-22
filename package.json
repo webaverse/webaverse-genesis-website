@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "parcel index.html",
     "build": "parcel build index.html --no-source-maps --public-url './'",
-    "sass-watch": "sass --no-source-map --watch sass:css"
+    "sass-watch": "sass --no-source-map --watch sass:css",
+    "publish": "npm run build && git add . && git commit -m \"fix\" && git push origin"
   },
   "keywords": [],
   "author": "",
