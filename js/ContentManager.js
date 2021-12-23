@@ -183,7 +183,7 @@ const changeContentFromIndex = ( index ) => {
     let nextItem = contentBodiesArray[ index ];
     let nextDelayVal = 0.3;
     let totalDelay = nextDelayVal * 3;
-
+    let __delay = 0.1;
     console.log( '*****************************  prev/next index ' + prevContentItemIndex  + ' ' + currentContentItemIndex);
 
     //return;
@@ -194,13 +194,13 @@ const changeContentFromIndex = ( index ) => {
         gsap.set( nextItem.headline, { x: animationOffsetX } )
         gsap.set( nextItem.body, { x: animationOffsetX } )
 
-        gsap.to( currentItem.icon, 0.3, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn } )
-        gsap.to( currentItem.headline, 0.3, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.05 } )
-        gsap.to( currentItem.body, 0.3, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.1 } )
+        gsap.to( currentItem.icon, __delay, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn } )
+        gsap.to( currentItem.headline, __delay, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.05 } )
+        gsap.to( currentItem.body, __delay, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.1 } )
 
-        gsap.to( nextItem.icon, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
-        gsap.to( nextItem.headline, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
-        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1, onComplete:function(){
+        gsap.to( nextItem.icon, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
+        gsap.to( nextItem.headline, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
+        gsap.to( nextItem.body, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1, onComplete:function(){
             
             setTimeout(() => {
                 console.log('*****************************  Popping out',lastIndexToUpdateContent)
@@ -228,13 +228,13 @@ const changeContentFromIndex = ( index ) => {
         gsap.set( nextItem.headline, { x: -animationOffsetX } )
         gsap.set( nextItem.body, { x: -animationOffsetX } )
 
-        gsap.to( currentItem.icon, 0.3, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn } )
-        gsap.to( currentItem.headline, 0.3, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.05 } )
-        gsap.to( currentItem.body, 0.3, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.1 } )
+        gsap.to( currentItem.icon, __delay, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn } )
+        gsap.to( currentItem.headline, __delay, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.05 } )
+        gsap.to( currentItem.body, __delay, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.1 } )
 
-        gsap.to( nextItem.icon, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
-        gsap.to( nextItem.headline, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
-        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1, onComplete:function(){
+        gsap.to( nextItem.icon, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
+        gsap.to( nextItem.headline, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
+        gsap.to( nextItem.body, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1, onComplete:function(){
 
             setTimeout(() => {
                 console.log('*****************************  Popping out',lastIndexToUpdateContent)

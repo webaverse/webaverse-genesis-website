@@ -48566,6 +48566,7 @@ const changeContentFromIndex = (index)=>{
     let nextItem = contentBodiesArray[index];
     let nextDelayVal = 0.3;
     let totalDelay = nextDelayVal * 3;
+    let __delay = 0.1;
     console.log('*****************************  prev/next index ' + prevContentItemIndex + ' ' + currentContentItemIndex);
     //return;
     if (index > prevContentItemIndex) {
@@ -48578,36 +48579,36 @@ const changeContentFromIndex = (index)=>{
         _gsap.gsap.set(nextItem.body, {
             x: animationOffsetX
         });
-        _gsap.gsap.to(currentItem.icon, 0.3, {
+        _gsap.gsap.to(currentItem.icon, __delay, {
             x: -animationOffsetX,
             opacity: 0,
             ease: _gsap.Power3.easeIn
         });
-        _gsap.gsap.to(currentItem.headline, 0.3, {
+        _gsap.gsap.to(currentItem.headline, __delay, {
             x: -animationOffsetX,
             opacity: 0,
             ease: _gsap.Power3.easeIn,
             delay: 0.05
         });
-        _gsap.gsap.to(currentItem.body, 0.3, {
+        _gsap.gsap.to(currentItem.body, __delay, {
             x: -animationOffsetX,
             opacity: 0,
             ease: _gsap.Power3.easeIn,
             delay: 0.1
         });
-        _gsap.gsap.to(nextItem.icon, 0.3, {
+        _gsap.gsap.to(nextItem.icon, __delay, {
             x: 0,
             opacity: 1,
             ease: _gsap.Power3.easeOut,
             delay: nextDelayVal
         });
-        _gsap.gsap.to(nextItem.headline, 0.3, {
+        _gsap.gsap.to(nextItem.headline, __delay, {
             x: 0,
             opacity: 1,
             ease: _gsap.Power3.easeOut,
             delay: nextDelayVal + 0.05
         });
-        _gsap.gsap.to(nextItem.body, 0.3, {
+        _gsap.gsap.to(nextItem.body, __delay, {
             x: 0,
             opacity: 1,
             ease: _gsap.Power3.easeOut,
@@ -48639,36 +48640,36 @@ const changeContentFromIndex = (index)=>{
         _gsap.gsap.set(nextItem.body, {
             x: -animationOffsetX
         });
-        _gsap.gsap.to(currentItem.icon, 0.3, {
+        _gsap.gsap.to(currentItem.icon, __delay, {
             x: animationOffsetX,
             opacity: 0,
             ease: _gsap.Power3.easeIn
         });
-        _gsap.gsap.to(currentItem.headline, 0.3, {
+        _gsap.gsap.to(currentItem.headline, __delay, {
             x: animationOffsetX,
             opacity: 0,
             ease: _gsap.Power3.easeIn,
             delay: 0.05
         });
-        _gsap.gsap.to(currentItem.body, 0.3, {
+        _gsap.gsap.to(currentItem.body, __delay, {
             x: animationOffsetX,
             opacity: 0,
             ease: _gsap.Power3.easeIn,
             delay: 0.1
         });
-        _gsap.gsap.to(nextItem.icon, 0.3, {
+        _gsap.gsap.to(nextItem.icon, __delay, {
             x: 0,
             opacity: 1,
             ease: _gsap.Power3.easeOut,
             delay: nextDelayVal
         });
-        _gsap.gsap.to(nextItem.headline, 0.3, {
+        _gsap.gsap.to(nextItem.headline, __delay, {
             x: 0,
             opacity: 1,
             ease: _gsap.Power3.easeOut,
             delay: nextDelayVal + 0.05
         });
-        _gsap.gsap.to(nextItem.body, 0.3, {
+        _gsap.gsap.to(nextItem.body, __delay, {
             x: 0,
             opacity: 1,
             ease: _gsap.Power3.easeOut,
