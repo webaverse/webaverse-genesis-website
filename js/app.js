@@ -160,7 +160,19 @@ const updateScroll = ( e ) => {
     WebaWorld.updateCameraPosition( yVal * 1.5 );
     ContentManager.updateScroll( yVal );
     let gradVal = Math.min( yVal * 10, 1 );
-    navGrad.style.opacity = gradVal;
+    // navGrad.style.opacity = gradVal;
+
+    if(window.scrollY > 0){
+        nav.style.opacity = 0;
+    }
+    if (document.documentElement.scrollHeight === window.innerHeight + window.scrollY){
+        //your code here
+        nav.style.opacity = 1;
+    }
+    if (window.scrollY < 50){
+        //your code here
+        nav.style.opacity = 1;
+    }
 }
 
 
