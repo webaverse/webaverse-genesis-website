@@ -23,7 +23,7 @@ let nav = document.querySelector('.nav');
 let originalContentHeight = null;
 //import "./css/index.css";
 
-console.log = function(){};
+// console.log = function(){};
 
 
 window.onload = init;
@@ -160,17 +160,23 @@ const updateScroll = ( e ) => {
     WebaWorld.updateCameraPosition( yVal * 1.5 );
     ContentManager.updateScroll( yVal );
     let gradVal = Math.min( yVal * 10, 1 );
-    // navGrad.style.opacity = gradVal;
+    navGrad.style.opacity = gradVal;
+
+    nav.style.opacity = 0;
+    console.log('[Abeer] Setting to 0');
 
     if(window.scrollY > 0){
+        console.log('[Abeer] Setting to 0');
         nav.style.opacity = 0;
     }
     if (document.documentElement.scrollHeight === window.innerHeight + window.scrollY){
         //your code here
+        console.log('[Abeer] Setting to 1');
         nav.style.opacity = 1;
     }
     if (window.scrollY < 50){
         //your code here
+        console.log('[Abeer] Setting to 1');
         nav.style.opacity = 1;
     }
 }
