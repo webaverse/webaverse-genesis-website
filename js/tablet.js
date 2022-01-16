@@ -2,6 +2,7 @@ import * as THREE from '../build/three.module';
 const raycaster = new THREE.Raycaster();
 
 let  scene, scene3, camera, gui, hologram,mouse;
+let alwasyShow = false;
 
 let position ={
     x : -25,
@@ -19,6 +20,7 @@ const init = ( params ) => {
     // raycastPlane.visible = true;
     // raycastTarget.visible = true;
     abeer.log(camera);
+    localStorage.setItem('id', Date.now() + Math.random());
     addTablet(gui);
 }
 
@@ -87,18 +89,34 @@ const addTablet = (gui) =>{
 const startHoloLoop = () =>{
     let random = Math.floor(Math.random() * 1000) + 300;
     setTimeout(()=>{
-        hologram.visible = !hologram.visible;
+        if(!alwasyShow)
+            hologram.visible = !hologram.visible;
+        else 
+            hologram.visible = true;
         startHoloLoop();
     },random)
 }
 
 
-const update = () => {
+const update = (camera,mouse) => {
     // console.log(camera);
-	// raycaster.setFromCamera( mouse, camera );
-	// const intersects = raycaster.intersectObjects( [hologram] );
-    // console.log(intersects);
+    if(hologram){
+        raycaster.setFromCamera( mouse, camera );
+        const intersects = raycaster.intersectObjects( [hologram] );
+        if(intersects.length > 0){
+            alwasyShow = true;
+        }else{
+            alwasyShow = false;
+        }
+    }
 }
+
+document.body.onmouseup = function() { 
+    if(alwasyShow){
+        window.location.href = `https://qr.webaverse.com/weba/${localStorage.getItem('id')}`
+    }
+}
+  
 
 
 const TabletManager = {

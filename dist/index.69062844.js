@@ -46120,7 +46120,8 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _threeModule = require("../build/three.module");
 const raycaster = new _threeModule.Raycaster();
-let scene, scene3, camera, gui, hologram, mouse;
+let scene, scene3, camera1, gui, hologram, mouse1;
+let alwasyShow = false;
 let position = {
     x: -25,
     y: 1.27,
@@ -46129,14 +46130,15 @@ let position = {
 const init = (params)=>{
     scene = params.scene;
     scene3 = params.scene3;
-    mouse = params.mouse;
+    mouse1 = params.mouse;
     // dynamicMouse = params.mouse;
-    camera = params.camera;
+    camera1 = params.camera;
     gui = params.gui;
     // raycaster = params.raycaster;
     // raycastPlane.visible = true;
     // raycastTarget.visible = true;
-    abeer.log(camera);
+    abeer.log(camera1);
+    localStorage.setItem('id', Date.now() + Math.random());
     addTablet(gui);
 };
 const addTablet = (gui)=>{
@@ -46189,15 +46191,24 @@ const addTablet = (gui)=>{
 const startHoloLoop = ()=>{
     let random = Math.floor(Math.random() * 1000) + 300;
     setTimeout(()=>{
-        hologram.visible = !hologram.visible;
+        if (!alwasyShow) hologram.visible = !hologram.visible;
+        else hologram.visible = true;
         startHoloLoop();
     }, random);
 };
-const update = ()=>{
-// console.log(camera);
-// raycaster.setFromCamera( mouse, camera );
-// const intersects = raycaster.intersectObjects( [hologram] );
-// console.log(intersects);
+const update = (camera, mouse)=>{
+    // console.log(camera);
+    if (hologram) {
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects([
+            hologram
+        ]);
+        if (intersects.length > 0) alwasyShow = true;
+        else alwasyShow = false;
+    }
+};
+document.body.onmouseup = function() {
+    if (alwasyShow) window.location.href = `https://qr.webaverse.com/weba/${localStorage.getItem('id')}`;
 };
 const TabletManager = {
     init,
