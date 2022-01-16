@@ -488,6 +488,9 @@ let navGrad;
 let nav = document.querySelector('.nav');
 let originalContentHeight = null;
 //import "./css/index.css";
+window.abeer = {
+    log: console.log
+};
 // console.log = function(){};
 window.onload = init;
 function init() {
@@ -5053,6 +5056,8 @@ var _audioManagerDefault = parcelHelpers.interopDefault(_audioManager);
 var _ui = require("./UI");
 var _uiDefault = parcelHelpers.interopDefault(_ui);
 var _modifiersMin = require("./modifiers.min");
+var _tabletJs = require("./tablet.js");
+var _tabletJsDefault = parcelHelpers.interopDefault(_tabletJs);
 const allowControls = false;
 let modelLoaded = false;
 let dispatcher = new _eventDispatcherDefault.default();
@@ -5195,6 +5200,15 @@ function init(sceneParams) {
         _fireflyManagerDefault.default.init({
             scene: scene2,
             model: "./assets/models/firefly/Fairy_LP_V7_galad.glb",
+            raycaster: raycaster,
+            raycastPlane: raycastPlane,
+            raycastTarget: raycastTarget,
+            mouse: mouse,
+            camera: camera
+        });
+        _tabletJsDefault.default.init({
+            scene: scene,
+            scene3: scene2,
             raycaster: raycaster,
             raycastPlane: raycastPlane,
             raycastTarget: raycastTarget,
@@ -5568,6 +5582,7 @@ const update = (t)=>{
     }
     for(let i = 0; i < fireflyGroups.length; i++)fireflyGroups[i].update(t);
     _treesManagerDefault.default.update();
+    _tabletJsDefault.default.update(camera, mouse);
     waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.3;
     if (isMobile) targetX = -mouseX * 0.0008;
     else targetX = -mouseX * 0.0004;
@@ -5704,7 +5719,7 @@ const WebaWorld = {
 };
 exports.default = WebaWorld;
 
-},{"regenerator-runtime/runtime":"1EBPE","../build/three.module":"5T8FK","../examples/jsm/controls/OrbitControls":"4gBF2","../examples/jsm/loaders/GLTFLoader":"aRyIW","../examples/jsm/loaders/DRACOLoader":"cJKxB","gsap":"2aTR0","./shaders/StarryNightShader":"6JMfi","./FireFlies":"gwcAu","./TreesManager":"vQYSN","./shaders/MistShader":"bEmbk","simplex-noise":"jB0ac","./FireflyManager":"13V9k","./EventDispatcher":"czwKm","./AudioManager":"7sFeC","./UI":"lsITd","./modifiers.min":"2uVfE","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"5T8FK":[function(require,module,exports) {
+},{"regenerator-runtime/runtime":"1EBPE","../build/three.module":"5T8FK","../examples/jsm/controls/OrbitControls":"4gBF2","../examples/jsm/loaders/GLTFLoader":"aRyIW","../examples/jsm/loaders/DRACOLoader":"cJKxB","gsap":"2aTR0","./shaders/StarryNightShader":"6JMfi","./FireFlies":"gwcAu","./TreesManager":"vQYSN","./shaders/MistShader":"bEmbk","simplex-noise":"jB0ac","./FireflyManager":"13V9k","./EventDispatcher":"czwKm","./AudioManager":"7sFeC","./UI":"lsITd","./modifiers.min":"2uVfE","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","./tablet.js":"78wyl"}],"5T8FK":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ACESFilmicToneMapping", ()=>ACESFilmicToneMapping
@@ -46100,7 +46115,97 @@ exports.getOrigin = getOrigin;
     ]);
 });
 
-},{}],"kOUe0":[function(require,module,exports) {
+},{}],"78wyl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _threeModule = require("../build/three.module");
+const raycaster = new _threeModule.Raycaster();
+let scene, scene3, camera, gui, hologram, mouse;
+let position = {
+    x: -25,
+    y: 1.27,
+    z: -16
+};
+const init = (params)=>{
+    scene = params.scene;
+    scene3 = params.scene3;
+    mouse = params.mouse;
+    // dynamicMouse = params.mouse;
+    camera = params.camera;
+    gui = params.gui;
+    // raycaster = params.raycaster;
+    // raycastPlane.visible = true;
+    // raycastTarget.visible = true;
+    abeer.log(camera);
+    addTablet(gui);
+};
+const addTablet = (gui)=>{
+    /** Tablet */ var img = new _threeModule.MeshBasicMaterial({
+        map: _threeModule.ImageUtils.loadTexture('./assets/tablets.png')
+    });
+    img.transparent = true;
+    var plane = new _threeModule.Mesh(new _threeModule.PlaneGeometry(3.6, 3.6), img);
+    plane.position.set(position.x, position.y, position.z);
+    plane.rotateY(1);
+    plane.rotateX(0);
+    plane.renderOrder = 2;
+    plane.material.depthTest = false;
+    // let cubeFolder = gui.addFolder('Rotation')
+    // cubeFolder.add(plane.rotation, 'x', -360,360)
+    // cubeFolder.add(plane.rotation, 'y', -360,360)
+    // cubeFolder.add(plane.rotation, 'z', -360,360)
+    // cubeFolder.add(plane, "renderDepth", 0, 200)
+    // cubeFolder.open()
+    // cubeFolder = gui.addFolder('Position')
+    // cubeFolder.add(plane.position, 'x', -50,30)
+    // cubeFolder.add(plane.position, 'y', -50,20)
+    // cubeFolder.add(plane.position, 'z', -50,20)
+    // cubeFolder.open()
+    /** Holograms */ const holoImg = new _threeModule.MeshBasicMaterial({
+        map: _threeModule.ImageUtils.loadTexture('./assets/holograms.png')
+    });
+    holoImg.transparent = true;
+    var holoPlane = new _threeModule.Mesh(new _threeModule.PlaneGeometry(3.6, 3.6), holoImg);
+    holoPlane.position.set(position.x, position.y, position.z);
+    holoPlane.rotateY(1);
+    holoPlane.rotateX(0);
+    hologram = holoPlane;
+    // let outerFolder = gui.addFolder('Hologram')
+    // cubeFolder = outerFolder.addFolder('Rotation')
+    // cubeFolder.add(holoPlane.rotation, 'x', -1,1)
+    // cubeFolder.add(holoPlane.rotation, 'y', -1,1)
+    // cubeFolder.add(holoPlane.rotation, 'z', -1,1)
+    // cubeFolder.open()
+    // cubeFolder = outerFolder.addFolder('Position')
+    // cubeFolder.add(holoPlane.position, 'x', -50,50)
+    // cubeFolder.add(holoPlane.position, 'y', -50,50)
+    // cubeFolder.add(holoPlane.position, 'z', -50,50)
+    // cubeFolder.open()
+    // outerFolder.open();
+    scene.add(plane);
+    scene3.add(holoPlane);
+    startHoloLoop();
+};
+const startHoloLoop = ()=>{
+    let random = Math.floor(Math.random() * 1000) + 300;
+    setTimeout(()=>{
+        hologram.visible = !hologram.visible;
+        startHoloLoop();
+    }, random);
+};
+const update = ()=>{
+// console.log(camera);
+// raycaster.setFromCamera( mouse, camera );
+// const intersects = raycaster.intersectObjects( [hologram] );
+// console.log(intersects);
+};
+const TabletManager = {
+    init,
+    update
+};
+exports.default = TabletManager;
+
+},{"../build/three.module":"5T8FK","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"kOUe0":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "color", ()=>color1

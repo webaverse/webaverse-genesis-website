@@ -23,6 +23,9 @@ let nav = document.querySelector('.nav');
 let originalContentHeight = null;
 //import "./css/index.css";
 
+window.abeer = {
+    log:console.log
+}
 // console.log = function(){};
 
 

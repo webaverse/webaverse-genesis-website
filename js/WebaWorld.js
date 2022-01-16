@@ -17,7 +17,7 @@ import AudioManager from './AudioManager';
 import UI from './UI';
 
 import { Bend, ModifierStack } from './modifiers.min';
-
+import TabletManager from './tablet.js'
 
 
 const allowControls = false;
@@ -158,6 +158,16 @@ function init( sceneParams ){
                 mouse: mouse,
                 camera: camera
               });
+
+            TabletManager.init({
+                scene: scene,
+                scene3: scene2, 
+                raycaster: raycaster,
+                raycastPlane: raycastPlane,
+                raycastTarget: raycastTarget,
+                mouse: mouse,
+                camera: camera
+            });
 
             window.dispatchEvent(new Event('resize'));
 
@@ -618,6 +628,7 @@ const update = ( t ) => {
     }
 
     TreesManager.update();
+    TabletManager.update(camera, mouse);
 
     waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.3;
 
