@@ -5,9 +5,9 @@ let  scene, scene3, camera, gui, hologram,mouse;
 let alwasyShow = false;
 
 let position ={
-    x : -25,
-    y: 1.27,
-    z: -16
+    x : -7.640,
+    y: 0.450,
+    z: 1.290
 }
 const init = ( params ) => {
     scene = params.scene;
@@ -20,7 +20,8 @@ const init = ( params ) => {
     // raycastPlane.visible = true;
     // raycastTarget.visible = true;
     abeer.log(camera);
-    localStorage.setItem('id', Date.now() + Math.random());
+    if(!localStorage.getItem('id'))
+        localStorage.setItem('id', Date.now() + Math.random());
     addTablet(gui);
 }
 

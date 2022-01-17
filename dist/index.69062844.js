@@ -46123,9 +46123,9 @@ const raycaster = new _threeModule.Raycaster();
 let scene, scene3, camera1, gui, hologram, mouse1;
 let alwasyShow = false;
 let position = {
-    x: -25,
-    y: 1.27,
-    z: -16
+    x: -7.64,
+    y: 0.45,
+    z: 1.29
 };
 const init = (params)=>{
     scene = params.scene;
@@ -46138,7 +46138,7 @@ const init = (params)=>{
     // raycastPlane.visible = true;
     // raycastTarget.visible = true;
     abeer.log(camera1);
-    localStorage.setItem('id', Date.now() + Math.random());
+    if (!localStorage.getItem('id')) localStorage.setItem('id', Date.now() + Math.random());
     addTablet(gui);
 };
 const addTablet = (gui)=>{
