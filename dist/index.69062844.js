@@ -46122,6 +46122,8 @@ var _threeModule = require("../build/three.module");
 const raycaster = new _threeModule.Raycaster();
 let scene, scene3, camera1, gui, hologram, mouse1;
 let alwasyShow = false;
+let cursorAlreadyWeba = false;
+let cursorAlreadyNone = false;
 let position = {
     x: -7.64,
     y: 0.45,
@@ -46196,6 +46198,17 @@ const startHoloLoop = ()=>{
         startHoloLoop();
     }, random);
 };
+const updateCursor = (weba)=>{
+    if (weba && !cursorAlreadyWeba) {
+        cursorAlreadyNone = false;
+        cursorAlreadyWeba = true;
+        document.documentElement.style.cursor = "url('./assets/mouse.png'), auto";
+    } else if (!weba && !cursorAlreadyNone) {
+        cursorAlreadyWeba = false;
+        cursorAlreadyNone = true;
+        document.documentElement.style.cursor = "auto";
+    }
+};
 const update = (camera, mouse)=>{
     // console.log(camera);
     if (hologram) {
@@ -46203,8 +46216,13 @@ const update = (camera, mouse)=>{
         const intersects = raycaster.intersectObjects([
             hologram
         ]);
-        if (intersects.length > 0) alwasyShow = true;
-        else alwasyShow = false;
+        if (intersects.length > 0) {
+            alwasyShow = true;
+            updateCursor(alwasyShow);
+        } else {
+            alwasyShow = false;
+            updateCursor(alwasyShow);
+        }
     }
 };
 document.body.onmouseup = function() {

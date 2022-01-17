@@ -3,6 +3,8 @@ const raycaster = new THREE.Raycaster();
 
 let  scene, scene3, camera, gui, hologram,mouse;
 let alwasyShow = false;
+let cursorAlreadyWeba = false;
+let cursorAlreadyNone = false;
 
 let position ={
     x : -7.640,
@@ -98,6 +100,17 @@ const startHoloLoop = () =>{
     },random)
 }
 
+const updateCursor = (weba) =>{
+    if(weba && !cursorAlreadyWeba){
+        cursorAlreadyNone = false;
+        cursorAlreadyWeba = true;
+        document.documentElement.style.cursor = "url('./assets/mouse.png'), auto";
+    }else if(!weba && !cursorAlreadyNone){
+        cursorAlreadyWeba = false;
+        cursorAlreadyNone = true;
+        document.documentElement.style.cursor = "auto";
+    }
+}
 
 const update = (camera,mouse) => {
     // console.log(camera);
@@ -106,8 +119,10 @@ const update = (camera,mouse) => {
         const intersects = raycaster.intersectObjects( [hologram] );
         if(intersects.length > 0){
             alwasyShow = true;
+            updateCursor(alwasyShow);
         }else{
             alwasyShow = false;
+            updateCursor(alwasyShow);
         }
     }
 }
