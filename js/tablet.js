@@ -134,7 +134,7 @@ document.body.onmouseup = function () {
         //window.location.href = `https://qr.webaverse.com/weba/${localStorage.getItem('id')}`
         let name = localStorage.getItem('name');
         if (name) {
-            window.location.href = `https://qr.webaverse.com/weba/${input}-${localStorage.getItem('id')}`
+            window.location.href = `https://qr.webaverse.com/weba/${name}-${localStorage.getItem('id')}`
             return;
         }
         document.getElementById('qrform').style.display = 'block';
