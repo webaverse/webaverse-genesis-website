@@ -1,17 +1,18 @@
 import * as THREE from '../build/three.module';
 const raycaster = new THREE.Raycaster();
 
-let  scene, scene3, camera, gui, hologram,mouse;
+let scene, scene3, camera, gui, hologram, mouse;
 let alwasyShow = false;
 let cursorAlreadyWeba = false;
 let cursorAlreadyNone = false;
 
-let position ={
-    x : -7.640,
+let position = {
+    x: -7.640,
     y: 0.450,
     z: 1.290
 }
-const init = ( params ) => {
+
+const init = (params) => {
     scene = params.scene;
     scene3 = params.scene3;
     mouse = params.mouse;
@@ -22,21 +23,21 @@ const init = ( params ) => {
     // raycastPlane.visible = true;
     // raycastTarget.visible = true;
     abeer.log(camera);
-    if(!localStorage.getItem('id'))
+    if (!localStorage.getItem('id'))
         localStorage.setItem('id', Date.now() + Math.random());
     addTablet(gui);
 }
 
-const addTablet = (gui) =>{
+const addTablet = (gui) => {
 
     /** Tablet */
     var img = new THREE.MeshBasicMaterial({
-        map:THREE.ImageUtils.loadTexture('./assets/tablets.png')
+        map: THREE.ImageUtils.loadTexture('./assets/tablets.png')
     });
     img.transparent = true;
 
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 3.6),img);
-    plane.position.set(position.x,position.y,position.z);
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 3.6), img);
+    plane.position.set(position.x, position.y, position.z);
     plane.rotateY(1);
     plane.rotateX(0);
     plane.renderOrder = 2;
@@ -59,12 +60,12 @@ const addTablet = (gui) =>{
 
     /** Holograms */
     const holoImg = new THREE.MeshBasicMaterial({
-        map:THREE.ImageUtils.loadTexture('./assets/holograms.png')
+        map: THREE.ImageUtils.loadTexture('./assets/holograms.png')
     });
     holoImg.transparent = true;
 
-    var holoPlane = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 3.6),holoImg);
-    holoPlane.position.set(position.x,position.y,position.z);
+    var holoPlane = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 3.6), holoImg);
+    holoPlane.position.set(position.x, position.y, position.z);
     holoPlane.rotateY(1);
     holoPlane.rotateX(0);
     hologram = holoPlane;
@@ -89,50 +90,70 @@ const addTablet = (gui) =>{
     startHoloLoop();
 }
 
-const startHoloLoop = () =>{
+const startHoloLoop = () => {
     let random = Math.floor(Math.random() * 1000) + 300;
-    setTimeout(()=>{
-        if(!alwasyShow)
+    setTimeout(() => {
+        if (!alwasyShow)
             hologram.visible = !hologram.visible;
-        else 
+        else
             hologram.visible = true;
         startHoloLoop();
-    },random)
+    }, random)
 }
 
-const updateCursor = (weba) =>{
-    if(weba && !cursorAlreadyWeba){
+const updateCursor = (weba) => {
+    if (weba && !cursorAlreadyWeba) {
         cursorAlreadyNone = false;
         cursorAlreadyWeba = true;
         document.documentElement.style.cursor = "url('./assets/mouse.png'), auto";
-    }else if(!weba && !cursorAlreadyNone){
+    } else if (!weba && !cursorAlreadyNone) {
         cursorAlreadyWeba = false;
         cursorAlreadyNone = true;
         document.documentElement.style.cursor = "auto";
+        document.getElementById('qrform').style.display = 'none';
     }
 }
 
-const update = (camera,mouse) => {
+const update = (camera, mouse) => {
     // console.log(camera);
-    if(hologram){
-        raycaster.setFromCamera( mouse, camera );
-        const intersects = raycaster.intersectObjects( [hologram] );
-        if(intersects.length > 0){
+    if (hologram) {
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects([hologram]);
+        if (intersects.length > 0) {
             alwasyShow = true;
             updateCursor(alwasyShow);
-        }else{
+        } else {
             alwasyShow = false;
             updateCursor(alwasyShow);
         }
     }
 }
 
-document.body.onmouseup = function() { 
-    if(alwasyShow){
-        window.location.href = `https://qr.webaverse.com/weba/${localStorage.getItem('id')}`
+document.body.onmouseup = function () {
+    if (alwasyShow) {
+        //window.location.href = `https://qr.webaverse.com/weba/${localStorage.getItem('id')}`
+        let name = localStorage.getItem('name');
+        if (name) {
+            window.location.href = `https://qr.webaverse.com/weba/${input}-${localStorage.getItem('id')}`
+            return;
+        }
+        document.getElementById('qrform').style.display = 'block';
+        document.querySelector('#qrform').classList.add('open');
+        document.querySelector('#qrform > form > input[type="text"]').focus();
     }
 }
-  
+
+document.querySelector('#qrNameSubmit').addEventListener("keyup", function (event) {
+    let input = document.querySelector('#qrNameSubmit').value;
+
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        if (input.length > 1 && event.keyCode === 13) {
+            localStorage.setItem('name', input);
+            window.location.href = `https://qr.webaverse.com/weba/${input}-${localStorage.getItem('id')}`
+        }
+    }
+});
 
 
 const TabletManager = {
