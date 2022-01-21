@@ -520,15 +520,12 @@ const update = ( ) => {
 const updateRaycaster = () => {
     raycaster.setFromCamera( dynamicMouse, camera );
 
-	// calculate objects intersecting the picking ray
 	const intersects = raycaster.intersectObjects( [ raycastPlane ] );
 
     raycastPlane.lookAt( camera.position )
 	
     //raycastTarget.position.copy( intersects[ 0 ].position );
     raycastTarget.position.copy( intersects[0].point.add( new THREE.Vector3( 0, 0, 0 ) ) );
-
-   //FireflyManager.
 
 }
 

@@ -17,7 +17,7 @@ let guiParams;
 let isMobile;
 let contentContainer;
 let stats;
-let showStats = false;
+let showStats = true;
 let navGrad;
 let nav = document.querySelector('.nav');
 let originalContentHeight = null;
@@ -34,7 +34,6 @@ window.onload = init;
 function init(){
     console.log( 'app.init');
 
-    
     if( showStats ) stats = new Stats();
     
     isMobile = userAgent.getUserAgent();
@@ -44,7 +43,7 @@ function init(){
     windowHeight = window.innerHeight;
     
     WebaWorld.dispatcher.once( 'modelLoaded', function() { 
-        console.log( 'app.modelLoaded()')
+        console.log( 'app.modelLoaded()' )
         document.querySelector( '.content-container' ).style.display = 'block';
         
         gsap.set( nav, { y: 10 } );

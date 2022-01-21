@@ -18,7 +18,7 @@ import UI from './UI';
 
 import { Bend, ModifierStack } from './modifiers.min';
 import TabletManager from './tablet.js'
-
+import TooltipAssetManager from './TooltipAssetManager';
 
 const allowControls = false;
 let modelLoaded = false;
@@ -89,6 +89,11 @@ const nativeMouse = new THREE.Vector2();
 let raycastPlane;
 let raycastTarget;
 
+// terrain raycaster
+
+
+let allowTerrainRaycast = false;
+
 
 function init( sceneParams ){
 
@@ -131,10 +136,11 @@ function init( sceneParams ){
     raycastTarget.visible = false;
     scene2.add( raycastPlane, raycastTarget );
 
+   
     addSkies();
     createTerrain();
     addLights();
-    addMist();
+    //addMist();
     initAudio();
     
     
@@ -150,6 +156,8 @@ function init( sceneParams ){
             addShootingStar();
             addFireflies();
             addHomeLight( result );
+            TooltipAssetManager.init( { scene: scene } );
+
             FireflyManager.init( { scene: scene2, 
                 model: "./assets/models/firefly/Fairy_LP_V7_galad.glb", 
                 raycaster: raycaster,
@@ -169,7 +177,9 @@ function init( sceneParams ){
                 camera: camera
             });
 
-            window.dispatchEvent(new Event('resize'));
+            allowTerrainRaycast = true;
+
+            //window.dispatchEvent(new Event('resize'));
 
         }
     );
@@ -555,7 +565,8 @@ const createTerrain = () => {
     let terrainScale = 40 / 1024;
     let terrainGeom = new THREE.PlaneBufferGeometry( 1024, 1024, 256, 256 );
     
-    terrainMeshNight = new THREE.Mesh( terrainGeom.clone(), terrainMaterialNight );
+    terrainMeshNight = new THREE.Mesh( terrainGeom, terrainMaterialNight );
+    terrainMeshNight.receiveShadow = true;
     terrainMeshNight.rotateOnAxis( new THREE.Vector3( 1, 0, 0 ), -Math.PI * 0.5 );
     terrainMeshNight.scale.set( terrainScale, terrainScale, terrainScale );
     terrainMeshNight.position.x = 5;
@@ -564,6 +575,8 @@ const createTerrain = () => {
     terrainMeshNight.matrixAutoUpdate = false
     terrainMeshNight.updateMatrix()
     scene.add( terrainMeshNight );
+
+    
 
 }
 
@@ -630,7 +643,7 @@ const update = ( t ) => {
     TreesManager.update();
     TabletManager.update(camera, mouse);
 
-    waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.3;
+    //waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.3;
 
     
     
@@ -657,12 +670,20 @@ const update = ( t ) => {
     renderer.render( scene2, camera );
 
     if( raycastPlane ) {
-        //updateRaycaster();
         if( FireflyManager.getModelLoaded() ) FireflyManager.update();
     }
+    
+    if( allowTerrainRaycast && terrainRaycaster && terrainMeshNight ){
+        //updateTerrainRaycaster();
+    }
 
+    TooltipAssetManager.update( nativeMouse );
 };
 
+
+const updateTerrainRaycaster = () => {
+    TooltipAssetManager.updateRaycaster( mouse, camera );
+}
 
 
 const resize = () => {
@@ -677,9 +698,9 @@ const resize = () => {
 
     renderer.setSize( windowWidth, windowHeight );
 }
+  
 
-
-window.WebaWorldResize = resize;
+//window.WebaWorldResize = resize;
 
 
 const mouseMove = ( e ) => {
@@ -697,6 +718,8 @@ const mouseMove = ( e ) => {
 
     TweenLite.to( paraAmount, 2, { x: ( mouseX / windowWidth ) * 0.5, ease: Power1.easeOut, onUpdate: updateLightColors })
 
+    updateTerrainRaycaster();
+
 }
 
 const touchMove = ( e ) => {
@@ -713,6 +736,8 @@ const touchMove = ( e ) => {
     nativeMouse.y = e.clientY; */
 
     TweenLite.to( paraAmount, 2, { x: ( mouseX / windowWidth ) * 0.5, ease: Power1.easeOut, onUpdate: updateLightColors })
+
+    updateTerrainRaycaster();
 }
 
 const updateLightColors = () => {
