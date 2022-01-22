@@ -140,7 +140,7 @@ function init( sceneParams ){
     addSkies();
     createTerrain();
     addLights();
-    //addMist();
+    addMist();
     initAudio();
     
     
@@ -216,9 +216,12 @@ const addMist = () => {
         vertexShader: MistShader.fragmentShader,
         fragmentShader: MistShader.vertexShader,
         transparent: true, 
-        //alphaTest: true, 
+        alphaTest: true, 
+        depthWrite: false,
+        dithering: true,
         blending: THREE.AdditiveBlending,
-    
+        //opacity: 0.2,
+        //wireframe: true,
 
     });
     
@@ -230,8 +233,22 @@ const addMist = () => {
 
     wavePlane = new THREE.Mesh( waveGeom, waveMaterial );
     wavePlane.rotateOnAxis( new THREE.Vector3( 1, 0, 0 ), -90 * Math.PI / 180 );
-    wavePlane.position.y = -1;
+    wavePlane.position.y = -0.8;
     scene.add( wavePlane );
+
+    let wavePlane2 = new THREE.Mesh( waveGeom.clone(), waveMaterial );
+    wavePlane2.rotateOnAxis( new THREE.Vector3( 1, 0, 0 ), -90 * Math.PI / 180 );
+    wavePlane2.scale.x = -1;
+    wavePlane2.position.y = -0.7;
+    scene.add( wavePlane2 );
+
+    let wavePlane3 = new THREE.Mesh( waveGeom.clone(), waveMaterial );
+    wavePlane3.rotateOnAxis( new THREE.Vector3( 1, 0, 0 ), -90 * Math.PI / 180 );
+    //wavePlane3.scale.z = -1;
+    wavePlane3.position.y = -0.6;
+    scene.add( wavePlane3 );
+
+    //console.log( '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ADD MIST!!!!!')
 }
 
 
@@ -643,7 +660,7 @@ const update = ( t ) => {
     TreesManager.update();
     TabletManager.update(camera, mouse);
 
-    //waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.3;
+    waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.05;
 
     
     

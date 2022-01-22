@@ -25,7 +25,7 @@ const init = (params) => {
     abeer.log(camera);
     if (!localStorage.getItem('id'))
         localStorage.setItem('id', Date.now() + Math.random());
-    addTablet(gui);
+    //addTablet(gui);
 }
 
 const addTablet = (gui) => {

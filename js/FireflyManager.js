@@ -145,6 +145,7 @@ const init = ( params ) => {
     raycastTarget.visible = true; */
 
     flyGroup = new THREE.Group();
+    flyGroup.visible = false;
     
     glowText = new THREE.TextureLoader().load( './assets/textures/firefly/firefly-1.png' );
 

@@ -258,25 +258,60 @@
 }
 
 .ui-terrain-asset-tooltip-ot {
-    width: 200px;
-    height: 45px;
-    background-color: magenta;
+    width: 230px;
+    height: 100px;
+    background-color: rgba( 255, 0, 255, 0.0 );
     position: absolute;
     top: 0;
     left: 0;
     z-index: 999998;
-    opacity: 0.0;
+    opacity: 1.0;
+    display: none;
 }
 
 .ui-terrain-asset-tooltip-sf {
-    width: 200px;
-    height: 45px;
-    background-color: cyan;
+    width: 230px;
+    height: 100px;
+    background-color: rgba( 129, 27, 239, 0.0 );
     position: absolute;
     top: 0;
     left: 0;
     z-index: 999999;
-    opacity: 0.0;
+    opacity: 1.0;
+    display: none;
+
+}
+
+.ui-tooltip-circ-ot {
+    position: absolute;
+    top: 0px;
+    left: 125px;
+    width: auto;
+    height: auto;
+}
+
+.ui-tooltip-text-ot {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: auto;
+    height: auto;
+}
+
+.ui-tooltip-circ-sf {
+    position: absolute;
+    top: 0px;
+    right: 95px;
+    width: auto;
+    height: auto;
+}
+
+.ui-tooltip-text-sf {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: auto;
+    height: auto;
 }
 
 #qrform {

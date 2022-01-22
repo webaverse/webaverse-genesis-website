@@ -2,7 +2,7 @@ import * as THREE from '../build/three.module';
 import { GLTFLoader } from '../examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from '../examples/jsm/loaders/DRACOLoader';
 import SilkShader from './shaders/SilkShaderRocks';
-import { gsap, Power2 } from 'gsap';
+import { gsap, Power2, Power3, Power4 } from 'gsap';
 
 const emissiveCol = 0x63fcff;
 let otMesh1, otMesh2, otGroup, otHologramMat1, otHologramMat2, otPl;
@@ -26,10 +26,14 @@ let allowSilkFountainsTooltip = false;
 
 const terrainRaycaster = new THREE.Raycaster();
 const terrainDebugMarker = new THREE.Mesh( new THREE.SphereBufferGeometry( 0.1, 4, 4 ), new THREE.MeshNormalMaterial( { wireframe: true } ) );
-const terrainAssetPlane = new THREE.Mesh( new THREE.PlaneBufferGeometry( 15, 15, 1, 1 ), new THREE.MeshNormalMaterial( { wireframe: true } ) );
+const terrainAssetPlane = new THREE.Mesh( new THREE.PlaneBufferGeometry( 15, 15, 20, 20 ), new THREE.MeshNormalMaterial( { wireframe: true } ) );
 
 const sfToolTipElement = document.createElement( 'div' );
+let sfToolTipImg, sfToolTipText;
+
 const otToolTipElement = document.createElement( 'div' );
+let otToolTipImg, otToolTipText;
+
 
 let mousePointer = new THREE.Vector2();
 
@@ -41,17 +45,45 @@ const init = ( params ) => {
     otHologramMat2 = new THREE.MeshStandardMaterial( { color: emissiveCol, transparent: true, opacity: 0.2 } ); 
 
     scene.add( terrainDebugMarker, terrainAssetPlane );
-    terrainAssetPlane.rotateOnAxis( new THREE.Vector3( 0, 1, 0 ), 12 * Math.PI / 180 );
-    terrainAssetPlane.position.z = 4.7;
+    terrainAssetPlane.rotateOnAxis( new THREE.Vector3( 0, 1, 0 ), 10 * Math.PI / 180 );
+    terrainAssetPlane.position.z = 0.7;
     terrainAssetPlane.visible = false;
     terrainDebugMarker.visible = false;
 
     otToolTipElement.className = "ui-terrain-asset-tooltip-ot";
-    otToolTipElement.style.opacity = '0';
+    //otToolTipElement.style.opacity = '0';
+    
+    otToolTipImg = document.createElement( 'img' );
+    otToolTipImg.src = './assets/docs-tooltip-circ.png';
+    otToolTipImg.className = 'ui-tooltip-circ-ot';
+
+    
+    otToolTipText = document.createElement( 'img' );
+    otToolTipText.src = './assets/docs-tooltip-text.png';
+    otToolTipText.className = 'ui-tooltip-text-ot';
+    //otToolTipText.style.top = '45px';
+
+    otToolTipElement.appendChild( otToolTipText );
+    otToolTipElement.appendChild( otToolTipImg );
+
     document.body.appendChild( otToolTipElement );
 
     sfToolTipElement.className = "ui-terrain-asset-tooltip-sf";
-    sfToolTipElement.style.opacity = '0';
+    //sfToolTipElement.style.opacity = '0';
+
+    sfToolTipImg = document.createElement( 'img' );
+    sfToolTipImg.src = './assets/app-tooltip-circ.png';
+    sfToolTipImg.className = 'ui-tooltip-circ-sf';
+
+    
+    sfToolTipText = document.createElement( 'img' );
+    sfToolTipText.src = './assets/app-tooltip-text.png';
+    sfToolTipText.className = 'ui-tooltip-text-sf';
+    //otToolTipText.style.top = '45px';
+
+    sfToolTipElement.appendChild( sfToolTipText );
+    sfToolTipElement.appendChild( sfToolTipImg );
+
     document.body.appendChild( sfToolTipElement );
 
     loadModels();
@@ -97,11 +129,11 @@ const loadModels = () => {
         otPl.position.set( 0, 1, -2 )
         const plh = new THREE.PointLightHelper( otPl, sphereSize );
         
+        let marker1 = new THREE.Mesh( new THREE.BoxBufferGeometry( 5, 5, 5 ), new THREE.MeshNormalMaterial( { wireframe: true } ) );
         otGroup.add( otMesh1, otMesh2, otPl );
-        otGroup.position.set( -2, -1.38, 5.5 );
-        otGroup.scale.set( 0.05, 0.065, 0.05 );
+        otGroup.position.set( -5, -1.27, 1.8 );
+        otGroup.scale.set( 0.075, 0.0975, 0.075 );
         //otGroup.rotation.y = 35 * Math.PI/180;
-
 
         scene.add( otGroup );
 
@@ -131,12 +163,12 @@ const loadModels = () => {
 
         sfPlsArr.push( sfPl1, sfPl2, sfPl3 );
 
-        //let marker = new THREE.Mesh( new THREE.BoxBufferGeometry( 5, 5, 5 ), new THREE.MeshNormalMaterial( { wireframe: true } ) );
+        let marker = new THREE.Mesh( new THREE.BoxBufferGeometry( 5, 5, 5 ), new THREE.MeshNormalMaterial( { wireframe: true } ) );
 
         silkFountainsGroup.add( silkFountainMesh, silkFountainClone1, silkFountainClone2, sfPl1, sfPl2, sfPl3 );
 
-        silkFountainsGroup.position.set( 3, -1.7, 4 );
-        silkFountainsGroup.scale.set( 0.05, 0.05, 0.05 );
+        silkFountainsGroup.position.set( 6, -1.68, 0 );
+        silkFountainsGroup.scale.set( 0.1, 0.1, 0.1 );
         //silkFountainsGroup.rotation.y = 35 * ( Math.PI/180 );
 
 
@@ -270,6 +302,10 @@ const updateRaycaster = ( mouse, camera ) => {
     //console.log( 'mouse ' + mouse.x + ' ' + mouse.y )
     //console.log( 'terrainDebugMarker ', terrainDebugMarker.position )
     //console.log( 'terrainMeshNight ', terrainMeshNight.position )
+
+    if( !terrainAssetPlane || !terrainDebugMarker || !otGroup ) return;
+
+
     terrainRaycaster.setFromCamera( mouse, camera );
 
 	const intersects = terrainRaycaster.intersectObjects( [ terrainAssetPlane ] );
@@ -300,15 +336,22 @@ const updateRaycaster = ( mouse, camera ) => {
         pl.intensity = Math.max( minLight, ( maxLight * 0.75 ) * sfLightPerc );
     })
 
-    if( terrainDebugMarker.position.distanceTo( otGroup.position ) < 0.5 && enableOTTooltip == false ) {
+    if( terrainDebugMarker.position.distanceTo( otGroup.position ) <0.75 && enableOTTooltip == false ) {
         showOTTooltip();
-    } else if( terrainDebugMarker.position.distanceTo( otGroup.position ) > 0.5 && enableOTTooltip == true ){
+        document.body.style.cursor = "pointer";
+    } else if( terrainDebugMarker.position.distanceTo( otGroup.position ) > 0.75 && enableOTTooltip == true ){
+        document.body.style.cursor = "auto";
+
         hideOTTooltip();
     }
 
-    if( terrainDebugMarker.position.distanceTo( silkFountainsGroup.position ) < 0.5 && enableSFTooltip == false ) {
+    if( terrainDebugMarker.position.distanceTo( silkFountainsGroup.position ) <0.75 && enableSFTooltip == false ) {
         showSFTooltip();
-    } else if( terrainDebugMarker.position.distanceTo( silkFountainsGroup.position ) > 0.5 && enableSFTooltip == true ){
+        document.body.style.cursor = "pointer";
+
+    } else if( terrainDebugMarker.position.distanceTo( silkFountainsGroup.position ) > 0.75 && enableSFTooltip == true ){
+        document.body.style.cursor = "auto";
+
         hideSFTooltip();
     }
 
@@ -321,40 +364,64 @@ const updateRaycaster = ( mouse, camera ) => {
 
 const showOTTooltip = () => {
     enableOTTooltip = true;
-    /* otToolTipElement.style.top = mousePointer.y + 'px';
-    otToolTipElement.style.left = mousePointer.x + 'px'; */
-    gsap.set( otToolTipElement, { x: mousePointer.x + 10, y: mousePointer.y - 22.5, alpha: 1 } )
+
+
+    gsap.killTweensOf( otToolTipText );
+    gsap.killTweensOf( otToolTipImg );
+
+    gsap.set( otToolTipElement, { x: mousePointer.x + 0, y: mousePointer.y - 75.0 } )
+    gsap.set( otToolTipText, { x: -40, alpha: 0 } );
+    gsap.set( otToolTipImg, { scaleX: 0.5, scaleY:0.5, alpha: 0 } );
+
+    gsap.to( otToolTipText, 0.15, { x: 0, alpha: 1, ease: Power3.easeOut } );
+    gsap.to( otToolTipImg, 0.15, { scaleX: 1, scaleY:1, alpha: 1, ease: Power3.easeOut, delay: 0.05 } );
+
     otToolTipElement.style.display = 'block';
-    gsap.to( otToolTipElement, 0.6, { alpha: 1, ease: Power2.easeOut })
-   
+
 }
 
 const hideOTTooltip = () => {
-    
-    //gsap.set( otToolTipElement, { x: mousePointer.x + 10, y: mousePointer.y - 22.5, alpha: 0 } )
-    gsap.to( otToolTipElement, 0.1, { alpha: 0, ease: Power2.easeOut, onComplete: function(){
+
+
+    //gsap.killTweensOf( otToolTipText );
+    //gsap.killTweensOf( otToolTipImg );
+
+    gsap.to( otToolTipText, 0.15, { x: 20, alpha: 0, ease: Power3.easeIn, delay: 0.1, onComplete: function(){
         enableOTTooltip = false;
         otToolTipElement.style.display = 'none';
-    } })
+    } } );
+    gsap.to( otToolTipImg, 0.15, { scaleX: 0.5, scaleY: 0.5, alpha: 0, ease: Power3.easeIn } );
+
+
 }
 
 const showSFTooltip = () => {
+
+    console.log('SHow SF T')
     enableSFTooltip = true;
-    /* otToolTipElement.style.top = mousePointer.y + 'px';
-    otToolTipElement.style.left = mousePointer.x + 'px'; */
-    gsap.set( sfToolTipElement, { x: mousePointer.x - ( 200 + 10 ), y: mousePointer.y - 22.5, alpha: 1 } )
-    otToolTipElement.style.display = 'block';
-    gsap.to( sfToolTipElement, 0.6, { alpha: 1, ease: Power2.easeOut })
+
+    gsap.killTweensOf( sfToolTipText );
+    gsap.killTweensOf( sfToolTipImg );
+    
+    gsap.set( sfToolTipElement, { x: mousePointer.x - ( 300 ), y: mousePointer.y - 75.0 } )
+    gsap.set( sfToolTipText, { x: 40, alpha: 0 } );
+    gsap.set( sfToolTipImg, { scaleX: 0.5, scaleY:0.5, alpha: 0 } );
+
+    gsap.to( sfToolTipText, 0.15, { x: 0, alpha: 1, ease: Power3.easeOut } );
+    gsap.to( sfToolTipImg, 0.15, { scaleX: 1, scaleY: 1, alpha: 1, ease: Power3.easeOut, delay: 0.05 } );
+
+    sfToolTipElement.style.display = 'block';
+
    
 }
 
 const hideSFTooltip = () => {
     
-    //gsap.set( otToolTipElement, { x: mousePointer.x + 10, y: mousePointer.y - 22.5, alpha: 0 } )
-    gsap.to( sfToolTipElement, 0.1, { alpha: 0, ease: Power2.easeOut, onComplete: function(){
+    gsap.to( sfToolTipText, 0.15, { x: -20, alpha: 0, ease: Power3.easeIn, delay: 0.1, onComplete: function(){
         enableSFTooltip = false;
         sfToolTipElement.style.display = 'none';
-    } })
+    } } );
+    gsap.to( sfToolTipImg, 0.15, { scaleX: 0.5, scaleY: 0.5, alpha: 0, ease: Power3.easeIn } );
 }
 
 const update = ( nativeMouse ) => {
@@ -364,13 +431,13 @@ const update = ( nativeMouse ) => {
     if( enableOTTooltip ) {
         /* otToolTipElement.style.top = mousePointer.y + 'px';
         otToolTipElement.style.left = mousePointer.x + 'px'; */
-        gsap.to( otToolTipElement, 0.3, { x: mousePointer.x + 10, y: mousePointer.y - 22.5, ease: Power2.easeOut } );
+        gsap.to( otToolTipElement, 0.3, { x: mousePointer.x + 0, y: mousePointer.y - 75.0, ease: Power2.easeOut } );
     }
 
     if( enableSFTooltip ) {
         /* otToolTipElement.style.top = mousePointer.y + 'px';
         otToolTipElement.style.left = mousePointer.x + 'px'; */
-        gsap.to( sfToolTipElement, 0.3, { x: mousePointer.x - ( 200 + 10 ), y: mousePointer.y - 22.5, ease: Power2.easeOut } );
+        gsap.to( sfToolTipElement, 0.3, { x: mousePointer.x - ( 300 ), y: mousePointer.y - 75, ease: Power2.easeOut } );
     }
 
 
