@@ -483,14 +483,11 @@ let guiParams;
 let isMobile;
 let contentContainer;
 let stats;
-let showStats = true;
+let showStats = false;
 let navGrad;
 let nav = document.querySelector('.nav');
 let originalContentHeight = null;
 //import "./css/index.css";
-window.abeer = {
-    log: console.log
-};
 // console.log = function(){};
 window.onload = init;
 function init() {
@@ -622,26 +619,10 @@ const updateScroll = (e)=>{
     let gradVal = Math.min(yVal * 10, 1);
     navGrad.style.opacity = gradVal;
     nav.style.opacity = 0;
-    console.log('[Abeer] Setting to 0');
-    if (window.scrollY > 0) {
-        console.log('[Abeer] Setting to 0');
-        nav.style.opacity = 0;
-    }
-    if (document.documentElement.scrollHeight === window.innerHeight + window.scrollY) {
-        //your code here
-        console.log('[Abeer] Setting to 1');
-        nav.style.opacity = 1;
-    }
-    if (window.scrollY < 50) {
-        //your code here
-        console.log('[Abeer] Setting to 1');
-        nav.style.opacity = 1;
-    }
+    if (window.scrollY > 0) nav.style.opacity = 0;
+    if (document.documentElement.scrollHeight === window.innerHeight + window.scrollY) nav.style.opacity = 1;
+    if (window.scrollY < 50) nav.style.opacity = 1;
 };
-const render = ()=>{
-/* return (
-    <div ref={ ref => ( this.mount = ref ) } />
-  ) */ };
 const resize = ()=>{
     windowWidth = document.documentElement.clientWidth;
     windowHeight = document.documentElement.clientHeight;
@@ -5214,13 +5195,6 @@ function init(sceneParams) {
             camera: camera
         });
         _tabletJsDefault.default.init({
-            scene: scene,
-            scene3: scene2,
-            raycaster: raycaster,
-            raycastPlane: raycastPlane,
-            raycastTarget: raycastTarget,
-            mouse: mouse,
-            camera: camera
         });
         allowTerrainRaycast = true;
     //window.dispatchEvent(new Event('resize'));
@@ -5604,7 +5578,7 @@ const update = (t)=>{
     }
     for(let i = 0; i < fireflyGroups.length; i++)fireflyGroups[i].update(t);
     _treesManagerDefault.default.update();
-    _tabletJsDefault.default.update(camera, mouse);
+    //TabletManager.update(camera, mouse);
     waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.05;
     if (isMobile) targetX = -mouseX * 0.0008;
     else targetX = -mouseX * 0.0004;
@@ -46144,144 +46118,99 @@ exports.getOrigin = getOrigin;
 },{}],"78wyl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _threeModule = require("../build/three.module");
-const raycaster = new _threeModule.Raycaster();
-let scene, scene3, camera1, gui, hologram, mouse1;
-let alwasyShow = false;
-let cursorAlreadyWeba = false;
-let cursorAlreadyNone = false;
-let position = {
-    x: -7.64,
-    y: 0.45,
-    z: 1.29
-};
-const init = (params)=>{
-    scene = params.scene;
-    scene3 = params.scene3;
-    mouse1 = params.mouse;
-    // dynamicMouse = params.mouse;
-    camera1 = params.camera;
-    gui = params.gui;
-    // raycaster = params.raycaster;
-    // raycastPlane.visible = true;
-    // raycastTarget.visible = true;
-    abeer.log(camera1);
+var _eventDispatcher = require("./EventDispatcher");
+var _eventDispatcherDefault = parcelHelpers.interopDefault(_eventDispatcher);
+var _gsap = require("gsap");
+let closeButton;
+let formElement;
+let submitButton;
+let nameInputText;
+let inputPrompt;
+const dispatcher = new _eventDispatcherDefault.default();
+const init = ()=>{
     if (!localStorage.getItem('id')) localStorage.setItem('id', Date.now() + Math.random());
-//addTablet(gui);
+    closeButton = document.querySelector('.ui-qr-form-close');
+    formElement = document.querySelector('#qrform');
+    submitButton = document.querySelector('.form-submit-button');
+    nameInputText = document.querySelector('#name-input');
+    inputPrompt = document.querySelector('.ui-enter-text');
 };
-const addTablet = (gui)=>{
-    /** Tablet */ var img = new _threeModule.MeshBasicMaterial({
-        map: _threeModule.ImageUtils.loadTexture('./assets/tablets.png')
+const invokeForm = ()=>{
+    closeButton.addEventListener('click', hideForm);
+    submitButton.addEventListener('click', submitForm);
+    let name = localStorage.getItem('name');
+    if (name) {
+        window.location.href = `https://qr.webaverse.com/weba/${name}-${localStorage.getItem('id')}`;
+        return;
+    }
+    formElement.style.display = 'flex';
+    document.querySelector('#qrform > div > form > input[type="text"]').focus();
+    _gsap.gsap.killTweensOf(formElement);
+    _gsap.gsap.set(inputPrompt, {
+        y: -10,
+        alpha: 0
     });
-    img.transparent = true;
-    var plane = new _threeModule.Mesh(new _threeModule.PlaneGeometry(3.6, 3.6), img);
-    plane.position.set(position.x, position.y, position.z);
-    plane.rotateY(1);
-    plane.rotateX(0);
-    plane.renderOrder = 2;
-    plane.material.depthTest = false;
-    // let cubeFolder = gui.addFolder('Rotation')
-    // cubeFolder.add(plane.rotation, 'x', -360,360)
-    // cubeFolder.add(plane.rotation, 'y', -360,360)
-    // cubeFolder.add(plane.rotation, 'z', -360,360)
-    // cubeFolder.add(plane, "renderDepth", 0, 200)
-    // cubeFolder.open()
-    // cubeFolder = gui.addFolder('Position')
-    // cubeFolder.add(plane.position, 'x', -50,30)
-    // cubeFolder.add(plane.position, 'y', -50,20)
-    // cubeFolder.add(plane.position, 'z', -50,20)
-    // cubeFolder.open()
-    /** Holograms */ const holoImg = new _threeModule.MeshBasicMaterial({
-        map: _threeModule.ImageUtils.loadTexture('./assets/holograms.png')
+    _gsap.gsap.set(nameInputText, {
+        y: -10,
+        alpha: 0
     });
-    holoImg.transparent = true;
-    var holoPlane = new _threeModule.Mesh(new _threeModule.PlaneGeometry(3.6, 3.6), holoImg);
-    holoPlane.position.set(position.x, position.y, position.z);
-    holoPlane.rotateY(1);
-    holoPlane.rotateX(0);
-    hologram = holoPlane;
-    // let outerFolder = gui.addFolder('Hologram')
-    // cubeFolder = outerFolder.addFolder('Rotation')
-    // cubeFolder.add(holoPlane.rotation, 'x', -1,1)
-    // cubeFolder.add(holoPlane.rotation, 'y', -1,1)
-    // cubeFolder.add(holoPlane.rotation, 'z', -1,1)
-    // cubeFolder.open()
-    // cubeFolder = outerFolder.addFolder('Position')
-    // cubeFolder.add(holoPlane.position, 'x', -50,50)
-    // cubeFolder.add(holoPlane.position, 'y', -50,50)
-    // cubeFolder.add(holoPlane.position, 'z', -50,50)
-    // cubeFolder.open()
-    // outerFolder.open();
-    scene.add(plane);
-    scene3.add(holoPlane);
-    startHoloLoop();
+    _gsap.gsap.set(submitButton, {
+        y: -10,
+        alpha: 0
+    });
+    let openAniSpeed = 0.3;
+    _gsap.gsap.to(formElement, openAniSpeed, {
+        alpha: 1,
+        ease: _gsap.Power3.easeOut
+    });
+    _gsap.gsap.to(inputPrompt, 0.3, {
+        y: 0,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: openAniSpeed
+    });
+    _gsap.gsap.to(nameInputText, 0.3, {
+        y: 0,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: openAniSpeed + 0.1
+    });
+    _gsap.gsap.to(submitButton, 0.3, {
+        y: 0,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: openAniSpeed + 0.2
+    });
 };
-const startHoloLoop = ()=>{
-    let random = Math.floor(Math.random() * 1000) + 300;
-    setTimeout(()=>{
-        if (!alwasyShow) hologram.visible = !hologram.visible;
-        else hologram.visible = true;
-        startHoloLoop();
-    }, random);
-};
-const updateCursor = (weba)=>{
-    if (weba && !cursorAlreadyWeba) {
-        cursorAlreadyNone = false;
-        cursorAlreadyWeba = true;
-        document.documentElement.style.cursor = "url('./assets/mouse.png'), auto";
-    } else if (!weba && !cursorAlreadyNone) {
-        cursorAlreadyWeba = false;
-        cursorAlreadyNone = true;
-        document.documentElement.style.cursor = "auto";
-        document.getElementById('qrform').style.display = 'none';
-    }
-};
-const update = (camera, mouse)=>{
-    // console.log(camera);
-    if (hologram) {
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects([
-            hologram
-        ]);
-        if (intersects.length > 0) {
-            alwasyShow = true;
-            updateCursor(alwasyShow);
-        } else {
-            alwasyShow = false;
-            updateCursor(alwasyShow);
+const hideForm = ()=>{
+    submitButton.removeEventListener('click', submitForm);
+    submitButton.removeEventListener('click', hideForm);
+    document.querySelector('#qrform').classList.remove('open');
+    dispatcher.dispatchEvent('formClosed');
+    _gsap.gsap.to(formElement, 0.3, {
+        alpha: 0,
+        ease: _gsap.Power3.easeOut,
+        onComplete: function() {
+            formElement.style.display = 'none';
         }
+    });
+};
+const submitForm = ()=>{
+    let input = document.querySelector('#name-input').value;
+    if (input.length > 1) {
+        localStorage.setItem('name', input);
+        window.location.href = `https://qr.webaverse.com/weba/${input}-${localStorage.getItem('id')}`;
     }
 };
-document.body.onmouseup = function() {
-    if (alwasyShow) {
-        //window.location.href = `https://qr.webaverse.com/weba/${localStorage.getItem('id')}`
-        let name = localStorage.getItem('name');
-        if (name) {
-            window.location.href = `https://qr.webaverse.com/weba/${name}-${localStorage.getItem('id')}`;
-            return;
-        }
-        document.getElementById('qrform').style.display = 'block';
-        document.querySelector('#qrform').classList.add('open');
-        document.querySelector('#qrform > form > input[type="text"]').focus();
-    }
-};
-document.querySelector('#qrNameSubmit').addEventListener("keyup", function(event) {
-    let input = document.querySelector('#qrNameSubmit').value;
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        if (input.length > 1 && event.keyCode === 13) {
-            localStorage.setItem('name', input);
-            window.location.href = `https://qr.webaverse.com/weba/${input}-${localStorage.getItem('id')}`;
-        }
-    }
-});
 const TabletManager = {
     init,
-    update
+    invokeForm,
+    hideForm,
+    dispatcher
 };
 exports.default = TabletManager;
 
-},{"../build/three.module":"5T8FK","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"lls42":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","./EventDispatcher":"czwKm","gsap":"2aTR0"}],"lls42":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _threeModule = require("../build/three.module");
@@ -46290,6 +46219,8 @@ var _dracoloader = require("../examples/jsm/loaders/DRACOLoader");
 var _silkShaderRocks = require("./shaders/SilkShaderRocks");
 var _silkShaderRocksDefault = parcelHelpers.interopDefault(_silkShaderRocks);
 var _gsap = require("gsap");
+var _tabletJs = require("./tablet.js");
+var _tabletJsDefault = parcelHelpers.interopDefault(_tabletJs);
 const emissiveCol = 6552831;
 let otMesh1, otMesh2, otGroup, otHologramMat1, otHologramMat2, otPl;
 let otMouseDist = 0;
@@ -46320,6 +46251,7 @@ const sfToolTipElement = document.createElement('div');
 let sfToolTipImg, sfToolTipText;
 const otToolTipElement = document.createElement('div');
 let otToolTipImg, otToolTipText;
+let allowInteraction = true;
 let mousePointer = new _threeModule.Vector2();
 const init = (params)=>{
     console.log('TooltipAssetManager.init()');
@@ -46340,26 +46272,22 @@ const init = (params)=>{
     terrainAssetPlane.visible = false;
     terrainDebugMarker.visible = false;
     otToolTipElement.className = "ui-terrain-asset-tooltip-ot";
-    //otToolTipElement.style.opacity = '0';
     otToolTipImg = document.createElement('img');
     otToolTipImg.src = './assets/docs-tooltip-circ.png';
     otToolTipImg.className = 'ui-tooltip-circ-ot';
     otToolTipText = document.createElement('img');
     otToolTipText.src = './assets/docs-tooltip-text.png';
     otToolTipText.className = 'ui-tooltip-text-ot';
-    //otToolTipText.style.top = '45px';
     otToolTipElement.appendChild(otToolTipText);
     otToolTipElement.appendChild(otToolTipImg);
     document.body.appendChild(otToolTipElement);
     sfToolTipElement.className = "ui-terrain-asset-tooltip-sf";
-    //sfToolTipElement.style.opacity = '0';
     sfToolTipImg = document.createElement('img');
     sfToolTipImg.src = './assets/app-tooltip-circ.png';
     sfToolTipImg.className = 'ui-tooltip-circ-sf';
     sfToolTipText = document.createElement('img');
     sfToolTipText.src = './assets/app-tooltip-text.png';
     sfToolTipText.className = 'ui-tooltip-text-sf';
-    //otToolTipText.style.top = '45px';
     sfToolTipElement.appendChild(sfToolTipText);
     sfToolTipElement.appendChild(sfToolTipImg);
     document.body.appendChild(sfToolTipElement);
@@ -46367,9 +46295,7 @@ const init = (params)=>{
 };
 const loadModels = ()=>{
     console.log('TooltipAssetManager.loadModels()');
-    //let pointLight = new THREE.PointLight( 0x63fcff, 2.5, 1, 1 );
     const sphereSize = 100;
-    //scene.add( pointLightHelper );
     let p1 = loadModel({
         filePath: baseUrl + 'ot/',
         fileName: 'Tablet_Origin_Var1_LOD2_dream.glb',
@@ -46393,7 +46319,6 @@ const loadModels = ()=>{
         scale: 1
     }).then((result)=>{
         otMesh2 = result;
-    //otMesh2.add( pointLight.clone() );
     });
     let p3 = loadModel({
         filePath: baseUrl + 'silk-fountain/',
@@ -46406,7 +46331,6 @@ const loadModels = ()=>{
         scale: 0.2
     }).then((result)=>{
         silkFountainMesh = result;
-    //silkFountainMesh.add( pl, plh )
     });
     Promise.all([
         p1,
@@ -46427,12 +46351,10 @@ const loadModels = ()=>{
         otGroup.add(otMesh1, otMesh2, otPl);
         otGroup.position.set(-5, -1.27, 1.8);
         otGroup.scale.set(0.075, 0.0975, 0.075);
-        //otGroup.rotation.y = 35 * Math.PI/180;
         scene.add(otGroup);
         silkFountainsGroup = new _threeModule.Group();
         silkFountainClone1 = silkFountainMesh.clone();
         silkFountainClone2 = silkFountainMesh.clone();
-        //silkFountainMesh.material.wireframe = true;
         silkFountainClone1.position.set(10, 0, 0);
         silkFountainClone1.scale.set(0.2 * 0.75, 0.2 * 0.75, 0.2 * 0.75);
         silkFountainClone1.rotation.y = -90 * Math.PI / 180;
@@ -46452,19 +46374,10 @@ const loadModels = ()=>{
         silkFountainsGroup.add(silkFountainMesh, silkFountainClone1, silkFountainClone2, sfPl1, sfPl2, sfPl3);
         silkFountainsGroup.position.set(6, -1.68, 0);
         silkFountainsGroup.scale.set(0.1, 0.1, 0.1);
-        //silkFountainsGroup.rotation.y = 35 * ( Math.PI/180 );
         scene.add(silkFountainsGroup);
         assetPositions.otsPos = otGroup.position;
         assetPositions.silkFountainsPos = silkFountainsGroup.position;
-    /* app.add( groundMesh );
-
-        rocksArray.push( rock01Mesh, rock02Mesh, rock03Mesh, rock04Mesh, rock05Mesh, rock06Mesh, rock07Mesh, rock08Mesh, rock09Mesh, rock10Mesh );
-        rockGroupsArray.push( rockGroup01Mesh, rockGroup02Mesh, rockGroup03Mesh, rockGroup04Mesh, rockGroup05Mesh, rockGroup06Mesh, rockGroup07Mesh, rockGroup08Mesh, rockGroup09Mesh, rockGroup10Mesh );
-        plantsArray.push( plantMesh01, plantMesh02, plantMesh03 );
-        bushesArray.push( bushMesh01, bushMesh02 );
-
-        addGroundItems();
-        addAndScatterSilkNodes( 500, 1, 2 ); */ });
+    });
 };
 const loadModel = (params)=>{
     return new Promise((resolve, reject)=>{
@@ -46478,8 +46391,7 @@ const loadModel = (params)=>{
                 if (child.isMesh) {
                     if (params.fileName == "Tablet_Origin_Var1_LOD2_dream.glb" || params.fileName == "Tablet_Origin_Var2_LOD2_dream.glb") {
                         if (child.name == 'Var1_Holo') child.material = otHologramMat2;
-                        else if (child.name == 'Var2_Holo') //child.visible = false;
-                        child.material = otHologramMat1;
+                        else if (child.name == 'Var2_Holo') child.material = otHologramMat1;
                         else child.material.color = new _threeModule.Color(2434341);
                     }
                     if (params.fileName == 'SilkFountain_5_LOD2_center_dream.glb') {
@@ -46494,34 +46406,9 @@ const loadModel = (params)=>{
                             });
                             silkShaderMaterial.uniforms.noiseImage.value = silkMaterialTexture;
                             child.material = silkShaderMaterial;
-                        //console.log( 'SILK MATERIAL is ' + child )
                         } else child.material.color = new _threeModule.Color(4473924);
                     }
-                    /* if( params.fileName == "SilkFountain_Ground_V4_Dream.glb" ){
-
-                        let mat = new THREE.MeshStandardMaterial( { 
-                           color: 0xffffff,
-                            map: textureMap,
-                           
-                            wireframe: false
-                        })
-
-                        mat.needsUpdate = true
-                            
-                        child.material = mat;
-
-                        const physicsId = physics.addGeometry( child );
-                        physicsIds.push( physicsId );
-
-                        groundGeometry = child.geometry;
-
-                        for( let i = 0; i< groundGeometry.attributes.position.count; i++ ){
-                            groundGeometry.attributes.position.needsUpdate = true;
-                            let v = new THREE.Vector3().fromBufferAttribute( groundGeometry.attributes.position, i ) ;
-                            groundVerticePositions.push( v );
-                        }
-
-                    } */ numVerts += child.geometry.index.count / 3;
+                    numVerts += child.geometry.index.count / 3;
                     child.castShadow = true;
                     child.receiveShadow = true;
                 }
@@ -46534,9 +46421,6 @@ const loadModel = (params)=>{
     });
 };
 const updateRaycaster = (mouse, camera)=>{
-    //console.log( 'mouse ' + mouse.x + ' ' + mouse.y )
-    //console.log( 'terrainDebugMarker ', terrainDebugMarker.position )
-    //console.log( 'terrainMeshNight ', terrainMeshNight.position )
     if (!terrainAssetPlane || !terrainDebugMarker || !otGroup) return;
     terrainRaycaster.setFromCamera(mouse, camera);
     const intersects = terrainRaycaster.intersectObjects([
@@ -46544,12 +46428,8 @@ const updateRaycaster = (mouse, camera)=>{
     ]);
     if (intersects[0] == undefined) return;
     terrainDebugMarker.position.copy(intersects[0].point.add(new _threeModule.Vector3(0, 0, 0)));
-    //console.log( 'dist' + terrainDebugMarker.position.distanceTo( TooltipAssetManager.getAssetPositions.otsPos ) );
-    //console.log( 'debugPos ', terrainDebugMarker.position );
-    //console.log( 'otsPos ', TooltipAssetManager.getAssetPositions().otsPos );
     otMouseDist = terrainDebugMarker.position.distanceTo(otGroup.position);
     otLightPerc = (5 - otMouseDist) * 0.2;
-    //console.log( 'dist ' + Math.max( minLight, maxLight * otLightPerc ) );
     otPl.intensity = Math.max(minLight, maxLight * 2 * otLightPerc);
     otHologramMat1.opacity = Math.max(0.2, otLightPerc);
     otHologramMat2.opacity = Math.max(0.2, otLightPerc);
@@ -46558,11 +46438,15 @@ const updateRaycaster = (mouse, camera)=>{
     sfPlsArr.forEach((pl)=>{
         pl.intensity = Math.max(minLight, maxLight * 0.75 * sfLightPerc);
     });
+    if (allowInteraction == false) return;
+    console.log('allowInteraction ' + allowInteraction);
     if (terrainDebugMarker.position.distanceTo(otGroup.position) < 0.75 && enableOTTooltip == false) {
         showOTTooltip();
         document.body.style.cursor = "pointer";
+        document.body.addEventListener('click', invokeQRForm, false);
     } else if (terrainDebugMarker.position.distanceTo(otGroup.position) > 0.75 && enableOTTooltip == true) {
         document.body.style.cursor = "auto";
+        document.body.removeEventListener('click', invokeQRForm);
         hideOTTooltip();
     }
     if (terrainDebugMarker.position.distanceTo(silkFountainsGroup.position) < 0.75 && enableSFTooltip == false) {
@@ -46572,9 +46456,19 @@ const updateRaycaster = (mouse, camera)=>{
         document.body.style.cursor = "auto";
         hideSFTooltip();
     }
-/* if( terrainDebugMarker.position.distanceTo( silkFountainsGroup.position ) < 0.5 ) {
-        console.log( 'SHOW SILK FOUNTAIN TOOLTIP '); 
-    } */ };
+};
+const invokeQRForm = ()=>{
+    document.body.removeEventListener('click', invokeQRForm);
+    _tabletJsDefault.default.dispatcher.addEventListener('formClosed', formClosed);
+    allowInteraction = false;
+    hideOTTooltip(true);
+    document.body.style.cursor = "auto";
+    _tabletJsDefault.default.invokeForm();
+};
+const formClosed = ()=>{
+    allowInteraction = true;
+    _tabletJsDefault.default.dispatcher.removeListener('formClosed', formClosed);
+};
 const showOTTooltip = ()=>{
     enableOTTooltip = true;
     _gsap.gsap.killTweensOf(otToolTipText);
@@ -46606,9 +46500,14 @@ const showOTTooltip = ()=>{
     });
     otToolTipElement.style.display = 'block';
 };
-const hideOTTooltip = ()=>{
-    //gsap.killTweensOf( otToolTipText );
-    //gsap.killTweensOf( otToolTipImg );
+const hideOTTooltip = (force)=>{
+    if (force) {
+        enableOTTooltip = false;
+        otToolTipElement.style.display = 'none';
+        otToolTipText.style.opacity = 0;
+        otToolTipImg.style.opacity = 0;
+        return;
+    }
     _gsap.gsap.to(otToolTipText, 0.15, {
         x: 20,
         alpha: 0,
@@ -46678,14 +46577,12 @@ const hideSFTooltip = ()=>{
 };
 const update = (nativeMouse)=>{
     mousePointer = nativeMouse;
-    if (enableOTTooltip) /* otToolTipElement.style.top = mousePointer.y + 'px';
-        otToolTipElement.style.left = mousePointer.x + 'px'; */ _gsap.gsap.to(otToolTipElement, 0.3, {
+    if (enableOTTooltip) _gsap.gsap.to(otToolTipElement, 0.3, {
         x: mousePointer.x + 0,
         y: mousePointer.y - 75,
         ease: _gsap.Power2.easeOut
     });
-    if (enableSFTooltip) /* otToolTipElement.style.top = mousePointer.y + 'px';
-        otToolTipElement.style.left = mousePointer.x + 'px'; */ _gsap.gsap.to(sfToolTipElement, 0.3, {
+    if (enableSFTooltip) _gsap.gsap.to(sfToolTipElement, 0.3, {
         x: mousePointer.x - 300,
         y: mousePointer.y - 75,
         ease: _gsap.Power2.easeOut
@@ -46709,7 +46606,7 @@ const TooltipAssetManager = {
 };
 exports.default = TooltipAssetManager;
 
-},{"../build/three.module":"5T8FK","../examples/jsm/loaders/GLTFLoader":"aRyIW","../examples/jsm/loaders/DRACOLoader":"cJKxB","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","./shaders/SilkShaderRocks":"h27BM","gsap":"2aTR0"}],"h27BM":[function(require,module,exports) {
+},{"../build/three.module":"5T8FK","../examples/jsm/loaders/GLTFLoader":"aRyIW","../examples/jsm/loaders/DRACOLoader":"cJKxB","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","./shaders/SilkShaderRocks":"h27BM","gsap":"2aTR0","./tablet.js":"78wyl"}],"h27BM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _three = require("three");

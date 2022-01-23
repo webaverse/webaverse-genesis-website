@@ -3,6 +3,7 @@ import { GLTFLoader } from '../examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from '../examples/jsm/loaders/DRACOLoader';
 import SilkShader from './shaders/SilkShaderRocks';
 import { gsap, Power2, Power3, Power4 } from 'gsap';
+import TabletManager from './tablet.js'
 
 const emissiveCol = 0x63fcff;
 let otMesh1, otMesh2, otGroup, otHologramMat1, otHologramMat2, otPl;
@@ -33,7 +34,7 @@ let sfToolTipImg, sfToolTipText;
 
 const otToolTipElement = document.createElement( 'div' );
 let otToolTipImg, otToolTipText;
-
+let allowInteraction = true;
 
 let mousePointer = new THREE.Vector2();
 
@@ -51,7 +52,6 @@ const init = ( params ) => {
     terrainDebugMarker.visible = false;
 
     otToolTipElement.className = "ui-terrain-asset-tooltip-ot";
-    //otToolTipElement.style.opacity = '0';
     
     otToolTipImg = document.createElement( 'img' );
     otToolTipImg.src = './assets/docs-tooltip-circ.png';
@@ -61,7 +61,6 @@ const init = ( params ) => {
     otToolTipText = document.createElement( 'img' );
     otToolTipText.src = './assets/docs-tooltip-text.png';
     otToolTipText.className = 'ui-tooltip-text-ot';
-    //otToolTipText.style.top = '45px';
 
     otToolTipElement.appendChild( otToolTipText );
     otToolTipElement.appendChild( otToolTipImg );
@@ -69,7 +68,6 @@ const init = ( params ) => {
     document.body.appendChild( otToolTipElement );
 
     sfToolTipElement.className = "ui-terrain-asset-tooltip-sf";
-    //sfToolTipElement.style.opacity = '0';
 
     sfToolTipImg = document.createElement( 'img' );
     sfToolTipImg.src = './assets/app-tooltip-circ.png';
@@ -79,7 +77,6 @@ const init = ( params ) => {
     sfToolTipText = document.createElement( 'img' );
     sfToolTipText.src = './assets/app-tooltip-text.png';
     sfToolTipText.className = 'ui-tooltip-text-sf';
-    //otToolTipText.style.top = '45px';
 
     sfToolTipElement.appendChild( sfToolTipText );
     sfToolTipElement.appendChild( sfToolTipImg );
@@ -94,10 +91,7 @@ const loadModels = () => {
 
     console.log( 'TooltipAssetManager.loadModels()')
 
-    //let pointLight = new THREE.PointLight( 0x63fcff, 2.5, 1, 1 );
     const sphereSize = 100;
-    
-    //scene.add( pointLightHelper );
 
     let p1 = loadModel( { filePath: baseUrl + 'ot/', fileName: 'Tablet_Origin_Var1_LOD2_dream.glb', pos: { x: 0, y: 0, z: 0 }, scale: 1 } ).then( result => { 
         otMesh1 = result;
@@ -106,13 +100,10 @@ const loadModels = () => {
 
     let p2 = loadModel( { filePath: baseUrl + 'ot/', fileName: 'Tablet_Origin_Var2_LOD2_dream.glb', pos: { x: 0, y: 0, z: 0 }, scale: 1 } ).then( result => { 
         otMesh2 = result;
-        //otMesh2.add( pointLight.clone() );
     } );
 
     let p3 = loadModel( { filePath: baseUrl + 'silk-fountain/', fileName: 'SilkFountain_5_LOD2_center_dream.glb', pos: { x: 0, y: 0, z: 0 }, scale: 0.2 } ).then( result => { 
         silkFountainMesh = result;
-        
-        //silkFountainMesh.add( pl, plh )
         
     } );
 
@@ -133,7 +124,6 @@ const loadModels = () => {
         otGroup.add( otMesh1, otMesh2, otPl );
         otGroup.position.set( -5, -1.27, 1.8 );
         otGroup.scale.set( 0.075, 0.0975, 0.075 );
-        //otGroup.rotation.y = 35 * Math.PI/180;
 
         scene.add( otGroup );
 
@@ -141,7 +131,6 @@ const loadModels = () => {
 
         silkFountainClone1 = silkFountainMesh.clone();
         silkFountainClone2 = silkFountainMesh.clone();
-        //silkFountainMesh.material.wireframe = true;
 
         silkFountainClone1.position.set( 10, 0, 0 );
         silkFountainClone1.scale.set( 0.2 * 0.75, 0.2 * 0.75, 0.2 * 0.75 );
@@ -169,25 +158,12 @@ const loadModels = () => {
 
         silkFountainsGroup.position.set( 6, -1.68, 0 );
         silkFountainsGroup.scale.set( 0.1, 0.1, 0.1 );
-        //silkFountainsGroup.rotation.y = 35 * ( Math.PI/180 );
-
 
         scene.add( silkFountainsGroup );
 
         assetPositions.otsPos = otGroup.position;
         assetPositions.silkFountainsPos = silkFountainsGroup.position;
 
-
-
-        /* app.add( groundMesh );
-
-        rocksArray.push( rock01Mesh, rock02Mesh, rock03Mesh, rock04Mesh, rock05Mesh, rock06Mesh, rock07Mesh, rock08Mesh, rock09Mesh, rock10Mesh );
-        rockGroupsArray.push( rockGroup01Mesh, rockGroup02Mesh, rockGroup03Mesh, rockGroup04Mesh, rockGroup05Mesh, rockGroup06Mesh, rockGroup07Mesh, rockGroup08Mesh, rockGroup09Mesh, rockGroup10Mesh );
-        plantsArray.push( plantMesh01, plantMesh02, plantMesh03 );
-        bushesArray.push( bushMesh01, bushMesh02 );
-
-        addGroundItems();
-        addAndScatterSilkNodes( 500, 1, 2 ); */
     });
 }
 
@@ -213,7 +189,6 @@ const loadModel = ( params ) => {
                         if( child.name == 'Var1_Holo' ){
                             child.material = otHologramMat2;
                         } else if( child.name == 'Var2_Holo' ){
-                            //child.visible = false;
                             child.material = otHologramMat1;
                         } else {
                             child.material.color = new THREE.Color( 0x252525 );
@@ -236,46 +211,14 @@ const loadModel = ( params ) => {
                         
                             silkShaderMaterial.uniforms.noiseImage.value = silkMaterialTexture;
 
-
                             child.material = silkShaderMaterial;
-
-                            //console.log( 'SILK MATERIAL is ' + child )
 
                         } else {
                             child.material.color = new THREE.Color( 0x444444 );
                         }
 
-                        //child.material.wireframe = true;
                         
                     }
-
-
-
-                    /* if( params.fileName == "SilkFountain_Ground_V4_Dream.glb" ){
-
-                        let mat = new THREE.MeshStandardMaterial( { 
-                           color: 0xffffff,
-                            map: textureMap,
-                           
-                            wireframe: false
-                        })
-
-                        mat.needsUpdate = true
-                            
-                        child.material = mat;
-
-                        const physicsId = physics.addGeometry( child );
-                        physicsIds.push( physicsId );
-
-                        groundGeometry = child.geometry;
-
-                        for( let i = 0; i< groundGeometry.attributes.position.count; i++ ){
-                            groundGeometry.attributes.position.needsUpdate = true;
-                            let v = new THREE.Vector3().fromBufferAttribute( groundGeometry.attributes.position, i ) ;
-                            groundVerticePositions.push( v );
-                        }
-
-                    } */
 
 
                     numVerts += child.geometry.index.count / 3;  
@@ -299,30 +242,17 @@ const loadModel = ( params ) => {
 
 const updateRaycaster = ( mouse, camera ) => {
 
-    //console.log( 'mouse ' + mouse.x + ' ' + mouse.y )
-    //console.log( 'terrainDebugMarker ', terrainDebugMarker.position )
-    //console.log( 'terrainMeshNight ', terrainMeshNight.position )
-
     if( !terrainAssetPlane || !terrainDebugMarker || !otGroup ) return;
-
 
     terrainRaycaster.setFromCamera( mouse, camera );
 
 	const intersects = terrainRaycaster.intersectObjects( [ terrainAssetPlane ] );
     if( intersects[ 0 ] == undefined ) return;
 
-
     terrainDebugMarker.position.copy( intersects[0].point.add( new THREE.Vector3( 0, 0, 0 ) ) );
-
-    //console.log( 'dist' + terrainDebugMarker.position.distanceTo( TooltipAssetManager.getAssetPositions.otsPos ) );
-
-    //console.log( 'debugPos ', terrainDebugMarker.position );
-    //console.log( 'otsPos ', TooltipAssetManager.getAssetPositions().otsPos );
 
     otMouseDist = terrainDebugMarker.position.distanceTo( otGroup.position );
     otLightPerc = ( 5 - otMouseDist ) * 0.2;
-
-    //console.log( 'dist ' + Math.max( minLight, maxLight * otLightPerc ) );
 
     otPl.intensity = Math.max( minLight, ( maxLight * 2 ) * otLightPerc );
     otHologramMat1.opacity = Math.max( 0.2, otLightPerc );
@@ -336,12 +266,17 @@ const updateRaycaster = ( mouse, camera ) => {
         pl.intensity = Math.max( minLight, ( maxLight * 0.75 ) * sfLightPerc );
     })
 
+    if( allowInteraction == false ) return;
+
+    console.log( 'allowInteraction ' + allowInteraction )
+
     if( terrainDebugMarker.position.distanceTo( otGroup.position ) <0.75 && enableOTTooltip == false ) {
         showOTTooltip();
         document.body.style.cursor = "pointer";
+        document.body.addEventListener( 'click', invokeQRForm, false );
     } else if( terrainDebugMarker.position.distanceTo( otGroup.position ) > 0.75 && enableOTTooltip == true ){
         document.body.style.cursor = "auto";
-
+        document.body.removeEventListener( 'click', invokeQRForm );
         hideOTTooltip();
     }
 
@@ -351,15 +286,23 @@ const updateRaycaster = ( mouse, camera ) => {
 
     } else if( terrainDebugMarker.position.distanceTo( silkFountainsGroup.position ) > 0.75 && enableSFTooltip == true ){
         document.body.style.cursor = "auto";
-
         hideSFTooltip();
     }
-
-
-    /* if( terrainDebugMarker.position.distanceTo( silkFountainsGroup.position ) < 0.5 ) {
-        console.log( 'SHOW SILK FOUNTAIN TOOLTIP '); 
-    } */
  
+}
+
+const invokeQRForm = () => {
+    document.body.removeEventListener( 'click', invokeQRForm );
+    TabletManager.dispatcher.addEventListener( 'formClosed', formClosed )
+    allowInteraction = false;
+    hideOTTooltip( true );
+    document.body.style.cursor = "auto";
+    TabletManager.invokeForm();
+}
+
+const formClosed = () => {
+    allowInteraction = true;
+    TabletManager.dispatcher.removeListener( 'formClosed', formClosed )
 }
 
 const showOTTooltip = () => {
@@ -380,11 +323,15 @@ const showOTTooltip = () => {
 
 }
 
-const hideOTTooltip = () => {
+const hideOTTooltip = ( force ) => {
 
-
-    //gsap.killTweensOf( otToolTipText );
-    //gsap.killTweensOf( otToolTipImg );
+    if( force ) {
+        enableOTTooltip = false;
+        otToolTipElement.style.display = 'none';
+        otToolTipText.style.opacity = 0;
+        otToolTipImg.style.opacity = 0;
+        return;
+    }
 
     gsap.to( otToolTipText, 0.15, { x: 20, alpha: 0, ease: Power3.easeIn, delay: 0.1, onComplete: function(){
         enableOTTooltip = false;
@@ -429,14 +376,10 @@ const update = ( nativeMouse ) => {
     mousePointer = nativeMouse;
 
     if( enableOTTooltip ) {
-        /* otToolTipElement.style.top = mousePointer.y + 'px';
-        otToolTipElement.style.left = mousePointer.x + 'px'; */
         gsap.to( otToolTipElement, 0.3, { x: mousePointer.x + 0, y: mousePointer.y - 75.0, ease: Power2.easeOut } );
     }
 
     if( enableSFTooltip ) {
-        /* otToolTipElement.style.top = mousePointer.y + 'px';
-        otToolTipElement.style.left = mousePointer.x + 'px'; */
         gsap.to( sfToolTipElement, 0.3, { x: mousePointer.x - ( 300 ), y: mousePointer.y - 75, ease: Power2.easeOut } );
     }
 

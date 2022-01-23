@@ -167,15 +167,7 @@ function init( sceneParams ){
                 camera: camera
               });
 
-            TabletManager.init({
-                scene: scene,
-                scene3: scene2, 
-                raycaster: raycaster,
-                raycastPlane: raycastPlane,
-                raycastTarget: raycastTarget,
-                mouse: mouse,
-                camera: camera
-            });
+            TabletManager.init({});
 
             allowTerrainRaycast = true;
 
@@ -658,7 +650,7 @@ const update = ( t ) => {
     }
 
     TreesManager.update();
-    TabletManager.update(camera, mouse);
+    //TabletManager.update(camera, mouse);
 
     waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.05;
 

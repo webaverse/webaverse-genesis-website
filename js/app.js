@@ -17,15 +17,12 @@ let guiParams;
 let isMobile;
 let contentContainer;
 let stats;
-let showStats = true;
+let showStats = false;
 let navGrad;
 let nav = document.querySelector('.nav');
 let originalContentHeight = null;
 //import "./css/index.css";
 
-window.abeer = {
-    log:console.log
-}
 // console.log = function(){};
 
 
@@ -165,29 +162,19 @@ const updateScroll = ( e ) => {
     navGrad.style.opacity = gradVal;
 
     nav.style.opacity = 0;
-    console.log('[Abeer] Setting to 0');
+
 
     if(window.scrollY > 0){
-        console.log('[Abeer] Setting to 0');
+
         nav.style.opacity = 0;
     }
     if (document.documentElement.scrollHeight === window.innerHeight + window.scrollY){
-        //your code here
-        console.log('[Abeer] Setting to 1');
         nav.style.opacity = 1;
     }
     if (window.scrollY < 50){
-        //your code here
-        console.log('[Abeer] Setting to 1');
+
         nav.style.opacity = 1;
     }
-}
-
-
-const render = () => {
-  /* return (
-    <div ref={ ref => ( this.mount = ref ) } />
-  ) */
 }
 
 const resize = () => {
