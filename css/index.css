@@ -86,7 +86,7 @@ body {
 
 @media only screen and (max-height: 480px) {
   .content-scroll-item {
-    margin-top: -20vh;
+    margin-top: calc(100vh * -0.2);
   }
 }
 @media only screen and (max-height: 480px) and (min-width: 768px) {
@@ -134,7 +134,7 @@ body {
 
 @media only screen and (max-height: 550px) {
   .content-containerX {
-    height: calc(1000px + 100vh);
+    height: calc( (1000px) + 100vh );
   }
 
   .content-scroll-container {
@@ -144,7 +144,7 @@ body {
 }
 @media only screen and (max-height: 500px) {
   .content-containerX {
-    height: calc(1200px + 100vh);
+    height: calc( (1200px) + 100vh );
   }
 
   .content-scroll-container {
@@ -154,7 +154,7 @@ body {
 }
 @media only screen and (max-height: 300px) {
   .content-containerX {
-    height: calc(1500px + 100vh);
+    height: calc( (1500px) + 100vh );
   }
 
   .content-scroll-container {
@@ -185,7 +185,7 @@ body {
   }
 
   .content-containerX {
-    min-height: calc(800px + 100vh);
+    min-height: calc( 800px + 100vh );
   }
 
   .content-scroll-container {
@@ -195,7 +195,7 @@ body {
 }
 @media only screen and (min-width: 500px) {
   .content-containerX {
-    height: calc(550px + 100vh);
+    height: calc( 550px + 100vh );
   }
 
   .content-scroll-container {
@@ -205,7 +205,7 @@ body {
 }
 @media only screen and (min-width: 600px) {
   .content-containerX {
-    height: calc(800px + 100vh);
+    height: calc( 800px + 100vh );
   }
 }
 @media only screen and (min-width: 768px) {
@@ -214,7 +214,7 @@ body {
   }
 
   .content-containerX {
-    height: calc(920px + 100vh);
+    height: calc( 920px + 100vh );
   }
 
   .content-scroll-container {
@@ -224,7 +224,7 @@ body {
 }
 @media only screen and (min-width: 800px) {
   .content-containerX {
-    height: calc(920px + 100vh);
+    height: calc( 920px + 100vh );
   }
 
   .content-scroll-container {
@@ -234,7 +234,7 @@ body {
 }
 @media only screen and (min-width: 800px) and (max-width: 1000px) {
   .content-containerX {
-    height: 100vh;
+    height: calc(100vh );
   }
 
   .content-scroll-container {
@@ -244,7 +244,7 @@ body {
 }
 @media only screen and (min-width: 1280px) {
   .content-containerX {
-    height: calc(800px + 100vh);
+    height: calc( 800px + 100vh );
   }
 
   .content-scroll-container {
@@ -254,7 +254,7 @@ body {
 }
 @media only screen and (min-width: 1440px) {
   .content-containerX {
-    height: calc(900px + 100vh);
+    height: calc( 900px + 100vh );
   }
 
   .content-scroll-container {
@@ -264,7 +264,7 @@ body {
 }
 @media only screen and (min-width: 1600px) {
   .content-containerX {
-    height: calc(700px + 100vh);
+    height: calc( 700px + 100vh );
   }
 
   .content-scroll-container {
@@ -274,7 +274,7 @@ body {
 }
 @media only screen and (min-width: 1680px) {
   .content-containerX {
-    height: calc(700px + 100vh);
+    height: calc( 700px + 100vh );
   }
 
   .content-scroll-container {
@@ -284,7 +284,7 @@ body {
 }
 @media only screen and (min-width: 1920px) {
   .content-containerX {
-    height: calc(700px + 100vh);
+    height: calc( 700px + 100vh );
   }
 
   .content-scroll-container {
@@ -294,7 +294,7 @@ body {
 }
 @media only screen and (min-width: 2160px) {
   .content-containerX {
-    height: calc(600px + 100vh);
+    height: calc( 600px + 100vh );
   }
 
   .content-scroll-container {
@@ -304,7 +304,7 @@ body {
 }
 @media only screen and (min-width: 2880px) {
   .content-containerX {
-    height: 80vh;
+    height: calc( 80vh );
   }
 
   .content-scroll-container {
@@ -314,7 +314,7 @@ body {
 }
 @media only screen and (min-width: 7000px) {
   .content-containerX {
-    height: 100px;
+    height: calc( 100px );
   }
 
   .content-scroll-container {
@@ -431,17 +431,17 @@ img {
 }
 @media only screen and (max-height: 480px) {
   .slide-scroll-component {
-    height: 190vh;
+    height: calc(100vh + 90vh);
   }
 }
 @media only screen and (max-height: 400px) {
   .slide-scroll-component {
-    height: 200vh;
+    height: calc(100vh + 100vh);
   }
 }
 @media only screen and (max-height: 320px) {
   .slide-scroll-component {
-    height: 230vh;
+    height: calc(100vh + 130vh);
   }
 }
 .slide-scroll-controls-container {
@@ -576,7 +576,7 @@ img {
   .ui-logo-container {
     width: 90px !important;
     height: 124px !important;
-    left: calc(0vw + 17.5px) !important;
+    left: calc( 0vw + 17.5px) !important;
   }
 }
 .ui-nav {
@@ -588,7 +588,7 @@ img {
   cursor: pointer;
   pointer-events: none;
   position: fixed;
-  left: calc(50% - 159px);
+  left: calc( 50% - 159px);
   margin: 0 auto;
 }
 
@@ -704,7 +704,7 @@ img {
   width: 90px !important;
   height: 124px !important;
   pointer-events: none;
-  left: calc(0vw + 25px);
+  left: calc( 0vw + 25px);
 }
 
 .weba-logo-container {
@@ -712,7 +712,7 @@ img {
   top: 40px;
   width: 100px;
   pointer-events: none;
-  left: calc(100vw - 190px);
+  left: calc( 100vw - 190px);
 }
 
 .ui-genesis-container {
@@ -787,6 +787,62 @@ img {
   background-color: white;
 }
 
+.ui-terrain-asset-tooltip-ot {
+  width: 230px;
+  height: 100px;
+  background-color: rgba(255, 0, 255, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999998;
+  opacity: 1;
+  display: none;
+}
+
+.ui-terrain-asset-tooltip-sf {
+  width: 230px;
+  height: 100px;
+  background-color: rgba(129, 27, 239, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  opacity: 1;
+  display: none;
+}
+
+.ui-tooltip-circ-ot {
+  position: absolute;
+  top: 0px;
+  left: 125px;
+  width: auto;
+  height: auto;
+}
+
+.ui-tooltip-text-ot {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: auto;
+  height: auto;
+}
+
+.ui-tooltip-circ-sf {
+  position: absolute;
+  top: 0px;
+  right: 95px;
+  width: auto;
+  height: auto;
+}
+
+.ui-tooltip-text-sf {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: auto;
+  height: auto;
+}
+
 #qrform {
   position: fixed;
   top: 0px;
@@ -794,64 +850,93 @@ img {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -ms-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
+  /* -webkit-transition: all 0.5s ease-in-out;
+     -moz-transition: all 0.5s ease-in-out;
+      -ms-transition: all 0.5s ease-in-out;
+      -o-transition: all 0.5s ease-in-out;
+          transition: all 0.5s ease-in-out;
   -webkit-transform: translate(0px, -100%) scale(0, 0);
-  -moz-transform: translate(0px, -100%) scale(0, 0);
-  -ms-transform: translate(0px, -100%) scale(0, 0);
-  -o-transform: translate(0px, -100%) scale(0, 0);
-  transform: translate(0px, -100%) scale(0, 0);
+    -moz-transform: translate(0px, -100%) scale(0, 0);
+     -ms-transform: translate(0px, -100%) scale(0, 0);
+       -o-transform: translate(0px, -100%) scale(0, 0);
+         transform: translate(0px, -100%) scale(0, 0);     */
   opacity: 0;
-  display: none;
-}
-
-#qrform.open {
-  -webkit-transform: translate(0px, 0px) scale(1, 1);
-  -moz-transform: translate(0px, 0px) scale(1, 1);
-  -ms-transform: translate(0px, 0px) scale(1, 1);
-  -o-transform: translate(0px, 0px) scale(1, 1);
-  transform: translate(0px, 0px) scale(1, 1);
-  opacity: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   z-index: 106;
-  display: block;
 }
 
-#qrform input[type=text] {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  margin-top: -51px;
-  width: 60%;
-  margin-left: 20%;
-  color: white;
-  background: transparent;
-  border-top: 1px solid rgba(255, 255, 255, 0.8);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-  border-left: 0px solid transparent;
-  border-right: 0px solid transparent;
-  font-size: 40px;
-  font-family: Roboto;
-  font-weight: 300;
-  text-align: center;
-  outline: none;
-  padding: 10px;
-}
-
-#qrform .close {
+#qrform .ui-qr-form-close {
   position: fixed;
   top: 15px;
   right: 15px;
-  opacity: 1;
+  width: 36px;
+  height: 36px;
+  opacity: 0.5;
   font-size: 27px;
   color: #fff;
+  font-family: "Neutra";
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#qrform .close:hover {
-  color: #FC2121;
+#qrform .ui-qr-form-close:hover {
+  opacity: 1;
   cursor: pointer;
+}
+
+.form-inner {
+  width: 60%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.ui-enter-text {
+  color: #999999;
+  font-family: "Neutra";
+  margin: 0 auto;
+  padding: 10px;
+  font-size: 13pt;
+  width: 100%;
+}
+
+.form-submit-button {
+  height: 35px;
+  padding: 13px 18px 10px 18px;
+  margin: 0 auto;
+  margin-left: 20px;
+  border: none;
+  border-radius: 5px;
+  font-family: "Neutra";
+  color: #811bef;
+  cursor: pointer;
+}
+
+#name-input {
+  height: 26px;
+  width: 100%;
+  padding: 10px;
+  padding-top: 16px;
+  font-family: "Neutra";
+  color: white;
+  font-size: 16pt;
+  margin: 10 auto;
+  margin-bottom: 16px;
+  background-color: rgba(50, 50, 50, 0.5);
+  border: none;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+textarea:focus, input:focus {
+  outline: none;
 }
 
 @font-face {

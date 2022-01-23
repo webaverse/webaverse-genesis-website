@@ -226,10 +226,18 @@
     </script>
 
     <div id="qrform" style="display: none;"> 
-        <span class="close">X</span>
-        <form role="qr" onsubmit="return false;">
-            <input value="" name="q" id="qrNameSubmit" type="text" placeholder="Type your name! & Hit Enter!"/>
-        </form>
+        <div class="ui-qr-form-close">
+            <img src="./assets/form-close-btn.png" alt="">
+        </div>
+
+        <div class="form-inner">
+            <form role="qr" onsubmit="return false;">
+                <p class="ui-enter-text">ENTER YOUR NAME</p>
+                <input value="" name="q" id="name-input" type="text" placeholder=""/>
+                <button class="form-submit-button">SUBMIT</button>
+            </form>
+        </div>
+
     </div>
 
 </body>

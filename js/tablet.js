@@ -1,164 +1,81 @@
-import * as THREE from '../build/three.module';
-const raycaster = new THREE.Raycaster();
+import EventDispatcher from './EventDispatcher';
+import { gsap, Power3 } from 'gsap';
 
-let scene, scene3, camera, gui, hologram, mouse;
-let alwasyShow = false;
-let cursorAlreadyWeba = false;
-let cursorAlreadyNone = false;
 
-let position = {
-    x: -7.640,
-    y: 0.450,
-    z: 1.290
-}
+let closeButton;
+let formElement;
+let submitButton;
+let nameInputText;
+let inputPrompt;
+const dispatcher = new EventDispatcher();
 
-const init = (params) => {
-    scene = params.scene;
-    scene3 = params.scene3;
-    mouse = params.mouse;
-    // dynamicMouse = params.mouse;
-    camera = params.camera;
-    gui = params.gui;
-    // raycaster = params.raycaster;
-    // raycastPlane.visible = true;
-    // raycastTarget.visible = true;
-    abeer.log(camera);
+const init = () => {
+
     if (!localStorage.getItem('id'))
         localStorage.setItem('id', Date.now() + Math.random());
-    addTablet(gui);
+
+    closeButton = document.querySelector( '.ui-qr-form-close' );
+    formElement = document.querySelector('#qrform')
+    submitButton = document.querySelector( '.form-submit-button' )
+    nameInputText = document.querySelector('#name-input');
+    inputPrompt = document.querySelector('.ui-enter-text');
+
+
 }
 
-const addTablet = (gui) => {
+const invokeForm = () => {
+    closeButton.addEventListener( 'click', hideForm );
+    submitButton.addEventListener( 'click', submitForm );
 
-    /** Tablet */
-    var img = new THREE.MeshBasicMaterial({
-        map: THREE.ImageUtils.loadTexture('./assets/tablets.png')
-    });
-    img.transparent = true;
+    let name = localStorage.getItem('name');
+    if (name) {
+        window.location.href = `https://qr.webaverse.com/weba/${name}-${localStorage.getItem('id')}`
+        return;
+    }
+    formElement.style.display = 'flex';
 
-    var plane = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 3.6), img);
-    plane.position.set(position.x, position.y, position.z);
-    plane.rotateY(1);
-    plane.rotateX(0);
-    plane.renderOrder = 2;
-    plane.material.depthTest = false;
+    document.querySelector('#qrform > div > form > input[type="text"]').focus();
+    gsap.killTweensOf( formElement );
+    
+    gsap.set( inputPrompt, { y: -10, alpha: 0 } );
+    gsap.set( nameInputText, { y: -10, alpha: 0 } );
+    gsap.set( submitButton, { y: -10, alpha: 0 } );
 
-    // let cubeFolder = gui.addFolder('Rotation')
-    // cubeFolder.add(plane.rotation, 'x', -360,360)
-    // cubeFolder.add(plane.rotation, 'y', -360,360)
-    // cubeFolder.add(plane.rotation, 'z', -360,360)
-    // cubeFolder.add(plane, "renderDepth", 0, 200)
+    let openAniSpeed = 0.3;
+    
+    gsap.to( formElement, openAniSpeed, { alpha: 1, ease: Power3.easeOut } );
 
-    // cubeFolder.open()
+    gsap.to( inputPrompt, 0.3, { y: 0, alpha: 1, ease: Power3.easeOut, delay: openAniSpeed } );
+    gsap.to( nameInputText, 0.3, { y: 0, alpha: 1, ease: Power3.easeOut, delay: openAniSpeed + 0.1 } );
+    gsap.to( submitButton, 0.3, { y: 0, alpha: 1, ease: Power3.easeOut, delay: openAniSpeed + 0.2 } );
 
-
-    // cubeFolder = gui.addFolder('Position')
-    // cubeFolder.add(plane.position, 'x', -50,30)
-    // cubeFolder.add(plane.position, 'y', -50,20)
-    // cubeFolder.add(plane.position, 'z', -50,20)
-    // cubeFolder.open()
-
-    /** Holograms */
-    const holoImg = new THREE.MeshBasicMaterial({
-        map: THREE.ImageUtils.loadTexture('./assets/holograms.png')
-    });
-    holoImg.transparent = true;
-
-    var holoPlane = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 3.6), holoImg);
-    holoPlane.position.set(position.x, position.y, position.z);
-    holoPlane.rotateY(1);
-    holoPlane.rotateX(0);
-    hologram = holoPlane;
-    // let outerFolder = gui.addFolder('Hologram')
-
-    // cubeFolder = outerFolder.addFolder('Rotation')
-    // cubeFolder.add(holoPlane.rotation, 'x', -1,1)
-    // cubeFolder.add(holoPlane.rotation, 'y', -1,1)
-    // cubeFolder.add(holoPlane.rotation, 'z', -1,1)
-    // cubeFolder.open()
-
-    // cubeFolder = outerFolder.addFolder('Position')
-    // cubeFolder.add(holoPlane.position, 'x', -50,50)
-    // cubeFolder.add(holoPlane.position, 'y', -50,50)
-    // cubeFolder.add(holoPlane.position, 'z', -50,50)
-    // cubeFolder.open()
-
-    // outerFolder.open();
-
-    scene.add(plane);
-    scene3.add(holoPlane);
-    startHoloLoop();
 }
 
-const startHoloLoop = () => {
-    let random = Math.floor(Math.random() * 1000) + 300;
-    setTimeout(() => {
-        if (!alwasyShow)
-            hologram.visible = !hologram.visible;
-        else
-            hologram.visible = true;
-        startHoloLoop();
-    }, random)
+const hideForm = () => {
+    submitButton.removeEventListener( 'click', submitForm );
+    submitButton.removeEventListener( 'click', hideForm );
+
+    document.querySelector('#qrform').classList.remove('open');
+    dispatcher.dispatchEvent( 'formClosed' );
+    gsap.to( formElement, 0.3, { alpha: 0, ease: Power3.easeOut, onComplete: function(){
+        formElement.style.display = 'none';
+    } } );
 }
 
-const updateCursor = (weba) => {
-    if (weba && !cursorAlreadyWeba) {
-        cursorAlreadyNone = false;
-        cursorAlreadyWeba = true;
-        document.documentElement.style.cursor = "url('./assets/mouse.png'), auto";
-    } else if (!weba && !cursorAlreadyNone) {
-        cursorAlreadyWeba = false;
-        cursorAlreadyNone = true;
-        document.documentElement.style.cursor = "auto";
-        document.getElementById('qrform').style.display = 'none';
+const submitForm = () => {
+    let input = document.querySelector('#name-input').value;
+    if ( input.length > 1 ) {
+        localStorage.setItem('name', input);
+        window.location.href = `https://qr.webaverse.com/weba/${input}-${localStorage.getItem('id')}`
     }
 }
-
-const update = (camera, mouse) => {
-    // console.log(camera);
-    if (hologram) {
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects([hologram]);
-        if (intersects.length > 0) {
-            alwasyShow = true;
-            updateCursor(alwasyShow);
-        } else {
-            alwasyShow = false;
-            updateCursor(alwasyShow);
-        }
-    }
-}
-
-document.body.onmouseup = function () {
-    if (alwasyShow) {
-        //window.location.href = `https://qr.webaverse.com/weba/${localStorage.getItem('id')}`
-        let name = localStorage.getItem('name');
-        if (name) {
-            window.location.href = `https://qr.webaverse.com/weba/${name}-${localStorage.getItem('id')}`
-            return;
-        }
-        document.getElementById('qrform').style.display = 'block';
-        document.querySelector('#qrform').classList.add('open');
-        document.querySelector('#qrform > form > input[type="text"]').focus();
-    }
-}
-
-document.querySelector('#qrNameSubmit').addEventListener("keyup", function (event) {
-    let input = document.querySelector('#qrNameSubmit').value;
-
-    if (event.keyCode === 13) {
-        event.preventDefault();
-        if (input.length > 1 && event.keyCode === 13) {
-            localStorage.setItem('name', input);
-            window.location.href = `https://qr.webaverse.com/weba/${input}-${localStorage.getItem('id')}`
-        }
-    }
-});
 
 
 const TabletManager = {
     init,
-    update,
+    invokeForm,
+    hideForm,
+    dispatcher,
 };
 
 export default TabletManager;
