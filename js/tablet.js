@@ -29,7 +29,7 @@ const invokeForm = () => {
 
     let name = localStorage.getItem('name');
     if (name) {
-        window.location.href = `https://qr.webaverse.com/weba/${name}-${localStorage.getItem('id')}`
+        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(name)}-${localStorage.getItem('id')}`
         return;
     }
     formElement.style.display = 'flex';
