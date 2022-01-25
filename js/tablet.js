@@ -66,7 +66,7 @@ const submitForm = () => {
     let input = document.querySelector('#name-input').value;
     if ( input.length > 1 ) {
         localStorage.setItem('name', input);
-        window.location.href = `https://qr.webaverse.com/weba/${input}-${localStorage.getItem('id')}`
+        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(input)}-${localStorage.getItem('id')}`
     }
 }
 
