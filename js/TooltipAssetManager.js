@@ -11,7 +11,7 @@ let otMouseDist = 0;
 let otLightPerc = 0;
 const maxLight = 3.0;
 const minLight = 0.7;
-let silkFountainMesh, silkFountainClone1, silkFountainClone2, silkFountainsGroup, sfPl1, sfPl2, sfPL3;
+let silkFountainMesh, silkFountainClone1, silkFountainClone2, silkFountainsGroup, sfPl1, sfPl2, sfPl3;
 const sfPlsArr = [];
 let sfMouseDist = 0;
 let sfLightPerc = 0;
