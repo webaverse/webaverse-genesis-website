@@ -49302,6 +49302,7 @@ let contentIcons = [
 ];
 let isMobile;
 const bgImageAlphaVal = 1;
+const $ = document.querySelector;
 const init = (params)=>{
     isMobile = params.isMobile;
     container = params.container;
@@ -49362,10 +49363,14 @@ const init = (params)=>{
     if (isMobile) {
         nextArrow.addEventListener('touchend', nextArrowClickHandler);
         prevArrow.addEventListener('touchend', prevArrowClickHandler);
+        document.querySelector('.content-scroll-container').style.marginTop = document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height + 'px';
     } else {
         nextArrow.addEventListener('click', nextArrowClickHandler);
         prevArrow.addEventListener('click', prevArrowClickHandler);
     }
+    setTimeout(()=>{
+        if (isMobile) document.querySelector('.content-scroll-container').style.marginTop = document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height + 'px';
+    }, 2000);
 };
 var clicked = false;
 const nextArrowClickHandler = ()=>{
@@ -49574,14 +49579,14 @@ const updateScroll = (val)=>{
     //let amt = val > 1 ? 1 : val;
     topGrad.style.height = window.innerHeight * 0.5 * val + 'px';
     topGrad.style.marginTop = -(window.innerHeight * 0.5 * val) + 'px';
+    if (isMobile) document.querySelector('.content-scroll-container').style.marginTop = document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height + 'px';
 };
 const resize = (width, height)=>{
     _sideScrollManagerDefault.default.resize(width, height);
     //console.log( ' imgs container height: ', contentBackgroundImagesContainer.getBoundingClientRect() ); 
     let bgImgsRect = contentBackgroundImagesContainer.getBoundingClientRect();
     let contHeight = bgImgsRect.y + bgImgsRect.height;
-//container.style.height = contHeight + 'px';
-//gsap.set( container, { height: 'auto'})
+    if (isMobile) document.querySelector('.content-scroll-container').style.marginTop = document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height + 'px';
 };
 const Content = {
     init,

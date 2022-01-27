@@ -52,6 +52,8 @@ let loadbarCont, loadbarDiv;
 let loadGenesisInterval;
 const navCols = ['#1dff72', '#49c88b', '#8651cb', '#b431c9', '#e900e6'];
 let splashCalled = false;
+
+
 const init = (params) => {
     console.log('ui.init()');
 
