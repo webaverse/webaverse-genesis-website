@@ -46128,7 +46128,7 @@ let nameInputText;
 let inputPrompt;
 const dispatcher = new _eventDispatcherDefault.default();
 const init = ()=>{
-    if (!localStorage.getItem('id')) localStorage.setItem('id', Date.now() + Math.random());
+    if (!localStorage.getItem('id')) localStorage.setItem('id', Date.now() + '' + Math.floor(Math.random() * 100000));
     closeButton = document.querySelector('.ui-qr-form-close');
     formElement = document.querySelector('#qrform');
     submitButton = document.querySelector('.form-submit-button');
@@ -46140,7 +46140,7 @@ const invokeForm = ()=>{
     submitButton.addEventListener('click', submitForm);
     let name = localStorage.getItem('name');
     if (name) {
-        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(name)}-${localStorage.getItem('id')}`;
+        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(name.replace(/\./g, '_'))}-${localStorage.getItem('id')}`;
         return;
     }
     formElement.style.display = 'flex';
@@ -46199,7 +46199,7 @@ const submitForm = ()=>{
     let input = document.querySelector('#name-input').value;
     if (input.length > 1) {
         localStorage.setItem('name', input);
-        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(input)}-${localStorage.getItem('id')}`;
+        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(input.replace(/\./g, '_'))}-${localStorage.getItem('id')}`;
     }
 };
 const TabletManager = {
