@@ -29,7 +29,7 @@ const invokeForm = () => {
 
     let name = localStorage.getItem('name');
     if (name) {
-        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(name)}-${localStorage.getItem('id')}`
+        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(name)}-${localStorage.getItem('id').replace(/./g,'_')}`
         return;
     }
     formElement.style.display = 'flex';
@@ -66,7 +66,7 @@ const submitForm = () => {
     let input = document.querySelector('#name-input').value;
     if ( input.length > 1 ) {
         localStorage.setItem('name', input);
-        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(input)}-${localStorage.getItem('id')}`
+        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(input)}-${localStorage.getItem('id').replace(/./g,'_')}`
     }
 }
 
