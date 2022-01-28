@@ -31,7 +31,6 @@ window.onload = init;
 function init(){
     console.log( 'app.init');
 
-    
     if( showStats ) stats = new Stats();
     
     isMobile = userAgent.getUserAgent();
@@ -41,7 +40,7 @@ function init(){
     windowHeight = window.innerHeight;
     
     WebaWorld.dispatcher.once( 'modelLoaded', function() { 
-        console.log( 'app.modelLoaded()')
+        console.log( 'app.modelLoaded()' )
         document.querySelector( '.content-container' ).style.display = 'block';
         
         gsap.set( nav, { y: 10 } );
@@ -163,29 +162,19 @@ const updateScroll = ( e ) => {
     navGrad.style.opacity = gradVal;
 
     nav.style.opacity = 0;
-    console.log('[Abeer] Setting to 0');
+
 
     if(window.scrollY > 0){
-        console.log('[Abeer] Setting to 0');
+
         nav.style.opacity = 0;
     }
     if (document.documentElement.scrollHeight === window.innerHeight + window.scrollY){
-        //your code here
-        console.log('[Abeer] Setting to 1');
         nav.style.opacity = 1;
     }
     if (window.scrollY < 50){
-        //your code here
-        console.log('[Abeer] Setting to 1');
+
         nav.style.opacity = 1;
     }
-}
-
-
-const render = () => {
-  /* return (
-    <div ref={ ref => ( this.mount = ref ) } />
-  ) */
 }
 
 const resize = () => {

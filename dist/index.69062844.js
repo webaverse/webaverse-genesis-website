@@ -619,26 +619,10 @@ const updateScroll = (e)=>{
     let gradVal = Math.min(yVal * 10, 1);
     navGrad.style.opacity = gradVal;
     nav.style.opacity = 0;
-    console.log('[Abeer] Setting to 0');
-    if (window.scrollY > 0) {
-        console.log('[Abeer] Setting to 0');
-        nav.style.opacity = 0;
-    }
-    if (document.documentElement.scrollHeight === window.innerHeight + window.scrollY) {
-        //your code here
-        console.log('[Abeer] Setting to 1');
-        nav.style.opacity = 1;
-    }
-    if (window.scrollY < 50) {
-        //your code here
-        console.log('[Abeer] Setting to 1');
-        nav.style.opacity = 1;
-    }
+    if (window.scrollY > 0) nav.style.opacity = 0;
+    if (document.documentElement.scrollHeight === window.innerHeight + window.scrollY) nav.style.opacity = 1;
+    if (window.scrollY < 50) nav.style.opacity = 1;
 };
-const render = ()=>{
-/* return (
-    <div ref={ ref => ( this.mount = ref ) } />
-  ) */ };
 const resize = ()=>{
     windowWidth = document.documentElement.clientWidth;
     windowHeight = document.documentElement.clientHeight;
@@ -5053,6 +5037,10 @@ var _audioManagerDefault = parcelHelpers.interopDefault(_audioManager);
 var _ui = require("./UI");
 var _uiDefault = parcelHelpers.interopDefault(_ui);
 var _modifiersMin = require("./modifiers.min");
+var _tabletJs = require("./tablet.js");
+var _tabletJsDefault = parcelHelpers.interopDefault(_tabletJs);
+var _tooltipAssetManager = require("./TooltipAssetManager");
+var _tooltipAssetManagerDefault = parcelHelpers.interopDefault(_tooltipAssetManager);
 const allowControls = false;
 let modelLoaded = false;
 let dispatcher = new _eventDispatcherDefault.default();
@@ -5138,6 +5126,8 @@ const mouse = new _threeModule.Vector2();
 const nativeMouse = new _threeModule.Vector2();
 let raycastPlane;
 let raycastTarget;
+// terrain raycaster
+let allowTerrainRaycast = false;
 function init(sceneParams) {
     console.log('WebaWorld.init()');
     params = sceneParams;
@@ -5192,6 +5182,9 @@ function init(sceneParams) {
         addShootingStar();
         addFireflies();
         addHomeLight(result);
+        _tooltipAssetManagerDefault.default.init({
+            scene: scene
+        });
         _fireflyManagerDefault.default.init({
             scene: scene2,
             model: "./assets/models/firefly/Fairy_LP_V7_galad.glb",
@@ -5201,7 +5194,10 @@ function init(sceneParams) {
             mouse: mouse,
             camera: camera
         });
-        window.dispatchEvent(new Event('resize'));
+        _tabletJsDefault.default.init({
+        });
+        allowTerrainRaycast = true;
+    //window.dispatchEvent(new Event('resize'));
     });
     window.addEventListener("beforeunload", function() {
         if (_audioManagerDefault.default) _audioManagerDefault.default.stopAll();
@@ -5227,7 +5223,9 @@ const addMist = ()=>{
         vertexShader: _mistShaderDefault.default.fragmentShader,
         fragmentShader: _mistShaderDefault.default.vertexShader,
         transparent: true,
-        //alphaTest: true, 
+        alphaTest: true,
+        depthWrite: false,
+        dithering: true,
         blending: _threeModule.AdditiveBlending
     });
     waveMaterial.uniforms.uTexture.value.wrapS = _threeModule.RepeatWrapping;
@@ -5235,8 +5233,19 @@ const addMist = ()=>{
     waveGeom = new _threeModule.PlaneBufferGeometry(20, 20, 128, 128);
     wavePlane = new _threeModule.Mesh(waveGeom, waveMaterial);
     wavePlane.rotateOnAxis(new _threeModule.Vector3(1, 0, 0), -90 * Math.PI / 180);
-    wavePlane.position.y = -1;
+    wavePlane.position.y = -0.8;
     scene.add(wavePlane);
+    let wavePlane2 = new _threeModule.Mesh(waveGeom.clone(), waveMaterial);
+    wavePlane2.rotateOnAxis(new _threeModule.Vector3(1, 0, 0), -90 * Math.PI / 180);
+    wavePlane2.scale.x = -1;
+    wavePlane2.position.y = -0.7;
+    scene.add(wavePlane2);
+    let wavePlane3 = new _threeModule.Mesh(waveGeom.clone(), waveMaterial);
+    wavePlane3.rotateOnAxis(new _threeModule.Vector3(1, 0, 0), -90 * Math.PI / 180);
+    //wavePlane3.scale.z = -1;
+    wavePlane3.position.y = -0.6;
+    scene.add(wavePlane3);
+//console.log( '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ADD MIST!!!!!')
 };
 const addHomeLight = (sc)=>{
     homeLight = new _threeModule.SpotLight(homeLightCols.mid, 20); //warm
@@ -5525,7 +5534,8 @@ const createTerrain = ()=>{
     });
     let terrainScale = 0.0390625;
     let terrainGeom = new _threeModule.PlaneBufferGeometry(1024, 1024, 256, 256);
-    terrainMeshNight = new _threeModule.Mesh(terrainGeom.clone(), terrainMaterialNight);
+    terrainMeshNight = new _threeModule.Mesh(terrainGeom, terrainMaterialNight);
+    terrainMeshNight.receiveShadow = true;
     terrainMeshNight.rotateOnAxis(new _threeModule.Vector3(1, 0, 0), -Math.PI * 0.5);
     terrainMeshNight.scale.set(terrainScale, terrainScale, terrainScale);
     terrainMeshNight.position.x = 5;
@@ -5568,7 +5578,8 @@ const update = (t)=>{
     }
     for(let i = 0; i < fireflyGroups.length; i++)fireflyGroups[i].update(t);
     _treesManagerDefault.default.update();
-    waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.3;
+    //TabletManager.update(camera, mouse);
+    waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.05;
     if (isMobile) targetX = -mouseX * 0.0008;
     else targetX = -mouseX * 0.0004;
     if (scene2) {
@@ -5582,10 +5593,13 @@ const update = (t)=>{
     renderer.render(scene, camera);
     renderer.clearDepth();
     renderer.render(scene2, camera);
-    if (raycastPlane) //updateRaycaster();
-    {
+    if (raycastPlane) {
         if (_fireflyManagerDefault.default.getModelLoaded()) _fireflyManagerDefault.default.update();
     }
+    _tooltipAssetManagerDefault.default.update(nativeMouse);
+};
+const updateTerrainRaycaster = ()=>{
+    _tooltipAssetManagerDefault.default.updateRaycaster(mouse, camera);
 };
 const resize = ()=>{
     windowWidth = document.documentElement.clientWidth;
@@ -5595,7 +5609,7 @@ const resize = ()=>{
     _fireflyManagerDefault.default.resize(windowWidth, windowHeight);
     renderer.setSize(windowWidth, windowHeight);
 };
-window.WebaWorldResize = resize;
+//window.WebaWorldResize = resize;
 const mouseMove = (e)=>{
     if (!modelLoaded) return;
     mouseX = (e.clientX - windowWidth / 2) * 3;
@@ -5609,6 +5623,7 @@ const mouseMove = (e)=>{
         ease: _gsap.Power1.easeOut,
         onUpdate: updateLightColors
     });
+    updateTerrainRaycaster();
 };
 const touchMove = (e)=>{
     if (!modelLoaded) return;
@@ -5622,6 +5637,7 @@ const touchMove = (e)=>{
         ease: _gsap.Power1.easeOut,
         onUpdate: updateLightColors
     });
+    updateTerrainRaycaster();
 };
 const updateLightColors = ()=>{
     if (paraAmount.x > 0) homeLight.color.lerpColors(homeLightCols.mid, homeLightCols.end, paraAmount.x * 4);
@@ -5704,7 +5720,7 @@ const WebaWorld = {
 };
 exports.default = WebaWorld;
 
-},{"regenerator-runtime/runtime":"1EBPE","../build/three.module":"5T8FK","../examples/jsm/controls/OrbitControls":"4gBF2","../examples/jsm/loaders/GLTFLoader":"aRyIW","../examples/jsm/loaders/DRACOLoader":"cJKxB","gsap":"2aTR0","./shaders/StarryNightShader":"6JMfi","./FireFlies":"gwcAu","./TreesManager":"vQYSN","./shaders/MistShader":"bEmbk","simplex-noise":"jB0ac","./FireflyManager":"13V9k","./EventDispatcher":"czwKm","./AudioManager":"7sFeC","./UI":"lsITd","./modifiers.min":"2uVfE","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"5T8FK":[function(require,module,exports) {
+},{"regenerator-runtime/runtime":"1EBPE","../build/three.module":"5T8FK","../examples/jsm/controls/OrbitControls":"4gBF2","../examples/jsm/loaders/GLTFLoader":"aRyIW","../examples/jsm/loaders/DRACOLoader":"cJKxB","gsap":"2aTR0","./shaders/StarryNightShader":"6JMfi","./FireFlies":"gwcAu","./TreesManager":"vQYSN","./shaders/MistShader":"bEmbk","simplex-noise":"jB0ac","./FireflyManager":"13V9k","./EventDispatcher":"czwKm","./AudioManager":"7sFeC","./UI":"lsITd","./modifiers.min":"2uVfE","./tablet.js":"78wyl","./TooltipAssetManager":"lls42","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"5T8FK":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ACESFilmicToneMapping", ()=>ACESFilmicToneMapping
@@ -39989,7 +40005,7 @@ const MistShader = {
     void main() {
     float wave = vWave * 0.7;
     vec3 texture = texture2D(uTexture, vUv + wave).rgb;
-    gl_FragColor = vec4(texture, 0.1);
+    gl_FragColor = vec4(texture, 0.02);
     }`
 };
 exports.default = MistShader;
@@ -40138,6 +40154,7 @@ const init = (params)=>{
     camera = params.camera;
     /* raycastPlane.visible = true;
     raycastTarget.visible = true; */ flyGroup = new _threeModule.Group();
+    flyGroup.visible = false;
     glowText = new _threeModule.TextureLoader().load('./assets/textures/firefly/firefly-1.png');
     scene.add(flyGroup);
     flyToNavItem = document.querySelector('.nav-alpha-item');
@@ -40478,14 +40495,12 @@ const update = ()=>{
 };
 const updateRaycaster = ()=>{
     raycaster.setFromCamera(dynamicMouse, camera);
-    // calculate objects intersecting the picking ray
     const intersects = raycaster.intersectObjects([
         raycastPlane
     ]);
     raycastPlane.lookAt(camera.position);
     //raycastTarget.position.copy( intersects[ 0 ].position );
     raycastTarget.position.copy(intersects[0].point.add(new _threeModule.Vector3(0, 0, 0)));
-//FireflyManager.
 };
 const translate2DPoint = (point)=>{
     /* customPositionPoint.x = ;
@@ -44075,7 +44090,7 @@ const UI = {
 };
 exports.default = UI;
 
-},{"gsap":"2aTR0","./EventDispatcher":"czwKm","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","../assets/logo_type.png":"cOv56"}],"cOv56":[function(require,module,exports) {
+},{"gsap":"2aTR0","./EventDispatcher":"czwKm","../assets/logo_type.png":"cOv56","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"cOv56":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('fQbxF') + "logo_type.45c1e80c.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"chiK4"}],"chiK4":[function(require,module,exports) {
@@ -46100,7 +46115,828 @@ exports.getOrigin = getOrigin;
     ]);
 });
 
-},{}],"kOUe0":[function(require,module,exports) {
+},{}],"78wyl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _eventDispatcher = require("./EventDispatcher");
+var _eventDispatcherDefault = parcelHelpers.interopDefault(_eventDispatcher);
+var _gsap = require("gsap");
+let closeButton;
+let formElement;
+let submitButton;
+let nameInputText;
+let inputPrompt;
+const dispatcher = new _eventDispatcherDefault.default();
+const init = ()=>{
+    if (!localStorage.getItem('id')) localStorage.setItem('id', Date.now() + '' + Math.floor(Math.random() * 100000));
+    closeButton = document.querySelector('.ui-qr-form-close');
+    formElement = document.querySelector('#qrform');
+    submitButton = document.querySelector('.form-submit-button');
+    nameInputText = document.querySelector('#name-input');
+    inputPrompt = document.querySelector('.ui-enter-text');
+};
+const invokeForm = ()=>{
+    closeButton.addEventListener('click', hideForm);
+    submitButton.addEventListener('click', submitForm);
+    let name = localStorage.getItem('name');
+    if (name) {
+        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(name.replace(/\./g, '_'))}-${localStorage.getItem('id')}`;
+        return;
+    }
+    formElement.style.display = 'flex';
+    document.querySelector('#qrform > div > form > input[type="text"]').focus();
+    _gsap.gsap.killTweensOf(formElement);
+    _gsap.gsap.set(inputPrompt, {
+        y: -10,
+        alpha: 0
+    });
+    _gsap.gsap.set(nameInputText, {
+        y: -10,
+        alpha: 0
+    });
+    _gsap.gsap.set(submitButton, {
+        y: -10,
+        alpha: 0
+    });
+    let openAniSpeed = 0.3;
+    _gsap.gsap.to(formElement, openAniSpeed, {
+        alpha: 1,
+        ease: _gsap.Power3.easeOut
+    });
+    _gsap.gsap.to(inputPrompt, 0.3, {
+        y: 0,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: openAniSpeed
+    });
+    _gsap.gsap.to(nameInputText, 0.3, {
+        y: 0,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: openAniSpeed + 0.1
+    });
+    _gsap.gsap.to(submitButton, 0.3, {
+        y: 0,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: openAniSpeed + 0.2
+    });
+};
+const hideForm = ()=>{
+    submitButton.removeEventListener('click', submitForm);
+    submitButton.removeEventListener('click', hideForm);
+    document.querySelector('#qrform').classList.remove('open');
+    dispatcher.dispatchEvent('formClosed');
+    _gsap.gsap.to(formElement, 0.3, {
+        alpha: 0,
+        ease: _gsap.Power3.easeOut,
+        onComplete: function() {
+            formElement.style.display = 'none';
+        }
+    });
+};
+const submitForm = ()=>{
+    let input = document.querySelector('#name-input').value;
+    if (input.length > 1) {
+        localStorage.setItem('name', input);
+        window.location.href = `https://qr.webaverse.com/weba/${encodeURIComponent(input.replace(/\./g, '_'))}-${localStorage.getItem('id')}`;
+    }
+};
+const TabletManager = {
+    init,
+    invokeForm,
+    hideForm,
+    dispatcher
+};
+exports.default = TabletManager;
+
+},{"./EventDispatcher":"czwKm","gsap":"2aTR0","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"lls42":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _threeModule = require("../build/three.module");
+var _gltfloader = require("../examples/jsm/loaders/GLTFLoader");
+var _dracoloader = require("../examples/jsm/loaders/DRACOLoader");
+var _silkShaderRocks = require("./shaders/SilkShaderRocks");
+var _silkShaderRocksDefault = parcelHelpers.interopDefault(_silkShaderRocks);
+var _gsap = require("gsap");
+var _tabletJs = require("./tablet.js");
+var _tabletJsDefault = parcelHelpers.interopDefault(_tabletJs);
+const emissiveCol = 6552831;
+let otMesh1, otMesh2, otGroup, otHologramMat1, otHologramMat2, otPl;
+let otMouseDist = 0;
+let otLightPerc = 0;
+const maxLight = 3;
+const minLight = 0.7;
+let silkFountainMesh, silkFountainClone1, silkFountainClone2, silkFountainsGroup, sfPl1, sfPl2, sfPl3;
+const sfPlsArr = [];
+let sfMouseDist = 0;
+let sfLightPerc = 0;
+let baseUrl = './assets/models/';
+let scene;
+const assetPositions = {
+};
+let silkBrightnessVal = 0;
+let silkShaderMaterial;
+let enableOTTooltip = false;
+let enableSFTooltip = false;
+let allowSilkFountainsTooltip = false;
+const terrainRaycaster = new _threeModule.Raycaster();
+const terrainDebugMarker = new _threeModule.Mesh(new _threeModule.SphereBufferGeometry(0.1, 4, 4), new _threeModule.MeshNormalMaterial({
+    wireframe: true
+}));
+const terrainAssetPlane = new _threeModule.Mesh(new _threeModule.PlaneBufferGeometry(15, 15, 20, 20), new _threeModule.MeshNormalMaterial({
+    wireframe: true
+}));
+const sfToolTipElement = document.createElement('div');
+let sfToolTipImg, sfToolTipText;
+const otToolTipElement = document.createElement('div');
+let otToolTipImg, otToolTipText;
+let allowInteraction = true;
+let mousePointer = new _threeModule.Vector2();
+const init = (params)=>{
+    console.log('TooltipAssetManager.init()');
+    scene = params.scene;
+    otHologramMat1 = new _threeModule.MeshStandardMaterial({
+        color: emissiveCol,
+        transparent: true,
+        opacity: 0.2
+    });
+    otHologramMat2 = new _threeModule.MeshStandardMaterial({
+        color: emissiveCol,
+        transparent: true,
+        opacity: 0.2
+    });
+    scene.add(terrainDebugMarker, terrainAssetPlane);
+    terrainAssetPlane.rotateOnAxis(new _threeModule.Vector3(0, 1, 0), 10 * Math.PI / 180);
+    terrainAssetPlane.position.z = 0.7;
+    terrainAssetPlane.visible = false;
+    terrainDebugMarker.visible = false;
+    otToolTipElement.className = "ui-terrain-asset-tooltip-ot";
+    otToolTipImg = document.createElement('img');
+    otToolTipImg.src = './assets/docs-tooltip-circ.png';
+    otToolTipImg.className = 'ui-tooltip-circ-ot';
+    otToolTipText = document.createElement('img');
+    otToolTipText.src = './assets/docs-tooltip-text.png';
+    otToolTipText.className = 'ui-tooltip-text-ot';
+    otToolTipElement.appendChild(otToolTipText);
+    otToolTipElement.appendChild(otToolTipImg);
+    document.body.appendChild(otToolTipElement);
+    sfToolTipElement.className = "ui-terrain-asset-tooltip-sf";
+    sfToolTipImg = document.createElement('img');
+    sfToolTipImg.src = './assets/app-tooltip-circ.png';
+    sfToolTipImg.className = 'ui-tooltip-circ-sf';
+    sfToolTipText = document.createElement('img');
+    sfToolTipText.src = './assets/app-tooltip-text.png';
+    sfToolTipText.className = 'ui-tooltip-text-sf';
+    sfToolTipElement.appendChild(sfToolTipText);
+    sfToolTipElement.appendChild(sfToolTipImg);
+    document.body.appendChild(sfToolTipElement);
+    loadModels();
+};
+const loadModels = ()=>{
+    console.log('TooltipAssetManager.loadModels()');
+    const sphereSize = 100;
+    let p1 = loadModel({
+        filePath: baseUrl + 'ot/',
+        fileName: 'Tablet_Origin_Var1_LOD2_dream.glb',
+        pos: {
+            x: 0,
+            y: 0,
+            z: 0
+        },
+        scale: 1
+    }).then((result)=>{
+        otMesh1 = result;
+    });
+    let p2 = loadModel({
+        filePath: baseUrl + 'ot/',
+        fileName: 'Tablet_Origin_Var2_LOD2_dream.glb',
+        pos: {
+            x: 0,
+            y: 0,
+            z: 0
+        },
+        scale: 1
+    }).then((result)=>{
+        otMesh2 = result;
+    });
+    let p3 = loadModel({
+        filePath: baseUrl + 'silk-fountain/',
+        fileName: 'SilkFountain_5_LOD2_center_dream.glb',
+        pos: {
+            x: 0,
+            y: 0,
+            z: 0
+        },
+        scale: 0.2
+    }).then((result)=>{
+        silkFountainMesh = result;
+    });
+    Promise.all([
+        p1,
+        p2,
+        p3
+    ]).then((models)=>{
+        otGroup = new _threeModule.Group();
+        otMesh2.position.set(-1.5, 0, -1.5);
+        otMesh1.position.set(1.5, 0, 1.5);
+        otMesh2.rotation.y = -25 * (Math.PI / 180);
+        otMesh1.rotation.y = 35 * (Math.PI / 180);
+        otPl = new _threeModule.PointLight(emissiveCol, maxLight * 0.25, 3, 6);
+        otPl.position.set(0, 1, -2);
+        const plh = new _threeModule.PointLightHelper(otPl, sphereSize);
+        let marker1 = new _threeModule.Mesh(new _threeModule.BoxBufferGeometry(5, 5, 5), new _threeModule.MeshNormalMaterial({
+            wireframe: true
+        }));
+        otGroup.add(otMesh1, otMesh2, otPl);
+        otGroup.position.set(-5, -1.27, 1.8);
+        otGroup.scale.set(0.075, 0.0975, 0.075);
+        scene.add(otGroup);
+        silkFountainsGroup = new _threeModule.Group();
+        silkFountainClone1 = silkFountainMesh.clone();
+        silkFountainClone2 = silkFountainMesh.clone();
+        silkFountainClone1.position.set(10, 0, 0);
+        silkFountainClone1.scale.set(0.2 * 0.75, 0.2 * 0.75, 0.2 * 0.75);
+        silkFountainClone1.rotation.y = -90 * Math.PI / 180;
+        silkFountainClone2.position.set(0, 0, 10);
+        silkFountainClone2.scale.set(0.17, 0.17, 0.17);
+        silkFountainClone2.rotation.y = 90 * Math.PI / 180;
+        sfPl1 = new _threeModule.PointLight(emissiveCol, maxLight * 0.1875, 30, 60);
+        sfPl1.position.copy(silkFountainMesh.position);
+        sfPl2 = sfPl1.clone();
+        sfPl2.position.copy(silkFountainClone1.position);
+        sfPl3 = sfPl1.clone();
+        sfPl3.position.copy(silkFountainClone1.position);
+        sfPlsArr.push(sfPl1, sfPl2, sfPl3);
+        let marker = new _threeModule.Mesh(new _threeModule.BoxBufferGeometry(5, 5, 5), new _threeModule.MeshNormalMaterial({
+            wireframe: true
+        }));
+        silkFountainsGroup.add(silkFountainMesh, silkFountainClone1, silkFountainClone2, sfPl1, sfPl2, sfPl3);
+        silkFountainsGroup.position.set(6, -1.68, 0);
+        silkFountainsGroup.scale.set(0.1, 0.1, 0.1);
+        scene.add(silkFountainsGroup);
+        assetPositions.otsPos = otGroup.position;
+        assetPositions.silkFountainsPos = silkFountainsGroup.position;
+    });
+};
+const loadModel = (params)=>{
+    return new Promise((resolve, reject)=>{
+        const gltfLoader = new _gltfloader.GLTFLoader();
+        const dracoLoader = new _dracoloader.DRACOLoader();
+        dracoLoader.setDecoderPath("./assets/models/draco/gltf/");
+        gltfLoader.setDRACOLoader(dracoLoader);
+        gltfLoader.load(params.filePath + params.fileName, function(gltf) {
+            let numVerts = 0;
+            gltf.scene.traverse(function(child) {
+                if (child.isMesh) {
+                    if (params.fileName == "Tablet_Origin_Var1_LOD2_dream.glb" || params.fileName == "Tablet_Origin_Var2_LOD2_dream.glb") {
+                        if (child.name == 'Var1_Holo') child.material = otHologramMat2;
+                        else if (child.name == 'Var2_Holo') child.material = otHologramMat1;
+                        else child.material.color = new _threeModule.Color(2434341);
+                    }
+                    if (params.fileName == 'SilkFountain_5_LOD2_center_dream.glb') {
+                        if (child.material.name == 'Silk_Var5') {
+                            const silkMaterialTexture = new _threeModule.TextureLoader().load("./assets/textures/silk/silk-contrast-noise.png");
+                            silkMaterialTexture.wrapS = silkMaterialTexture.wrapT = _threeModule.RepeatWrapping;
+                            silkShaderMaterial = new _threeModule.ShaderMaterial({
+                                uniforms: _silkShaderRocksDefault.default.uniforms,
+                                vertexShader: _silkShaderRocksDefault.default.vertexShader,
+                                fragmentShader: _silkShaderRocksDefault.default.fragmentShader,
+                                side: _threeModule.FrontSide
+                            });
+                            silkShaderMaterial.uniforms.noiseImage.value = silkMaterialTexture;
+                            child.material = silkShaderMaterial;
+                        } else child.material.color = new _threeModule.Color(4473924);
+                    }
+                    numVerts += child.geometry.index.count / 3;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+            console.log(`modelLoaded() -> ${params.fileName} num verts: ` + numVerts);
+            gltf.scene.position.set(params.pos.x, params.pos.y, params.pos.z);
+            gltf.scene.scale.set(params.scale, params.scale, params.scale);
+            resolve(gltf.scene);
+        });
+    });
+};
+const updateRaycaster = (mouse, camera)=>{
+    if (!terrainAssetPlane || !terrainDebugMarker || !otGroup) return;
+    terrainRaycaster.setFromCamera(mouse, camera);
+    const intersects = terrainRaycaster.intersectObjects([
+        terrainAssetPlane
+    ]);
+    if (intersects[0] == undefined) return;
+    terrainDebugMarker.position.copy(intersects[0].point.add(new _threeModule.Vector3(0, 0, 0)));
+    otMouseDist = terrainDebugMarker.position.distanceTo(otGroup.position);
+    otLightPerc = (5 - otMouseDist) * 0.2;
+    otPl.intensity = Math.max(minLight, maxLight * 2 * otLightPerc);
+    otHologramMat1.opacity = Math.max(0.2, otLightPerc);
+    otHologramMat2.opacity = Math.max(0.2, otLightPerc);
+    sfMouseDist = terrainDebugMarker.position.distanceTo(silkFountainsGroup.position);
+    sfLightPerc = (5 - sfMouseDist) * 0.2;
+    sfPlsArr.forEach((pl)=>{
+        pl.intensity = Math.max(minLight, maxLight * 0.75 * sfLightPerc);
+    });
+    if (allowInteraction == false) return;
+    console.log('allowInteraction ' + allowInteraction);
+    if (terrainDebugMarker.position.distanceTo(otGroup.position) < 0.75 && enableOTTooltip == false) {
+        showOTTooltip();
+        document.body.style.cursor = "pointer";
+        document.body.addEventListener('click', invokeQRForm, false);
+    } else if (terrainDebugMarker.position.distanceTo(otGroup.position) > 0.75 && enableOTTooltip == true) {
+        document.body.style.cursor = "auto";
+        document.body.removeEventListener('click', invokeQRForm);
+        hideOTTooltip();
+    }
+    if (terrainDebugMarker.position.distanceTo(silkFountainsGroup.position) < 0.75 && enableSFTooltip == false) {
+        showSFTooltip();
+        document.body.style.cursor = "pointer";
+    } else if (terrainDebugMarker.position.distanceTo(silkFountainsGroup.position) > 0.75 && enableSFTooltip == true) {
+        document.body.style.cursor = "auto";
+        hideSFTooltip();
+    }
+};
+const invokeQRForm = ()=>{
+    document.body.removeEventListener('click', invokeQRForm);
+    _tabletJsDefault.default.dispatcher.addEventListener('formClosed', formClosed);
+    allowInteraction = false;
+    hideOTTooltip(true);
+    document.body.style.cursor = "auto";
+    _tabletJsDefault.default.invokeForm();
+};
+const formClosed = ()=>{
+    allowInteraction = true;
+    _tabletJsDefault.default.dispatcher.removeListener('formClosed', formClosed);
+};
+const showOTTooltip = ()=>{
+    enableOTTooltip = true;
+    _gsap.gsap.killTweensOf(otToolTipText);
+    _gsap.gsap.killTweensOf(otToolTipImg);
+    _gsap.gsap.set(otToolTipElement, {
+        x: mousePointer.x + 0,
+        y: mousePointer.y - 75
+    });
+    _gsap.gsap.set(otToolTipText, {
+        x: -40,
+        alpha: 0
+    });
+    _gsap.gsap.set(otToolTipImg, {
+        scaleX: 0.5,
+        scaleY: 0.5,
+        alpha: 0
+    });
+    _gsap.gsap.to(otToolTipText, 0.15, {
+        x: 0,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut
+    });
+    _gsap.gsap.to(otToolTipImg, 0.15, {
+        scaleX: 1,
+        scaleY: 1,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: 0.05
+    });
+    otToolTipElement.style.display = 'block';
+};
+const hideOTTooltip = (force)=>{
+    if (force) {
+        enableOTTooltip = false;
+        otToolTipElement.style.display = 'none';
+        otToolTipText.style.opacity = 0;
+        otToolTipImg.style.opacity = 0;
+        return;
+    }
+    _gsap.gsap.to(otToolTipText, 0.15, {
+        x: 20,
+        alpha: 0,
+        ease: _gsap.Power3.easeIn,
+        delay: 0.1,
+        onComplete: function() {
+            enableOTTooltip = false;
+            otToolTipElement.style.display = 'none';
+        }
+    });
+    _gsap.gsap.to(otToolTipImg, 0.15, {
+        scaleX: 0.5,
+        scaleY: 0.5,
+        alpha: 0,
+        ease: _gsap.Power3.easeIn
+    });
+};
+const showSFTooltip = ()=>{
+    console.log('SHow SF T');
+    enableSFTooltip = true;
+    _gsap.gsap.killTweensOf(sfToolTipText);
+    _gsap.gsap.killTweensOf(sfToolTipImg);
+    _gsap.gsap.set(sfToolTipElement, {
+        x: mousePointer.x - 300,
+        y: mousePointer.y - 75
+    });
+    _gsap.gsap.set(sfToolTipText, {
+        x: 40,
+        alpha: 0
+    });
+    _gsap.gsap.set(sfToolTipImg, {
+        scaleX: 0.5,
+        scaleY: 0.5,
+        alpha: 0
+    });
+    _gsap.gsap.to(sfToolTipText, 0.15, {
+        x: 0,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut
+    });
+    _gsap.gsap.to(sfToolTipImg, 0.15, {
+        scaleX: 1,
+        scaleY: 1,
+        alpha: 1,
+        ease: _gsap.Power3.easeOut,
+        delay: 0.05
+    });
+    sfToolTipElement.style.display = 'block';
+};
+const hideSFTooltip = ()=>{
+    _gsap.gsap.to(sfToolTipText, 0.15, {
+        x: -20,
+        alpha: 0,
+        ease: _gsap.Power3.easeIn,
+        delay: 0.1,
+        onComplete: function() {
+            enableSFTooltip = false;
+            sfToolTipElement.style.display = 'none';
+        }
+    });
+    _gsap.gsap.to(sfToolTipImg, 0.15, {
+        scaleX: 0.5,
+        scaleY: 0.5,
+        alpha: 0,
+        ease: _gsap.Power3.easeIn
+    });
+};
+const update = (nativeMouse)=>{
+    mousePointer = nativeMouse;
+    if (enableOTTooltip) _gsap.gsap.to(otToolTipElement, 0.3, {
+        x: mousePointer.x + 0,
+        y: mousePointer.y - 75,
+        ease: _gsap.Power2.easeOut
+    });
+    if (enableSFTooltip) _gsap.gsap.to(sfToolTipElement, 0.3, {
+        x: mousePointer.x - 300,
+        y: mousePointer.y - 75,
+        ease: _gsap.Power2.easeOut
+    });
+    //silkBrightnessVal += 0.1;
+    /* for( let i = 0; i < silkNodesArray.length; i++ ){
+        let shaderMesh = silkNodesArray[ i ];
+        shaderMesh.material.seed += 0.005;
+        shaderMesh.material.uniforms.time.value = shaderMesh.material.seed;
+        shaderMesh.material.uniforms.tileCaustic_brightness.value = 1.5 - ( ( ( 1 + Math.sin( shaderMesh.dist + silkBrightnessVal ) ) * 0.5 ) );
+        shaderMesh.material.uniforms.noiseRipples_brightness.value = 0.1 - ( ( ( 1 + Math.sin( shaderMesh.dist + silkBrightnessVal ) ) * 0.5 ) * 0.075 );
+    } */ if (silkShaderMaterial) silkShaderMaterial.uniforms.time.value += 0.06;
+};
+const getAssetPositions = ()=>{
+    return assetPositions;
+};
+const TooltipAssetManager = {
+    init,
+    update,
+    updateRaycaster
+};
+exports.default = TooltipAssetManager;
+
+},{"../build/three.module":"5T8FK","../examples/jsm/loaders/GLTFLoader":"aRyIW","../examples/jsm/loaders/DRACOLoader":"cJKxB","./shaders/SilkShaderRocks":"h27BM","gsap":"2aTR0","./tablet.js":"78wyl","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"h27BM":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+const SilkRawShader = {
+    vertexShader: `
+    precision highp float;
+    precision highp int;
+    varying vec2 vUv;
+
+
+      //uniform mat4 modelMatrix;
+      //uniform mat4 modelViewMatrix;
+      //uniform mat4 projectionMatrix;
+      //uniform mat4 viewMatrix;
+      //uniform mat3 normalMatrix;
+      //uniform vec3 cameraPosition;
+      uniform float time;
+
+      //attribute vec3 position;
+      //attribute vec3 normal;
+      //attribute vec2 uv;
+      attribute vec2 uv2;
+
+      varying vec2 tileCaustic_vUv;
+      varying vec2 noiseRipples_vUv;
+    
+      varying vec3 transGlow_normal;
+      varying vec3 transGlow_position;
+      varying vec3 glowEffect_normal;
+      varying vec3 glowEffect_position;
+
+      //varying vec3 vNormal;
+	
+
+      vec4 tileCausticCol() {
+        
+        vec4 tileCausticPos = vec4(0.0);
+        tileCaustic_vUv = uv;
+        tileCausticPos = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        return tileCausticPos *= 1.0;
+
+      }
+
+      vec4 noiseRippleCol() {
+        
+        vec4 noiseRipplePos = vec4( 0.0 );
+        noiseRipples_vUv = uv;
+        noiseRipplePos = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        return noiseRipplePos *= 1.0;
+      }
+
+      vec4 transGlowCol() {
+
+        vec4 transGlowPos = vec4( 0.0 );
+        transGlow_normal = normalize( normalMatrix * normal );
+        vec4 pos = modelViewMatrix * vec4( position, 1.0 );
+        transGlow_position = pos.xyz;
+        transGlowPos = projectionMatrix * pos;
+        return transGlowPos *= 0.3;
+      }
+
+      vec4 glowEffectCol() {
+        vec4 glowEffectPos = vec4(0.0);
+        glowEffect_normal = normalize(normalMatrix * normal);
+        vec4 pos = modelViewMatrix * vec4(position, 1.0);
+        glowEffect_position = pos.xyz;
+        glowEffectPos = projectionMatrix * pos;
+        return glowEffectPos *= 1.0;
+      }
+
+      void main() {
+
+      //vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      //gl_Position = projectionMatrix * mvPosition;
+	  
+        //vNormal = normal;
+        //gl_Position = tileCausticCol() + noiseRippleCol() + transGlowCol() + glowEffectCol();
+		
+		    //gl_Position = tileCausticCol() + noiseRippleCol() + transGlowCol() + glowEffectCol();
+
+        noiseRippleCol();
+        transGlowCol();
+        glowEffectCol();
+
+        gl_Position = tileCausticCol();
+		
+      }
+
+    `,
+    fragmentShader: `
+    
+    #define TAU 6.28318530718
+      #define MAX_ITER 5
+     
+      precision highp float;
+      precision highp int;
+      
+      uniform vec3 backgroundColor;
+      
+      uniform vec2 tileCaustic_resolution;
+      uniform vec3 tileCaustic_col;
+      uniform float tileCaustic_speed;
+      uniform float tileCaustic_brightness;
+
+      uniform float time;
+      uniform float contrast;
+      uniform float distortion;
+      
+      uniform float noiseRipples_speed;
+      uniform vec3 noiseRipples_col;
+      uniform float noiseRipples_brightness;
+      
+      uniform sampler2D noiseImage;
+      uniform vec2 noiseRipples_res;
+      
+      uniform vec3 transGlow_col;
+      uniform float transGlow_start;
+      uniform float transGlow_end;
+      uniform float transGlow_alpha;
+      
+      uniform vec3 glowEffect_col;
+      uniform float glowEffect_start;
+      uniform float glowEffect_end;
+      uniform float glowEffect_alpha;
+      
+      varying vec2 tileCaustic_vUv;
+      
+      varying vec2 noiseRipples_vUv;
+	        
+      mat2 makem2(in float theta) {
+        float c = cos(theta);
+        float s = sin(theta);
+        return mat2(c, -s, s, c);
+      }
+
+      float noise(in vec2 x){
+        return texture2D(noiseImage, x * .01).x;
+      }
+      
+      float fbm(in vec2 p) {
+        float z = 2.;
+        float rz = 0.;
+        vec2 bp = p;
+        
+        for (float i = 1.; i < 6.0; i++) {
+          rz += abs((noise(p) - 0.5) * 2.0) / z;
+          z = z * 2.;
+          p = p * 2.;
+        }
+        
+        return rz;
+      }
+
+      float dualfbm(in vec2 p) {
+        vec2 p2 = p * distortion;
+        vec2 basis = vec2(fbm(p2 - time * noiseRipples_speed * 1.6), fbm(p2 + time * noiseRipples_speed * 1.7));
+        basis = (basis - .5) * .2;
+        p += basis;
+        return fbm(p * makem2(time * noiseRipples_speed * 0.2));
+      }
+
+      varying vec3 transGlow_position;
+      varying vec3 transGlow_normal;
+      varying vec3 glowEffect_position;
+      varying vec3 glowEffect_normal;
+
+      //varying vec3 vNormal;
+
+      vec4 tileCausticCol() {
+        
+        vec4 tileCausticFragCol = vec4(0.0);
+        vec2 uv = tileCaustic_vUv * tileCaustic_resolution;
+        vec2 p = mod(uv * TAU, TAU) - 250.0;
+        vec2 i = vec2(p);
+        float c = 1.0;
+        float inten = 0.005;
+
+        for (int n = 0; n < MAX_ITER; n++) {
+          float t = time * tileCaustic_speed * (1.0 - (3.5 / float(n + 1)));
+          i = p + vec2(cos(t - i.x) + sin(t + i.y), sin(t - i.y) + cos(t + i.x));
+          c += 1.0 / length(vec2(p.x / (sin(i.x + t) / inten), p.y / (cos(i.y + t) / inten)));
+        }
+
+        c /= float(MAX_ITER);
+        c = 1.17 - pow(c, tileCaustic_brightness);
+        vec3 rgb = vec3(pow(abs(c), 8.0));
+        
+        tileCausticFragCol = vec4(rgb * tileCaustic_col + backgroundColor, 1.0);
+        return tileCausticFragCol *= 1.0;
+      }
+      
+      vec4 noiseRippleCol() {
+        vec4 noiseRipplesFragCol = vec4(0.0);
+        vec2 p = (noiseRipples_vUv.xy - 0.5) * noiseRipples_res;
+        float rz = dualfbm(p);
+        vec3 col = (noiseRipples_col / rz) * noiseRipples_brightness;
+        col = ((col - 0.5) * max(contrast, 0.0)) + 0.5;
+        noiseRipplesFragCol = vec4(col, 1.0);
+        return noiseRipplesFragCol *= 1.0;
+      }
+
+      vec4 transGlowCol() {
+        vec4 transGlowFragCol = vec4(0.0);
+        vec3 normal = normalize(transGlow_normal);
+        vec3 eye = normalize(-transGlow_position.xyz);
+        float rim = smoothstep(transGlow_start, transGlow_end, 1.0 - dot(normal, eye));
+        float value = clamp(rim * transGlow_alpha, 0.0, 1.0);
+        transGlowFragCol = vec4(transGlow_col * value, value);
+        return transGlowFragCol *= 0.3;
+      }
+
+      vec4 glowEffectCol() {
+        vec4 glowEffectFragCol = vec4(0.0);
+        vec3 normal = normalize(glowEffect_normal);
+        vec3 eye = normalize(-glowEffect_position.xyz);
+        float rim = smoothstep(glowEffect_start, glowEffect_end, 1.0 - dot(normal, eye));
+        glowEffectFragCol = vec4(clamp(rim, 0.0, 1.0) * glowEffect_alpha * glowEffect_col, 1.0);
+        return glowEffectFragCol *= 1.0;
+      }
+
+      void main() {
+
+        //vec3 light = vec3( 0.0, -0.5 , 0.0 );
+				//light = normalize( light );
+
+				//float d = max( 0.0, dot( vNormal, light ) );
+
+        gl_FragColor = (tileCausticCol() + noiseRippleCol() + transGlowCol() + glowEffectCol()); 
+				
+        //gl_FragColor = vec4( gl_FragColor.r * d, gl_FragColor.g * d, gl_FragColor.b * d, 1.0 );
+		
+		//gl_FragColor = vec4(1,0,0,1);
+		
+      }
+
+    `,
+    uniforms: {
+        time: {
+            value: 0
+        },
+        backgroundColor: {
+            value: {
+                r: 0.42,
+                g: 0.65,
+                b: 0.72
+            }
+        },
+        tileCaustic_resolution: {
+            value: {
+                x: 5,
+                y: 5
+            }
+        },
+        tileCaustic_col: {
+            value: {
+                r: 0.8,
+                g: 0.87,
+                b: 0.2
+            }
+        },
+        tileCaustic_speed: {
+            value: 0.2
+        },
+        tileCaustic_brightness: {
+            value: 1.5
+        },
+        noiseImage: {
+            value: null
+        },
+        distortion: {
+            value: 50
+        },
+        contrast: {
+            value: 1.9
+        },
+        noiseRipples_speed: {
+            value: 0.6
+        },
+        noiseRipples_col: {
+            value: {
+                r: 0.34,
+                g: 0.98,
+                b: 1
+            }
+        },
+        noiseRipples_brightness: {
+            value: 0.1
+        },
+        noiseRipples_res: {
+            value: {
+                x: 10.5,
+                y: 10.5
+            }
+        },
+        transGlow_col: {
+            value: {
+                r: 1,
+                g: 0.53,
+                b: 0.82
+            }
+        },
+        transGlow_start: {
+            value: 0.55
+        },
+        transGlow_end: {
+            value: 0.44
+        },
+        transGlow_alpha: {
+            value: 0.5
+        },
+        glowEffect_col: {
+            value: {
+                r: 0,
+                g: 0,
+                b: 0
+            }
+        },
+        glowEffect_start: {
+            value: 0
+        },
+        glowEffect_end: {
+            value: 1.9
+        },
+        glowEffect_alpha: {
+            value: 1
+        }
+    }
+};
+exports.default = SilkRawShader;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"kOUe0":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "color", ()=>color1
@@ -48466,6 +49302,7 @@ let contentIcons = [
 ];
 let isMobile;
 const bgImageAlphaVal = 1;
+const $ = document.querySelector;
 const init = (params)=>{
     isMobile = params.isMobile;
     container = params.container;
@@ -48526,10 +49363,14 @@ const init = (params)=>{
     if (isMobile) {
         nextArrow.addEventListener('touchend', nextArrowClickHandler);
         prevArrow.addEventListener('touchend', prevArrowClickHandler);
+        document.querySelector('.content-scroll-container').style.marginTop = document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height + 'px';
     } else {
         nextArrow.addEventListener('click', nextArrowClickHandler);
         prevArrow.addEventListener('click', prevArrowClickHandler);
     }
+    setTimeout(()=>{
+        if (isMobile) document.querySelector('.content-scroll-container').style.marginTop = document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height + 'px';
+    }, 2000);
 };
 var clicked = false;
 const nextArrowClickHandler = ()=>{
@@ -48738,14 +49579,14 @@ const updateScroll = (val)=>{
     //let amt = val > 1 ? 1 : val;
     topGrad.style.height = window.innerHeight * 0.5 * val + 'px';
     topGrad.style.marginTop = -(window.innerHeight * 0.5 * val) + 'px';
+    if (isMobile) document.querySelector('.content-scroll-container').style.marginTop = document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height + 'px';
 };
 const resize = (width, height)=>{
     _sideScrollManagerDefault.default.resize(width, height);
     //console.log( ' imgs container height: ', contentBackgroundImagesContainer.getBoundingClientRect() ); 
     let bgImgsRect = contentBackgroundImagesContainer.getBoundingClientRect();
     let contHeight = bgImgsRect.y + bgImgsRect.height;
-//container.style.height = contHeight + 'px';
-//gsap.set( container, { height: 'auto'})
+    if (isMobile) document.querySelector('.content-scroll-container').style.marginTop = document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height + 'px';
 };
 const Content = {
     init,
