@@ -98,7 +98,7 @@ const init = (params) => {
     let linksArr = [ 
         'https://app.webaverse.com/',
         'https://webaverse.notion.site/Webaverse-3a36b223e39b4f94b3d1f6921a4c297a',
-        'https://discord.gg/HxdjCDyq58',
+        'https://discord.gg/webaverse',
         'https://twitter.com/webaverse',
         'https://webaverse.ghost.io/'
     ];
