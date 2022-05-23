@@ -17,8 +17,8 @@ import AudioManager from './AudioManager';
 import UI from './UI';
 
 import { Bend, ModifierStack } from './modifiers.min';
-
-
+import TabletManager from './tablet.js'
+import TooltipAssetManager from './TooltipAssetManager';
 
 const allowControls = false;
 let modelLoaded = false;
@@ -89,6 +89,11 @@ const nativeMouse = new THREE.Vector2();
 let raycastPlane;
 let raycastTarget;
 
+// terrain raycaster
+
+
+let allowTerrainRaycast = false;
+
 
 function init( sceneParams ){
 
@@ -131,6 +136,7 @@ function init( sceneParams ){
     raycastTarget.visible = false;
     scene2.add( raycastPlane, raycastTarget );
 
+   
     addSkies();
     createTerrain();
     addLights();
@@ -150,6 +156,8 @@ function init( sceneParams ){
             addShootingStar();
             addFireflies();
             addHomeLight( result );
+            TooltipAssetManager.init( { scene: scene } );
+
             FireflyManager.init( { scene: scene2, 
                 model: "./assets/models/firefly/Fairy_LP_V7_galad.glb", 
                 raycaster: raycaster,
@@ -158,6 +166,12 @@ function init( sceneParams ){
                 mouse: mouse,
                 camera: camera
               });
+
+            TabletManager.init({});
+
+            allowTerrainRaycast = true;
+
+            //window.dispatchEvent(new Event('resize'));
 
         }
     );
@@ -194,9 +208,12 @@ const addMist = () => {
         vertexShader: MistShader.fragmentShader,
         fragmentShader: MistShader.vertexShader,
         transparent: true, 
-        //alphaTest: true, 
+        alphaTest: true, 
+        depthWrite: false,
+        dithering: true,
         blending: THREE.AdditiveBlending,
-    
+        //opacity: 0.2,
+        //wireframe: true,
 
     });
     
@@ -208,8 +225,22 @@ const addMist = () => {
 
     wavePlane = new THREE.Mesh( waveGeom, waveMaterial );
     wavePlane.rotateOnAxis( new THREE.Vector3( 1, 0, 0 ), -90 * Math.PI / 180 );
-    wavePlane.position.y = -1;
+    wavePlane.position.y = -0.8;
     scene.add( wavePlane );
+
+    let wavePlane2 = new THREE.Mesh( waveGeom.clone(), waveMaterial );
+    wavePlane2.rotateOnAxis( new THREE.Vector3( 1, 0, 0 ), -90 * Math.PI / 180 );
+    wavePlane2.scale.x = -1;
+    wavePlane2.position.y = -0.7;
+    scene.add( wavePlane2 );
+
+    let wavePlane3 = new THREE.Mesh( waveGeom.clone(), waveMaterial );
+    wavePlane3.rotateOnAxis( new THREE.Vector3( 1, 0, 0 ), -90 * Math.PI / 180 );
+    //wavePlane3.scale.z = -1;
+    wavePlane3.position.y = -0.6;
+    scene.add( wavePlane3 );
+
+    //console.log( '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& ADD MIST!!!!!')
 }
 
 
@@ -543,7 +574,8 @@ const createTerrain = () => {
     let terrainScale = 40 / 1024;
     let terrainGeom = new THREE.PlaneBufferGeometry( 1024, 1024, 256, 256 );
     
-    terrainMeshNight = new THREE.Mesh( terrainGeom.clone(), terrainMaterialNight );
+    terrainMeshNight = new THREE.Mesh( terrainGeom, terrainMaterialNight );
+    terrainMeshNight.receiveShadow = true;
     terrainMeshNight.rotateOnAxis( new THREE.Vector3( 1, 0, 0 ), -Math.PI * 0.5 );
     terrainMeshNight.scale.set( terrainScale, terrainScale, terrainScale );
     terrainMeshNight.position.x = 5;
@@ -552,6 +584,8 @@ const createTerrain = () => {
     terrainMeshNight.matrixAutoUpdate = false
     terrainMeshNight.updateMatrix()
     scene.add( terrainMeshNight );
+
+    
 
 }
 
@@ -616,8 +650,9 @@ const update = ( t ) => {
     }
 
     TreesManager.update();
+    //TabletManager.update(camera, mouse);
 
-    waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.3;
+    waveMaterial.uniforms.uTime.value = clock.getElapsedTime() * 0.05;
 
     
     
@@ -644,24 +679,37 @@ const update = ( t ) => {
     renderer.render( scene2, camera );
 
     if( raycastPlane ) {
-        //updateRaycaster();
         if( FireflyManager.getModelLoaded() ) FireflyManager.update();
     }
+    
+    if( allowTerrainRaycast && terrainRaycaster && terrainMeshNight ){
+        //updateTerrainRaycaster();
+    }
 
+    TooltipAssetManager.update( nativeMouse );
 };
 
+
+const updateTerrainRaycaster = () => {
+    TooltipAssetManager.updateRaycaster( mouse, camera );
+}
 
 
 const resize = () => {
 
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
+    windowWidth = document.documentElement.clientWidth;
+    windowHeight = document.documentElement.clientHeight;
 
     camera.aspect = windowWidth / windowHeight;
     camera.updateProjectionMatrix();
 
+    FireflyManager.resize( windowWidth, windowHeight );
+
     renderer.setSize( windowWidth, windowHeight );
 }
+  
+
+//window.WebaWorldResize = resize;
 
 
 const mouseMove = ( e ) => {
@@ -679,6 +727,8 @@ const mouseMove = ( e ) => {
 
     TweenLite.to( paraAmount, 2, { x: ( mouseX / windowWidth ) * 0.5, ease: Power1.easeOut, onUpdate: updateLightColors })
 
+    updateTerrainRaycaster();
+
 }
 
 const touchMove = ( e ) => {
@@ -695,6 +745,8 @@ const touchMove = ( e ) => {
     nativeMouse.y = e.clientY; */
 
     TweenLite.to( paraAmount, 2, { x: ( mouseX / windowWidth ) * 0.5, ease: Power1.easeOut, onUpdate: updateLightColors })
+
+    updateTerrainRaycaster();
 }
 
 const updateLightColors = () => {

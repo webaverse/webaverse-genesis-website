@@ -1,110 +1,185 @@
-$header-family: 'Bowlby One SC', cursive;
-$body-family: 'Jost', sans-serif;
+@font-face {
+    font-family: Neutra;
+    src: url('../fonts/neutra/NeutraText-Book.otf');
+}
 
+@font-face {
+    font-family: NeutraBold;
+    src: url('../fonts/neutra/NeutraText-Bold.otf');
+}
+
+$header-family: 'Bowlby One SC',
+cursive;
+$body-family: 'Neutra',
+sans-serif;
 // Globals
 .header-text {
+    font-weight: normal;
     color: white;
     font-family: $header-family;
     font-size: 2.2rem;
     line-height: 2.2rem;
-
+    // letter-spacing: 0.03em;
 }
 
+.mmo-logo {
+    width: 10rem;
+    margin-bottom: .5rem;
+}
+
+@media only screen and (max-width: 480px) {
+    .mmo-logo {
+        width: 10rem;
+        margin-bottom: 0.3rem;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .mmo-logo {
+        width: 15rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+// @media only screen and (min-width: 600px) {
+//     .mmo-logo {
+//         width: 10rem;
+//         margin-bottom: 1rem;
+//     }
+// }
 .subheader-text {
+    font-weight: normal;
     color: white;
     font-family: $header-family;
-    font-size: 1.5rem;
-    
+    font-size: 2rem;
+    // letter-spacing: 0.03em;
     //line-height: 1.5rem;
 }
 
+@media only screen and (max-height: 480px) {
+    .subheader-text {
+        font-size: 1.5rem !important;
+    }
+}
+
+// @media only screen and (max-height: 480px) and (min-width: 800px)  {
+//     .subheader-text {
+//         font-size: 1.5rem;
+//     }
+// }
 .body-text {
     color: white;
     font-family: $body-family;
     font-weight: 300;
-    font-size: 0.9rem;
-    line-height: 1.2rem;
+    font-size: 1.2rem;
+    line-height: 1.8rem;
     //
 }
 
 // Locals
-
 .intro-header-text {
     margin-bottom: 1rem;
     margin: 0 auto;
 }
 
+@media only screen and (max-height: 480px) {
+    .subheader-text {
+        font-size: 1.5rem !important;
+    }
+    .body-text {
+        font-size: 1.2rem !important;
+        line-height: 1.5rem !important;
+        //
+    }
+    .intro-header-text {
+        font-size: 2rem !important;
+        line-height: 2.5rem !important;
+    }
+}
+
 .intro-sub-text {
     margin-bottom: 0.7rem;
-    color: #7a1566;
+    color: #ff35d7;
     margin: 0 auto;
 }
 
 .intro-body-text {
     margin: 0 auto;
+    width: 100%;
+}
+
+@media only screen and (min-width: 800px) {
+    .intro-body-text {
+        width: 100%;
+    }
 }
 
 // content 
-
 .content-scroll-item-headline-text {
-    margin-top: 30px;
+    padding-top: 30px;
     //max-width: 600px;
     //margin: 0 auto;
 }
 
-
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 640px) {
     .header-text {
         font-size: 3rem;
         line-height: 3rem;
-
+        // letter-spacing: 0.03em;
     }
-    
     .subheader-text {
         font-family: $header-family;
         font-size: 2rem;
     }
-    
     .body-text {
-        font-size: 1rem;
-        line-height: 1.5rem;
-        max-width: 600px;
+        font-size: 1.5rem;
+        line-height: 2rem;
     }
-
     .intro-sub-text {
         margin-bottom: 0.5rem;
     }
-    
     .intro-header-text {
         margin-bottom: 1rem;
     }
-
 }
 
 @media only screen and (min-width: 768px) {
-    
     .header-text {
-        font-size: 4rem;
+        font-size: 2rem;
         line-height: 4rem;
+        // letter-spacing: 0.03em;
     }
-    
     .subheader-text {
-        
         font-family: $header-family;
         font-size: 2rem;
+        // letter-spacing: 0.03em;
     }
-    
     .body-text {
-        font-size: 1rem;
-        line-height: 1.5rem;
-        max-width: 600px;
+        font-size: 1.5rem;
+        line-height: 2rem;
     }
-
-     .intro-sub-text {
+    .intro-sub-text {
         margin-bottom: 1rem;
     }
-    
     .intro-header-text {
         margin-bottom: 1rem;
+    }
+}
+
+@media only screen and (min-width: 2000px) {
+    .body-text {
+        max-width: 50vw;
+    }
+}
+
+@media only screen and (min-width: 3000px) {
+    .body-text {
+        max-width: 30vw;
+    }
+}
+
+@media only screen and (min-width: 7000px) {
+    .body-text {
+        max-width: 20vw;
     }
 }

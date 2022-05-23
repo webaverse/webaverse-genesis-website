@@ -3,7 +3,7 @@ $comp-color: #617b99;
 .slide-scroll-controls-container {
 
     width: 300px;
-    height: 30px;
+    height: 90px;
     position: relative;
     align-self: center;
     display: flex;
@@ -12,9 +12,28 @@ $comp-color: #617b99;
     //justify-self: center;
 }
 
+
+@media only screen and (max-height: 480px) {
+    .slide-scroll-controls-container {
+        margin-top: -450px;
+    }
+}
+
+@media only screen and (max-height: 480px) and (min-width: 768px)  {
+    .slide-scroll-controls-container {
+        margin-top: -550px;
+    }
+}
+
+@media only screen and (max-height: 420px) and (min-width: 768px)  {
+    .slide-scroll-controls-container {
+        margin-top: -430px;
+    }
+}
+
 @media only screen and (max-width: 480px) {
     .slide-scroll-controls-container {
-        margin-top: 0px;
+        margin-top: 240px;
     }  
 }
 

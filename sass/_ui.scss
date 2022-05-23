@@ -1,3 +1,10 @@
+@font-face {
+    font-family: Neutra;
+    src: url('../fonts/neutra/NeutraText-Book.otf');
+}
+
+$body-family: 'Neutra';
+
 .foreground-div {
     position: absolute;
     bottom: 0;
@@ -7,33 +14,39 @@
     pointer-events: none;
 }
 
-
 .ui-cont {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index:101;
+    z-index: 101;
     pointer-events: none;
 }
 
 .ui-logo {
     position: absolute;
-    width: 210px;
-    height: 30px;
+    width: 100%;
+    // height: 30px;
 }
 
 .ui-logo-m {
     position: absolute;
-    width: 210px;
-    height: 30px;
-    margin: 0 auto;
-    right: 50%;
+    width: 100%;
+    // height: 30px;
+    // margin: 0 auto;
+    // right: 50%;
+}
+
+@media only screen and (max-height: 480px) {
+    .ui-logo-container {
+        width: 90px !important;
+        height: 124px !important;
+        left: calc( 0vw + 17.5px) !important;
+    }
 }
 
 .ui-nav {
-
     width: auto;
     height: 40px;
     position: absolute;
@@ -42,23 +55,22 @@
     cursor: pointer;
     pointer-events: none;
     position: fixed;
-    left: calc( 50% - 159px );
+    left: calc( 50% - 159px);
     margin: 0 auto;
 }
 
 .ui-nav-item {
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     font-weight: 400;
     color: white;
     display: inline-block;
     margin-right: 30px;
     font-size: 13px;
     pointer-events: all;
-
 }
 
 .ui-nav-item-m {
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     font-weight: 400;
     color: white;
     display: inline-block;
@@ -75,9 +87,8 @@
     height: 100%;
     background-color: black;
     z-index: 0;
-
     pointer-events: none;
-}   
+}
 
 .ui-top-cont {
     position: absolute;
@@ -118,7 +129,6 @@
     background-color: black;
     opacity: 0;
     cursor: pointer;
-
     pointer-events: all;
 }
 
@@ -126,7 +136,7 @@
     width: 300px;
     height: auto;
     color: white;
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     font-weight: 300;
     text-align: center;
     margin-bottom: 20px;
@@ -138,7 +148,7 @@
     height: auto;
     color: white;
     font-size: 18px;
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     font-weight: 400;
     text-align: center;
     margin-bottom: 12px;
@@ -148,7 +158,7 @@
     margin-top: 10px;
     width: 150px;
     height: 60px;
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     text-align: center;
     color: white;
     font-size: 22px;
@@ -158,14 +168,27 @@
 .ui-logo-container {
     position: relative;
     padding-top: 15px;
-    padding-left: 15px;
-    width: 250px;
-    height: 80px;
+    width: 90px !important;
+    height: 124px !important;
+    // padding-left: 15px;
+    // width: 100px;
+    // height: 80px;
     pointer-events: none;
-    left: calc( 50% - 125px);
+    left: calc( 0vw + 25px);
+}
+
+.weba-logo-container {
+    position: absolute;
+    top: 40px;
+    // padding-left: 15px;
+    width: 100px;
+    // height: 80px;
+    pointer-events: none;
+    left: calc( 100vw - 190px);
 }
 
 .ui-genesis-container {
+    display: none;
     width: 100px;
     height: 30px;
     right: 42px;
@@ -204,7 +227,7 @@
     padding-top: 2px;
     width: 30px;
     height: 10px;
-    background-color: rgba( 129, 27, 239, 0.4 );
+    background-color: rgba( 129, 27, 239, 0.4);
 }
 
 .ui-alpha-m {
@@ -214,11 +237,11 @@
     right: 262px;
     width: 25px;
     height: 10px;
-    background-color: rgba( 129, 27, 239, 0.4 );
+    background-color: rgba( 129, 27, 239, 0.4);
 }
 
 .ui-alpha-text {
-    font-family: 'Jost', sans-serif;
+    font-family: 'Neutra', sans-serif;
     text-align: center;
     color: white;
     font-size: 6px;
@@ -227,7 +250,7 @@
 .ui-loadbar-cont {
     width: 100px;
     height: 1px;
-    background-color: rgba( 129, 27, 239, 0.4 );
+    background-color: rgba( 129, 27, 239, 0.4);
 }
 
 .ui-load-bar {
@@ -236,3 +259,165 @@
     background-color: white;
 }
 
+.ui-terrain-asset-tooltip-ot {
+    width: 230px;
+    height: 100px;
+    background-color: rgba( 255, 0, 255, 0.0 );
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999998;
+    opacity: 1.0;
+    display: none;
+}
+
+.ui-terrain-asset-tooltip-sf {
+    width: 230px;
+    height: 100px;
+    background-color: rgba( 129, 27, 239, 0.0 );
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    opacity: 1.0;
+    display: none;
+
+}
+
+.ui-tooltip-circ-ot {
+    position: absolute;
+    top: 0px;
+    left: 125px;
+    width: auto;
+    height: auto;
+}
+
+.ui-tooltip-text-ot {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: auto;
+    height: auto;
+}
+
+.ui-tooltip-circ-sf {
+    position: absolute;
+    top: 0px;
+    right: 95px;
+    width: auto;
+    height: auto;
+}
+
+.ui-tooltip-text-sf {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: auto;
+    height: auto;
+}
+
+
+#qrform {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    /* -webkit-transition: all 0.5s ease-in-out;
+       -moz-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+	       -o-transition: all 0.5s ease-in-out;
+            transition: all 0.5s ease-in-out;
+    -webkit-transform: translate(0px, -100%) scale(0, 0);
+	     -moz-transform: translate(0px, -100%) scale(0, 0);
+	      -ms-transform: translate(0px, -100%) scale(0, 0);
+         -o-transform: translate(0px, -100%) scale(0, 0);
+	          transform: translate(0px, -100%) scale(0, 0);     */
+    opacity: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    z-index: 106;
+}
+
+  
+#qrform .ui-qr-form-close {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+	opacity: 0.5;
+	font-size: 27px;
+  	color: #fff;
+    font-family: $body-family;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+#qrform .ui-qr-form-close:hover{
+    opacity: 1;
+    cursor: pointer;
+}
+
+
+.form-inner {
+    width: 60%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+
+.ui-enter-text {
+    color: #999999;
+    font-family: $body-family;
+    margin: 0 auto;
+    padding: 10px;
+    font-size: 13pt;
+    width: 100%;
+
+}
+
+.form-submit-button {
+    height: 35px;
+    //width: 100px;
+    padding: 13px 18px 10px 18px;
+    //padding-top: 13px;
+    margin: 0 auto;
+    margin-left: 20px;
+    border: none;
+    border-radius: 5px;
+    font-family: $body-family;
+    color:rgba( 129, 27, 239, 1);
+    cursor: pointer;
+}
+
+#name-input {
+    height: 26px;
+    width: 100%;
+    padding: 10px;
+    
+    padding-top: 16px;
+    font-family: $body-family;
+    color: white;
+    font-size: 16pt;
+
+    margin: 10 auto;
+    margin-bottom: 16px;
+    background-color: rgba( 50, 50, 50, 0.5 );
+    border: none;
+    text-align: center;
+    text-transform: uppercase; 
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}

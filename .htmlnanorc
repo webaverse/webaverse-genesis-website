@@ -1,3 +1,5 @@
 {
-    "minifySvg": false
+    "minifySvg": false,
+    "drop_console": false
+
 }

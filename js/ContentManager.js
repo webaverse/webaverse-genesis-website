@@ -8,6 +8,8 @@ let contentBackgroundImagesContainer;
 let contentBackgroundImagesArray;
 
 let contentBodiesArray;
+let contentUpdateInProgress = false;
+let lastIndexToUpdateContent = -1;
 
 let imgsPath = './imgs/content-bg-imgs/';
 
@@ -33,6 +35,7 @@ let contentIcons = [
 let isMobile;
 
 const bgImageAlphaVal = 1;
+const $ = document.querySelector;
 
 const init = ( params ) => {
     
@@ -46,7 +49,7 @@ const init = ( params ) => {
     sideScrollComponentContainer = document.querySelector( '.slide-scroll-component' );
     
     contentBackgroundImagesContainer = document.querySelector( '.content-bg-imgs-container' );
-    contentBackgroundImagesContainer.style.top = '800px';
+    // contentBackgroundImagesContainer.style.top = '800px';
     contentBackgroundImagesArray = document.querySelectorAll( '.content-bg-img' );
     
     console.log( 'ContentManager contentBackgroundImagesArray() ' + contentBackgroundImagesArray.length )
@@ -105,40 +108,54 @@ const init = ( params ) => {
     if( isMobile ){
         nextArrow.addEventListener( 'touchend', nextArrowClickHandler );
         prevArrow.addEventListener( 'touchend', prevArrowClickHandler );
+        document.querySelector('.content-scroll-container').style.marginTop = (document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top
+        + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height) + 'px'    
     } else {
         nextArrow.addEventListener( 'click', nextArrowClickHandler );
         prevArrow.addEventListener( 'click', prevArrowClickHandler ); 
     }
-    
 
-    
+    setTimeout(() => {
+        if( isMobile ){
+            document.querySelector('.content-scroll-container').style.marginTop = (document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top
+            + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height) + 'px'    
+        }            
+    }, 2000);
+
 }
 
-const nextArrowClickHandler = () => {
+var clicked = false;
 
-    currentContentItemIndex++;
-    if( currentContentItemIndex > contentItemsLength-1 ) currentContentItemIndex = 0;
-    console.log( 'NEXT CLICKED ', currentContentItemIndex )
-    //console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
-    //SideScrollManager.updateItemIndex( currentContentItemIndex  );
-    SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
-    changeContentFromIndex( currentContentItemIndex );
-    
-    //updateBackgroundImageIndex( currentContentItemIndex + 1 )
+const nextArrowClickHandler = () => {
+    if(!clicked) {
+        clicked = true;
+        currentContentItemIndex++;
+        if( currentContentItemIndex > contentItemsLength-1 ) currentContentItemIndex = 0;
+        console.log( 'NEXT CLICKED ', currentContentItemIndex )
+        //console.log( 'ContentManager.nextArrowClickHandler() ' + currentContentItemIndex )
+        //SideScrollManager.updateItemIndex( currentContentItemIndex  );
+        SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
+        //console.log('*****************************  next clicked')
+        //changeContentFromIndex( currentContentItemIndex );
+        
+        //updateBackgroundImageIndex( currentContentItemIndex + 1 )
+    }
 
 }
 
 const prevArrowClickHandler = () => {
 
-    currentContentItemIndex--;
-    
-    //
-    if( currentContentItemIndex < 0 ) currentContentItemIndex = contentItemsLength-1;
-    
-    console.log( 'PREV CLICKED ', currentContentItemIndex );
-    SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
-
-    changeContentFromIndex( currentContentItemIndex );
+    if(!clicked) {
+        clicked = true;
+        currentContentItemIndex--;
+        
+        //
+        if( currentContentItemIndex < 0 ) currentContentItemIndex = contentItemsLength-1;
+        
+        console.log( 'PREV CLICKED ', currentContentItemIndex );
+        SideScrollManager.changeSlideItemIndex( currentContentItemIndex );
+        // changeContentFromIndex( currentContentItemIndex );
+    }
     
 }
 
@@ -147,13 +164,34 @@ const prevArrowClickHandler = () => {
 
 const changeContentFromIndex = ( index ) => {
 
-   
+    if(index<0){
+        console.log('*****************************  index < 1')
+        return;
+    }
+    if(true){
+        try{
+            throw new Error('Gaga');
+        }catch(e){
+            console.warn('*****************************   ',e);
+        }
+    }
 
-    console.log( 'ContentManager.changeContentFromIndex() ' + index )
+    //implementhere
+    if(!contentUpdateInProgress){
+        contentUpdateInProgress = true;
+        console.log('*****************************  setting in progress')
+    }else{
+        console.log('*****************************  Flushing',index)
+        lastIndexToUpdateContent = index;
+        return;
+    }
+
+    console.log( '*****************************  ContentManager.changeContentFromIndex() ' + index )
 
     let nextItem = contentBodiesArray[ index ];
     let nextDelayVal = 0.3;
-
+    let totalDelay = nextDelayVal * 3;
+    let __delay = 0.1;
     console.log( '*****************************  prev/next index ' + prevContentItemIndex  + ' ' + currentContentItemIndex);
 
     //return;
@@ -164,35 +202,67 @@ const changeContentFromIndex = ( index ) => {
         gsap.set( nextItem.headline, { x: animationOffsetX } )
         gsap.set( nextItem.body, { x: animationOffsetX } )
 
-        gsap.to( currentItem.icon, 0.3, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn } )
-        gsap.to( currentItem.headline, 0.3, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.05 } )
-        gsap.to( currentItem.body, 0.3, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.1 } )
+        gsap.to( currentItem.icon, __delay, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn } )
+        gsap.to( currentItem.headline, __delay, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.05 } )
+        gsap.to( currentItem.body, __delay, { x: -animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.1 } )
 
-        gsap.to( nextItem.icon, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
-        gsap.to( nextItem.headline, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
-        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1 } );
+        gsap.to( nextItem.icon, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
+        gsap.to( nextItem.headline, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
+        gsap.to( nextItem.body, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1, onComplete:function(){
+            
+            setTimeout(() => {
+                console.log('*****************************  Popping out',lastIndexToUpdateContent)
+
+
+                currentItem = nextItem;
+                prevContentItemIndex = index;
+                //
+                updateBackgroundImageIndex( currentContentItemIndex );
+
+
+                clicked = false;
+                contentUpdateInProgress = false;
+                if(lastIndexToUpdateContent > -1){
+                    let tempIdx = lastIndexToUpdateContent;
+                    lastIndexToUpdateContent = -1;
+                    changeContentFromIndex(tempIdx);
+                }                    
+            }, totalDelay);
+
+         }});
 
     } else {
         gsap.set( nextItem.icon, { x: -animationOffsetX } )
         gsap.set( nextItem.headline, { x: -animationOffsetX } )
         gsap.set( nextItem.body, { x: -animationOffsetX } )
 
-        gsap.to( currentItem.icon, 0.3, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn } )
-        gsap.to( currentItem.headline, 0.3, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.05 } )
-        gsap.to( currentItem.body, 0.3, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.1 } )
+        gsap.to( currentItem.icon, __delay, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn } )
+        gsap.to( currentItem.headline, __delay, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.05 } )
+        gsap.to( currentItem.body, __delay, { x: animationOffsetX, opacity: 0, ease: Power3.easeIn, delay: 0.1 } )
 
-        gsap.to( nextItem.icon, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
-        gsap.to( nextItem.headline, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
-        gsap.to( nextItem.body, 0.3, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1 } );
+        gsap.to( nextItem.icon, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal } )
+        gsap.to( nextItem.headline, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.05 } )
+        gsap.to( nextItem.body, __delay, { x: 0, opacity: 1, ease: Power3.easeOut, delay: nextDelayVal + 0.1, onComplete:function(){
+
+            setTimeout(() => {
+                console.log('*****************************  Popping out',lastIndexToUpdateContent)
+
+                currentItem = nextItem;
+                prevContentItemIndex = index;
+                //
+                updateBackgroundImageIndex( currentContentItemIndex );
+            
+                clicked = false;
+                contentUpdateInProgress = false;
+                if(lastIndexToUpdateContent > -1){
+                    let tempIdx = lastIndexToUpdateContent;
+                    lastIndexToUpdateContent = -1;
+                    changeContentFromIndex(tempIdx);
+                }                    
+            }, totalDelay);
+
+         }});
     }
-
-    currentItem = nextItem;
-
-    prevContentItemIndex = index;
-
-    //
-    updateBackgroundImageIndex( currentContentItemIndex );
-
 }
 
 const sideScrollComponentIndexChangeHandler = ( evt ) => {
@@ -200,7 +270,6 @@ const sideScrollComponentIndexChangeHandler = ( evt ) => {
     currentContentItemIndex = evt.index;
 
     //if( evt.index == currentContentItemIndex ) return;
-
     changeContentFromIndex( evt.index )
     
 
@@ -232,6 +301,11 @@ const updateScroll = ( val ) => {
     //let amt = val > 1 ? 1 : val;
     topGrad.style.height =  ( window.innerHeight * 0.5 ) * val + 'px';
     topGrad.style.marginTop = -( ( window.innerHeight * 0.5 ) * val ) + 'px';
+    
+    if(isMobile){
+        document.querySelector('.content-scroll-container').style.marginTop = (document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top
+        + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height) + 'px'    
+    }
 }
 
 
@@ -241,9 +315,11 @@ const resize = ( width, height ) => {
     let bgImgsRect = contentBackgroundImagesContainer.getBoundingClientRect();
     let contHeight = bgImgsRect.y + bgImgsRect.height;
 
-    //container.style.height = contHeight + 'px';
+    if(isMobile){
+        document.querySelector('.content-scroll-container').style.marginTop = (document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().top
+        + document.querySelector('.slide-scroll-controls-container').getBoundingClientRect().height) + 'px'    
+    }
 
-    //gsap.set( container, { height: 'auto'})
 }
 
 const Content = {
