@@ -18,4 +18,8 @@ build
 examples
 
 yarn.lock
+<<<<<<< HEAD
 .parcel-cache
+=======
+
+>>>>>>> d29900f95afc62bf2828fe4b4513382731c683cd
