@@ -2,7 +2,6 @@ import 'regenerator-runtime/runtime'
 import { gsap, Power1, Power4, Power3 } from 'gsap';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import WebaWorld from './WebaWorld';
-import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
 import userAgent from './userAgent';
 import UI from './UI';
 import ContentManager from './ContentManager';
@@ -101,21 +100,6 @@ function init(){
     } );
 
     navGrad = document.querySelector( '.nav-grad' );
-
-   /*  guiParams = {
-        drag: 0.0,
-    };
-
-    const gui = new GUI();
-    gui.add( guiParams, 'drag', -0.8, 0.0 ).step( 0.2 ).onChange( function ( value ) {
-        
-        
-        console.log( 'scrollVal ' + value)
-        ContentManager.updateDragVal( value );
-        
-    } );
-    
-    gui.open(); */
 
     if( showStats ) document.body.appendChild( stats.dom );
 

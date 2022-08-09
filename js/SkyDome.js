@@ -1,4 +1,4 @@
-import { ShaderMaterial, Mesh, SphereGeometry, BackSide } from "../../build/three.module";
+import { ShaderMaterial, Mesh, SphereGeometry, BackSide } from "three";
 
 export default class SkyDome extends Mesh {
 

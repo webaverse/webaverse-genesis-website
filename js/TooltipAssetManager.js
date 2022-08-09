@@ -1,6 +1,6 @@
-import * as THREE from '../build/three.module';
-import { GLTFLoader } from '../examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from '../examples/jsm/loaders/DRACOLoader';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import SilkShader from './shaders/SilkShaderRocks';
 import { gsap, Power2, Power3, Power4 } from 'gsap';
 import TabletManager from './tablet.js'

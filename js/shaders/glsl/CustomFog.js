@@ -1,4 +1,4 @@
-import * as THREE from '../../../../build/three.module';
+import * as THREE from 'three';
 import snoise from './snoise';
 
 

@@ -1,8 +1,8 @@
 import 'regenerator-runtime/runtime';
-import * as THREE from '../build/three.module';
-import { OrbitControls } from '../examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from '../examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from '../examples/jsm/loaders/DRACOLoader';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 import { TweenLite, Power1, Power4, Linear } from 'gsap';
 import StarryNightShader from './shaders/StarryNightShader';
@@ -680,10 +680,6 @@ const update = ( t ) => {
 
     if( raycastPlane ) {
         if( FireflyManager.getModelLoaded() ) FireflyManager.update();
-    }
-    
-    if( allowTerrainRaycast && terrainRaycaster && terrainMeshNight ){
-        //updateTerrainRaycaster();
     }
 
     TooltipAssetManager.update( nativeMouse );
